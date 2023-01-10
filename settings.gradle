@@ -1,4 +1,4 @@
-import OperatingSystem
+import org.gradle.internal.os.OperatingSystem
 
 pluginManagement {
     repositories {

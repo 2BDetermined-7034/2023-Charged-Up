@@ -3,6 +3,7 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
+
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.util.Units;
@@ -17,12 +18,9 @@ import java.util.HashMap;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-
-  public static final class DriverControls {
-    public static final int driverController = 0;
-    public static final int operatorController = 1;
+  public static class OperatorConstants {
+    public static final int kDriverControllerPort = 0;
   }
-
   public static final class DriveBase {
     public static final double MAX_VOLTAGE = 12.0;
 
@@ -76,7 +74,6 @@ public final class Constants {
     public static final double camHeightOffGround = 0.85;
     public static final double cameraPitch = 15.0;
   }
-
   public static final class Vision {
     public static final double kPRotate = 0;
 
@@ -85,8 +82,7 @@ public final class Constants {
 
   public static final class Field {
     public static final HashMap<Integer, Pose3d> targetMap;
-
-    static {
+    static{
       targetMap = new HashMap<>();
       targetMap.put(0 /* Fiducial ID */,
               new Pose3d(
@@ -103,4 +99,3 @@ public final class Constants {
     }
   }
 }
-

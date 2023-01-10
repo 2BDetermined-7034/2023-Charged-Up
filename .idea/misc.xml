@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ExternalStorageConfigurationManager" enabled="true" />
   <component name="FrameworkDetectionExcludesConfiguration">
-    <file type="web" url="file://$PROJECT_DIR$/2022-Charged-up" />
+    <file type="web" url="file://$PROJECT_DIR$" />
   </component>
-  <component name="ProjectRootManager" version="2" project-jdk-name="openjdk-19" project-jdk-type="JavaSDK" />
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="openjdk-19" project-jdk-type="JavaSDK" />
 </project>
