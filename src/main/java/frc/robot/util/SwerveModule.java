@@ -1,4 +1,4 @@
-package frc.robot;
+package frc.robot.util;
 
 import com.ctre.phoenix.sensors.*;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -7,9 +7,11 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
-import frc.robot.util.COTSSwerveConstants;
+import frc.robot.Robot;
+import frc.robot.constants.Constants;
+import frc.robot.constants.COTSSwerveConstants;
 import frc.robot.util.ModuleStateOptimizer;
-import frc.robot.util.SwerveModuleConstants;
+import frc.robot.constants.SwerveModuleConstants;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
@@ -30,7 +32,7 @@ public class SwerveModule {
 
     private final RelativeEncoder mDriveEncoder;
     private final RelativeEncoder mAngleEncoder;
-
+    private final SparkMaxPIDController drivePIDController;
     private final SparkMaxPIDController mAnglePIDController;
 
     private SwerveModuleState targetState;
@@ -63,6 +65,7 @@ public class SwerveModule {
         /* Drive motor */
         mDriveMotor = new CANSparkMax(moduleConstants.driveMotorID, MotorType.kBrushless);
         mDriveEncoder = mDriveMotor.getEncoder();
+        drivePIDController = mDriveMotor.getPIDController();
         configDriveMotor();
 
         targetState = new SwerveModuleState(0,Rotation2d.fromDegrees(0));
@@ -161,6 +164,13 @@ public class SwerveModule {
                 * cotsSwerveConstants.wheelCircumference // Multiply by the circumference to get meters per minute
                 / 60); // Divide by 60 to get meters per second.
         mDriveEncoder.setPosition(0);
+
+
+        drivePIDController.setP(cotsSwerveConstants.driveKP);
+        drivePIDController.setI(cotsSwerveConstants.driveKI);
+        drivePIDController.setD(cotsSwerveConstants.driveKD);
+        drivePIDController.setFF(cotsSwerveConstants.driveKF);
+
     }
 
     public SwerveModuleState getState(){

@@ -6,15 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="8be0e9b2-7bbf-401b-9710-29a56a36eb81" name="Changes" comment="updated swerve to 2023">
       <change beforePath="$PROJECT_DIR$/.idea/jarRepositories.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/Constants.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/Constants.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/SwerveModule.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/SwerveModule.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/util/COTSSwerveConstants.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/util/COTSSwerveConstants.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vendordeps/Phoenix.json" beforeDir="false" afterPath="$PROJECT_DIR$/vendordeps/Phoenix.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vendordeps/REVLib.json" beforeDir="false" afterPath="$PROJECT_DIR$/vendordeps/REVLib.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vendordeps/SdsSwerveLib.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vendordeps/navx_frc.json" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -202,7 +196,7 @@
     <option name="LAST_COMMIT_MESSAGE" value="updated swerve to 2023" />
   </component>
   <component name="WpiLibVersionService">
-    <option name="lastChecked" value="20230110093202" />
+    <option name="lastChecked" value="20230111083739" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

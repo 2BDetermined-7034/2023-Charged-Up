@@ -4,7 +4,7 @@
 
 package frc.robot;
 
-import frc.robot.Constants.OperatorConstants;
+import frc.robot.constants.Constants.OperatorConstants;
 import frc.robot.commands.Auto.AutoFactory;
 import frc.robot.commands.Drive.DefaultDriveCommand;
 import edu.wpi.first.wpilibj2.command.Command;

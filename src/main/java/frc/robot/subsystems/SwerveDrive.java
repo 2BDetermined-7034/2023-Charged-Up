@@ -15,10 +15,10 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
-import frc.robot.SwerveModule;
-import frc.robot.util.COTSSwerveConstants;
-import frc.robot.util.SwerveModuleConstants;
+import frc.robot.constants.Constants;
+import frc.robot.util.SwerveModule;
+import frc.robot.constants.COTSSwerveConstants;
+import frc.robot.constants.SwerveModuleConstants;
 
 public class SwerveDrive extends SubsystemBase {
 
