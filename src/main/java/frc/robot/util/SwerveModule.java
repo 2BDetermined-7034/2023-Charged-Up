@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import frc.robot.Robot;
 import frc.robot.constants.Constants;
 import frc.robot.constants.COTSSwerveConstants;
-import frc.robot.util.ModuleStateOptimizer;
 import frc.robot.constants.SwerveModuleConstants;
 
 import com.revrobotics.CANSparkMax;
@@ -39,7 +38,6 @@ public class SwerveModule {
 
     SimpleMotorFeedforward feedforward;
 
-    /* Sim Caches (basically im lazy and don't want to use the rev physics sim) */
     private double simSpeedCache;
     private Rotation2d simAngleCache = Rotation2d.fromDegrees(0);
 
@@ -111,7 +109,7 @@ public class SwerveModule {
 
     private Rotation2d getAngle(){
         if (Robot.isReal()) return Rotation2d.fromDegrees(mAngleEncoder.getPosition());
-        return simAngleCache; // If sim.
+        return simAngleCache;
     }
 
     public Rotation2d getAbsoluteAngle(){
@@ -164,7 +162,6 @@ public class SwerveModule {
                 * cotsSwerveConstants.wheelCircumference // Multiply by the circumference to get meters per minute
                 / 60); // Divide by 60 to get meters per second.
         mDriveEncoder.setPosition(0);
-
 
         drivePIDController.setP(cotsSwerveConstants.driveKP);
         drivePIDController.setI(cotsSwerveConstants.driveKI);
