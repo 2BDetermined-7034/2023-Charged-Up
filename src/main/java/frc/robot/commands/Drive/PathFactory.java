@@ -16,7 +16,6 @@ public class PathFactory {
     public PathFactory(SwerveDrive drive, PathPlannerTrajectory path, boolean isFirstPath) {
 
         m_swerveDrive = drive;
-        m_swerveDrive.addPath(path.toString(), path);
 
         followTrajectoryCommand = new SequentialCommandGroup(
                 new InstantCommand(() -> {
