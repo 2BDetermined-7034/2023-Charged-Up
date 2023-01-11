@@ -33,6 +33,8 @@ public class SwerveModule {
 
     private final SparkMaxPIDController mAnglePIDController;
 
+    private SwerveModuleState targetState;
+
     SimpleMotorFeedforward feedforward;
 
     /* Sim Caches (basically im lazy and don't want to use the rev physics sim) */
@@ -63,17 +65,23 @@ public class SwerveModule {
         mDriveEncoder = mDriveMotor.getEncoder();
         configDriveMotor();
 
+        targetState = new SwerveModuleState(0,Rotation2d.fromDegrees(0));
+
         feedforward = new SimpleMotorFeedforward(cotsSwerveConstants.driveKS, cotsSwerveConstants.driveKV, cotsSwerveConstants.driveKA);
 
         lastAngle = getState().angle;
     }
 
     private void configureDashboard() {
-        dashboard.addDouble("Speed", () -> getAngle().getDegrees());
+        dashboard.addDouble("Speed", () -> mDriveMotor.get());
+        dashboard.addDouble("Absolute Angle", () -> getAbsoluteAngle().getDegrees());
+        dashboard.addDouble("Relative Angle", () -> getAngle().getDegrees());
+        dashboard.addDouble("Target Angle", () -> getTargetState().angle.getDegrees());
     }
 
     public void setDesiredState(SwerveModuleState desiredState, boolean isOpenLoop){
         desiredState = ModuleStateOptimizer.optimize(desiredState, getState().angle); //Custom optimize command, since default WPILib optimize assumes continuous controller which CTRE is not
+        targetState = desiredState;
 
         setAngle(desiredState);
         setSpeed(desiredState, isOpenLoop);
@@ -163,5 +171,9 @@ public class SwerveModule {
     }
     public SwerveModulePosition getPosition() {
         return new SwerveModulePosition(mDriveEncoder.getPosition(), getAbsoluteAngle());
+    }
+
+    public SwerveModuleState getTargetState() {
+        return targetState;
     }
 }
