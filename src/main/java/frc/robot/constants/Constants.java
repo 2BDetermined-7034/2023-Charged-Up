@@ -61,5 +61,9 @@ public final class Constants {
             public static final double kP = 0;
         }
 
+        public static class Vision {
+            public static final ArrayList<Pair<String, Transform3d>> cameras = new ArrayList<>();
+        }
+
     }
 }
