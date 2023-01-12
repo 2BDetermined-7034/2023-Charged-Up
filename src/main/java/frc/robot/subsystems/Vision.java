@@ -61,7 +61,7 @@ public class Vision extends SubsystemBase {
 
   /**
    * Method to calculate global robot Position, Rotation
-   * Returns RobotPose2d, latency (s)
+   * Returns RobotPose2d, latency (ms)
    * @param prevEstimatedRobotPose
    * @return
    */
