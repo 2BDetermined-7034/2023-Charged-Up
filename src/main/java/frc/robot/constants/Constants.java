@@ -4,8 +4,13 @@
 
 package frc.robot.constants;
 
+import java.util.ArrayList;
+
 import com.revrobotics.CANSparkMax;
+
+import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform3d;
 
 public final class Constants {
     public static class OperatorConstants {
@@ -63,6 +68,12 @@ public final class Constants {
 
         public static class Vision {
             public static final ArrayList<Pair<String, Transform3d>> cameras = new ArrayList<>();
+            static 
+            {
+                cameras.add(
+                    
+                )
+            }
         }
 
     }
