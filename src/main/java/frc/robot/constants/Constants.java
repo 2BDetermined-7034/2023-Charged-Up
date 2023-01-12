@@ -5,6 +5,9 @@
 package frc.robot.constants;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import org.photonvision.PhotonCamera;
 
 import com.revrobotics.CANSparkMax;
 
@@ -66,15 +69,15 @@ public final class Constants {
             public static final double kP = 0;
         }
 
-        public static class Vision {
-            public static final ArrayList<Pair<String, Transform3d>> cameras = new ArrayList<>();
-            static 
-            {
-                cameras.add(
-                    
-                )
-            }
-        }
+        
 
+    }
+
+    public static class VisionConstants {
+        public static final List<Pair<PhotonCamera, Transform3d>> camList = new ArrayList<>();
+        static 
+        { // Init all Photoncameras Here
+            camList.add(new Pair<PhotonCamera,Transform3d>(new PhotonCamera("[Put_Cam_Names_Here]"), new Transform3d()));
+        }
     }
 }
