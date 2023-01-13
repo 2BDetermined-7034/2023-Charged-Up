@@ -76,6 +76,17 @@ public class VisionLocking extends SubsystemBase {
         return m_Level;
     }
 
+    /**
+     * 
+     * Returns the position the robot must be within a certain degree of error of to score on the Grid
+     * 
+     * TODO fix to apply for both alliance colors
+     * 
+     * TODO Add more shit for substation loading
+     * 
+     * @return position
+     */
+
     public Pose2d getLockedPositon(){
 
 
