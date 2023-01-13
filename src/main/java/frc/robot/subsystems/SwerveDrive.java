@@ -93,16 +93,10 @@ public class SwerveDrive extends SubsystemBase {
                 COTSSwerveConstants.SDSMK4i(Constants.Drivebase.Measurements.driveRatio)
         );
 
-
         m_estimator = new SwerveDrivePoseEstimator(
                 m_kinematics,
                 getGyroscopeRotation(),
-                new SwerveModulePosition[] {
-                        m_frontLeftModule.getPosition(),
-                        m_frontRightModule.getPosition(),
-                        m_backLeftModule.getPosition(),
-                        m_backRightModule.getPosition()
-                },
+                getModulePosition(),
                 new Pose2d(),
                 VecBuilder.fill(0.02, 0.02, 0.01), // estimator values (x, y, rotation) std-devs
                 VecBuilder.fill(0.15, 0.15, 0.01)
@@ -121,12 +115,7 @@ public class SwerveDrive extends SubsystemBase {
         zeroGyroscope();
         m_estimator.resetPosition(
                 getGyroscopeRotation(),
-                new SwerveModulePosition[] {
-                    m_frontLeftModule.getPosition(),
-                    m_frontRightModule.getPosition(),
-                    m_backLeftModule.getPosition(),
-                    m_backRightModule.getPosition()
-                },
+                getModulePosition(),
                 m_position
         );
     }
@@ -148,13 +137,21 @@ public class SwerveDrive extends SubsystemBase {
 
     public ChassisSpeeds getVelocity() {return m_speeds;}
 
-
     /**
      * Sets the gyroscope angle to zero. This can be used to set the direction the robot is currently facing to the
      * 'forwards' direction.
      */
     public void zeroGyroscope() {
         m_navx.zeroYaw();
+    }
+
+    public SwerveModulePosition[] getModulePosition() {
+        return new SwerveModulePosition[] {
+                m_frontLeftModule.getPosition(),
+                m_frontRightModule.getPosition(),
+                m_backLeftModule.getPosition(),
+                m_backRightModule.getPosition()
+        };
     }
 
     public static Rotation2d getGyroscopeRotation() {
@@ -183,19 +180,13 @@ public class SwerveDrive extends SubsystemBase {
 
         m_estimator.update(
                 getGyroscopeRotation(),
-                new SwerveModulePosition[] {
-                        m_frontLeftModule.getPosition(),
-                        m_frontRightModule.getPosition(),
-                        m_backLeftModule.getPosition(),
-                        m_backRightModule.getPosition()
-                }
+                getModulePosition()
         );
 
         m_frontLeftModule.setDesiredState(m_states[0], true);
         m_frontRightModule.setDesiredState(m_states[1], true);
         m_backLeftModule.setDesiredState(m_states[2], true);
         m_backRightModule.setDesiredState(m_states[3], true);
-
     }
 
 }

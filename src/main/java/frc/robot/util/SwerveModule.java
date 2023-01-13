@@ -158,9 +158,9 @@ public class SwerveModule {
         mDriveMotor.setOpenLoopRampRate(Constants.Drivebase.MotorConfig.openLoopRamp);
         mDriveMotor.setClosedLoopRampRate(Constants.Drivebase.MotorConfig.closedLoopRamp);
 
-        mDriveEncoder.setVelocityConversionFactor(1/cotsSwerveConstants.driveGearRatio// 1/gear ratio because the wheel spins slower than the motor.
-                * cotsSwerveConstants.wheelCircumference // Multiply by the circumference to get meters per minute
-                / 60); // Divide by 60 to get meters per second.
+        mDriveEncoder.setPositionConversionFactor(1/cotsSwerveConstants.driveGearRatio// 1/gear ratio
+                * cotsSwerveConstants.wheelCircumference
+        );
         mDriveEncoder.setPosition(0);
 
         drivePIDController.setP(cotsSwerveConstants.driveKP);
@@ -177,7 +177,7 @@ public class SwerveModule {
         );
     }
     public SwerveModulePosition getPosition() {
-        return new SwerveModulePosition(mDriveEncoder.getPosition(), getAbsoluteAngle());
+        return new SwerveModulePosition(mDriveEncoder.getPosition(), getAngle());
     }
 
     public SwerveModuleState getTargetState() {
