@@ -23,7 +23,7 @@ public final class Constants {
             public static final int flDrive = 3;
             public static final int flSteer = 13;
             public static final int flEncoder = 1;
-            public static final Rotation2d flOffset = Rotation2d.fromDegrees(263.1 + 5.5); //266.6
+            public static final Rotation2d flOffset = Rotation2d.fromDegrees(263.1 + 0); //266.6
 
             public static final int frDrive = 12;
             public static final int frSteer = 11;
@@ -46,7 +46,7 @@ public final class Constants {
             public static CANSparkMax.IdleMode angleNeutralMode = CANSparkMax.IdleMode.kBrake;
             public static int driveSmartCurrentLimit = 25;
             public static int driveSecondaryCurrentLimit = 60;
-            public static CANSparkMax.IdleMode driveNeutralMode = CANSparkMax.IdleMode.kCoast;
+            public static CANSparkMax.IdleMode driveNeutralMode = CANSparkMax.IdleMode.kBrake;
 
             public static final double openLoopRamp = 0.25;
             public static final double closedLoopRamp = 0.0;
@@ -56,7 +56,7 @@ public final class Constants {
         public static class Auto {
             public static final double maxVelocity = 4;
             public static final double maxAcceleration = 4;
-            public static final double kP = 0;
+            public static final double kP = 2.5;
         }
 
     }

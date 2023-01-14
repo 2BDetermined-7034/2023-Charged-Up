@@ -20,9 +20,9 @@ public class RobotContainer {
 
         m_swerveDrive.setDefaultCommand(new DefaultDriveCommand(
                 m_swerveDrive,
-                () -> square(modifyAxis(m_driverController.getLeftY() / 2) * m_swerveDrive.getMaxSpeed()),
-                () -> square(modifyAxis(m_driverController.getLeftX()/ 2) * m_swerveDrive.getMaxSpeed()),
-                () -> square(modifyAxis(m_driverController.getRightX()/2) * m_swerveDrive.getMaxSpeed())
+                () -> -square(modifyAxis(m_driverController.getLeftY() ) * m_swerveDrive.getMaxSpeed()),
+                () -> -square(modifyAxis(m_driverController.getLeftX()) * m_swerveDrive.getMaxSpeed()),
+                () -> -square(modifyAxis(m_driverController.getRightX()) * m_swerveDrive.getMaxSpeed())
         ));
         configureBindings();
     }

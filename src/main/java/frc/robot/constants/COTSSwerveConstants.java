@@ -73,7 +73,7 @@ public class COTSSwerveConstants {
 
         //TODO: Tune all of these gains
         double angleKP = 0.01;
-        double angleKI = 0.00001;
+        double angleKI = 0.0000;
         double angleKD = 0.0;
         double angleKF = 0.0;
 
@@ -86,7 +86,7 @@ public class COTSSwerveConstants {
         double driveKV = 0;
         double driveKA = 0;
 
-        boolean driveMotorInvert = false;
+        boolean driveMotorInvert = true;
         boolean angleMotorInvert = true;
         boolean canCoderInvert = false;
 

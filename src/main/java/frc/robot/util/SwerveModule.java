@@ -74,7 +74,7 @@ public class SwerveModule {
     }
 
     private void configureDashboard() {
-        dashboard.addDouble("Speed", () -> mDriveMotor.get());
+        dashboard.addDouble("Speed", () -> mDriveMotor.getAppliedOutput());
         dashboard.addDouble("Absolute Angle", () -> getAbsoluteAngle().getDegrees());
         dashboard.addDouble("Relative Angle", () -> getAngle().getDegrees());
         dashboard.addDouble("Target Angle", () -> getTargetState().angle.getDegrees());
@@ -94,7 +94,8 @@ public class SwerveModule {
 
         if(isOpenLoop){
             double percentOutput = desiredState.speedMetersPerSecond / cotsSwerveConstants.maxSpeed;
-            mDriveMotor.set(percentOutput);
+            //mDriveMotor.set(percentOutput);
+            mDriveMotor.setVoltage(percentOutput*12);
         }
         else {
             mDriveMotor.getPIDController().setReference(desiredState.speedMetersPerSecond, ControlType.kVelocity, 0, feedforward.calculate(desiredState.speedMetersPerSecond));
@@ -158,7 +159,7 @@ public class SwerveModule {
         mDriveMotor.setOpenLoopRampRate(Constants.Drivebase.MotorConfig.openLoopRamp);
         mDriveMotor.setClosedLoopRampRate(Constants.Drivebase.MotorConfig.closedLoopRamp);
 
-        mDriveEncoder.setPositionConversionFactor(1/cotsSwerveConstants.driveGearRatio// 1/gear ratio
+        mDriveEncoder.setPositionConversionFactor(1 / cotsSwerveConstants.driveGearRatio
                 * cotsSwerveConstants.wheelCircumference
         );
         mDriveEncoder.setPosition(0);
