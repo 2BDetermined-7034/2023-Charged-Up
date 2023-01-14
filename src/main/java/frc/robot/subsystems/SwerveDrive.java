@@ -1,6 +1,9 @@
 package frc.robot.subsystems;
 
+
 import com.kauailabs.navx.frc.AHRS;
+
+import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -38,6 +41,8 @@ public class SwerveDrive extends SubsystemBase {
     private final SwerveModule m_backRightModule;
 
     private final SwerveDrivePoseEstimator m_estimator;
+
+    private final Vision m_vision = new Vision();
 
     SwerveModuleState[] m_states;
     ChassisSpeeds m_speeds;
@@ -176,6 +181,20 @@ public class SwerveDrive extends SubsystemBase {
     public void setModuleStates(SwerveModuleState[] states){
         m_states = states;
     }
+
+    public void updateOdometry() {
+        m_estimator.update(getGyroscopeRotation(), new SwerveModulePosition[] {
+                    m_frontLeftModule.getPosition(),
+                    m_frontRightModule.getPosition(),
+                    m_backLeftModule.getPosition(),
+                    m_backRightModule.getPosition()
+                });
+        Pair<Pose2d, Double> result = m_vision.getEstimatedGlobalPose(m_estimator.getEstimatedPosition());
+
+            Pose2d camPose = result.getFirst();
+            m_estimator.addVisionMeasurement(camPose, result.getSecond());
+    }
+    
 
     @Override
     public void periodic() {

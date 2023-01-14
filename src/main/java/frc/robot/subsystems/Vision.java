@@ -26,6 +26,7 @@ public class Vision extends SubsystemBase {
 
   private RobotPoseEstimator poseEstimator;
   private PoseStrategy estimatorStrategy = PoseStrategy.LOWEST_AMBIGUITY;
+  private Pose2d latestEstimatedPose;
 
 
   public static final ArrayList<AprilTag> aprilTags = new ArrayList<>();
@@ -65,8 +66,8 @@ public class Vision extends SubsystemBase {
    * @param prevEstimatedRobotPose
    * @return
    */
-  public Pair<Pose2d, Double> getEstimatedGlobalPose(Pose2d prevEstimatedRobotPose) {
-    poseEstimator.setReferencePose(prevEstimatedRobotPose);
+  public Pair<Pose2d, Double> getEstimatedGlobalPose(Pose2d latestEstimatedPose) {
+    poseEstimator.setReferencePose(latestEstimatedPose);
 
     double currentTime = Timer.getFPGATimestamp();
     Optional<Pair<Pose3d, Double>> result = poseEstimator.update();
