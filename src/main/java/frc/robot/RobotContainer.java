@@ -4,17 +4,17 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 import frc.robot.constants.Constants.OperatorConstants;
 import frc.robot.commands.Auto.AutoFactory;
 import frc.robot.commands.Drive.DefaultDriveCommand;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.SwerveDrive;
 
 
 public class RobotContainer {
     private final SwerveDrive m_swerveDrive = new SwerveDrive();
-    private final CommandXboxController m_driverController = new CommandXboxController(OperatorConstants.kDriverControllerPort);
+    private final CommandPS4Controller m_driverController = new CommandPS4Controller(OperatorConstants.kDriverControllerPort);
 
     public RobotContainer() {
 
@@ -29,7 +29,7 @@ public class RobotContainer {
 
     private void configureBindings() {
 
-        m_driverController.back().whileTrue(m_swerveDrive.runOnce(m_swerveDrive::zeroGyroscope));
+        m_driverController.share().whileTrue(m_swerveDrive.runOnce(m_swerveDrive::zeroGyroscope));
     }
 
 
