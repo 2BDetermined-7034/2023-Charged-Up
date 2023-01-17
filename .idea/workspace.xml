@@ -4,7 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8be0e9b2-7bbf-401b-9710-29a56a36eb81" name="Changes" comment="updated swerve to 2023" />
+    <list default="true" id="8be0e9b2-7bbf-401b-9710-29a56a36eb81" name="Changes" comment="no auto">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/constants/Constants.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/constants/Constants.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/subsystems/SwerveDrive.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/subsystems/SwerveDrive.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/util/SwerveModule.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/util/SwerveModule.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -185,7 +190,14 @@
       <option name="project" value="LOCAL" />
       <updated>1673456436953</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="no auto">
+      <created>1673757298287</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1673757298287</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -196,7 +208,8 @@
     <MESSAGE value="askdnasl" />
     <MESSAGE value="updated swerve to 2023" />
     <MESSAGE value="Setup to tune gains tonight" />
-    <option name="LAST_COMMIT_MESSAGE" value="Setup to tune gains tonight" />
+    <MESSAGE value="no auto" />
+    <option name="LAST_COMMIT_MESSAGE" value="no auto" />
   </component>
   <component name="WpiLibVersionService">
     <option name="lastChecked" value="20230112184925" />

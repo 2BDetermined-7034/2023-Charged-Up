@@ -114,11 +114,11 @@ public class SwerveModule {
     }
 
     public Rotation2d getAbsoluteAngle(){
-        return Rotation2d.fromDegrees(absoluteEncoder.getAbsolutePosition());
+        return Rotation2d.fromDegrees(absoluteEncoder.getAbsolutePosition()).minus(angleOffset);
     }
 
     private void resetToAbsolute(){
-        mAngleEncoder.setPosition(getAbsoluteAngle().getDegrees() - angleOffset.getDegrees());
+        mAngleEncoder.setPosition(getAbsoluteAngle().getDegrees());
     }
 
     private void configAngleEncoder(){
@@ -178,7 +178,7 @@ public class SwerveModule {
         );
     }
     public SwerveModulePosition getPosition() {
-        return new SwerveModulePosition(mDriveEncoder.getPosition(), getAngle());
+        return new SwerveModulePosition(mDriveEncoder.getPosition(), getAbsoluteAngle());
     }
 
     public SwerveModuleState getTargetState() {

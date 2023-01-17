@@ -14,8 +14,8 @@ public final class Constants {
     public static class Drivebase {
 
         public static class Measurements {
-            public static final double width = 0.5;
-            public static final double length = 0.5;
+            public static final double width = 0.7;
+            public static final double length = 0.7;
             public static final double driveRatio = COTSSwerveConstants.driveGearRatios.SDSMK4i_L2;
 
         }
@@ -56,7 +56,7 @@ public final class Constants {
         public static class Auto {
             public static final double maxVelocity = 4;
             public static final double maxAcceleration = 4;
-            public static final double kP = 0;
+            public static final double kP = 0.0;
         }
 
     }
