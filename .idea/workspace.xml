@@ -4,9 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8be0e9b2-7bbf-401b-9710-29a56a36eb81" name="Changes" comment="Setup to tune gains tonight">
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2023-01-11__8_37_a_m___Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2023-01-11__8_37_a_m___Changes_.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/constants/COTSSwerveConstants.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/constants/COTSSwerveConstants.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/subsystems/SwerveDrive.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/subsystems/SwerveDrive.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -32,7 +32,7 @@
             <expand>
               <path>
                 <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="2022-Charged-Up" type="f1a62948:ProjectNode" />
+                <item name="2023-Charged-Up" type="f1a62948:ProjectNode" />
               </path>
             </expand>
             <select />
@@ -83,7 +83,7 @@
     &quot;project.structure.last.edited&quot;: &quot;SDKs&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;Errors&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.project.gradle&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
@@ -188,7 +188,21 @@
       <option name="project" value="LOCAL" />
       <updated>1673456436953</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="no auto">
+      <created>1673757298287</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1673757298287</updated>
+    </task>
+    <task id="LOCAL-00006" summary="aaaaaaaaaa">
+      <created>1673919722519</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1673919722519</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -210,10 +224,11 @@
     <MESSAGE value="askdnasl" />
     <MESSAGE value="updated swerve to 2023" />
     <MESSAGE value="Setup to tune gains tonight" />
-    <option name="LAST_COMMIT_MESSAGE" value="Setup to tune gains tonight" />
+    <MESSAGE value="no auto" />
+    <MESSAGE value="aaaaaaaaaa" />
+    <option name="LAST_COMMIT_MESSAGE" value="aaaaaaaaaa" />
   </component>
   <component name="WpiLibVersionService">
-    <option name="lastChecked" value="20230111182634" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

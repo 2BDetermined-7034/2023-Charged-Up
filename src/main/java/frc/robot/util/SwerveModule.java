@@ -74,7 +74,7 @@ public class SwerveModule {
     }
 
     private void configureDashboard() {
-        dashboard.addDouble("Speed", () -> mDriveMotor.get());
+        dashboard.addDouble("Speed", () -> mDriveMotor.getAppliedOutput());
         dashboard.addDouble("Absolute Angle", () -> getAbsoluteAngle().getDegrees());
         dashboard.addDouble("Relative Angle", () -> getAngle().getDegrees());
         dashboard.addDouble("Target Angle", () -> getTargetState().angle.getDegrees());
@@ -94,7 +94,8 @@ public class SwerveModule {
 
         if(isOpenLoop){
             double percentOutput = desiredState.speedMetersPerSecond / cotsSwerveConstants.maxSpeed;
-            mDriveMotor.set(percentOutput);
+            //mDriveMotor.set(percentOutput);
+            mDriveMotor.setVoltage(percentOutput*12);
         }
         else {
             mDriveMotor.getPIDController().setReference(desiredState.speedMetersPerSecond, ControlType.kVelocity, 0, feedforward.calculate(desiredState.speedMetersPerSecond));
@@ -113,11 +114,11 @@ public class SwerveModule {
     }
 
     public Rotation2d getAbsoluteAngle(){
-        return Rotation2d.fromDegrees(absoluteEncoder.getAbsolutePosition());
+        return Rotation2d.fromDegrees(absoluteEncoder.getAbsolutePosition()).minus(angleOffset);
     }
 
     private void resetToAbsolute(){
-        mAngleEncoder.setPosition(getAbsoluteAngle().getDegrees() - angleOffset.getDegrees());
+        mAngleEncoder.setPosition(getAbsoluteAngle().getDegrees());
     }
 
     private void configAngleEncoder(){
@@ -158,9 +159,9 @@ public class SwerveModule {
         mDriveMotor.setOpenLoopRampRate(Constants.Drivebase.MotorConfig.openLoopRamp);
         mDriveMotor.setClosedLoopRampRate(Constants.Drivebase.MotorConfig.closedLoopRamp);
 
-        mDriveEncoder.setVelocityConversionFactor(1/cotsSwerveConstants.driveGearRatio// 1/gear ratio because the wheel spins slower than the motor.
-                * cotsSwerveConstants.wheelCircumference // Multiply by the circumference to get meters per minute
-                / 60); // Divide by 60 to get meters per second.
+        mDriveEncoder.setPositionConversionFactor(1 / cotsSwerveConstants.driveGearRatio
+                * cotsSwerveConstants.wheelCircumference
+        );
         mDriveEncoder.setPosition(0);
 
         drivePIDController.setP(cotsSwerveConstants.driveKP);

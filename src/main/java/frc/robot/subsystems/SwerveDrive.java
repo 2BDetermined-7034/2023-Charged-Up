@@ -41,6 +41,7 @@ public class SwerveDrive extends SubsystemBase {
     private final SwerveModule m_backRightModule;
 
     private final SwerveDrivePoseEstimator m_estimator;
+    private boolean m_IsOpenLoop = false;
 
     private final Vision m_vision = new Vision();
 
@@ -49,7 +50,7 @@ public class SwerveDrive extends SubsystemBase {
 
     public SwerveDrive() {
         ShuffleboardTab tab = Shuffleboard.getTab("Drivetrain");
-
+        zeroGyroscope();
         m_frontLeftModule = new SwerveModule(
                 0,
                 tab.getLayout("Front Left Module", BuiltInLayouts.kList).withSize(1, 3).withPosition(0, 0),
@@ -98,16 +99,10 @@ public class SwerveDrive extends SubsystemBase {
                 COTSSwerveConstants.SDSMK4i(Constants.Drivebase.Measurements.driveRatio)
         );
 
-
         m_estimator = new SwerveDrivePoseEstimator(
                 m_kinematics,
                 getGyroscopeRotation(),
-                new SwerveModulePosition[] {
-                        m_frontLeftModule.getPosition(),
-                        m_frontRightModule.getPosition(),
-                        m_backLeftModule.getPosition(),
-                        m_backRightModule.getPosition()
-                },
+                getModulePosition(),
                 new Pose2d(),
                 VecBuilder.fill(0.02, 0.02, 0.01), // estimator values (x, y, rotation) std-devs
                 VecBuilder.fill(0.15, 0.15, 0.01)
@@ -126,12 +121,7 @@ public class SwerveDrive extends SubsystemBase {
         zeroGyroscope();
         m_estimator.resetPosition(
                 getGyroscopeRotation(),
-                new SwerveModulePosition[] {
-                    m_frontLeftModule.getPosition(),
-                    m_frontRightModule.getPosition(),
-                    m_backLeftModule.getPosition(),
-                    m_backRightModule.getPosition()
-                },
+                getModulePosition(),
                 m_position
         );
     }
@@ -153,7 +143,6 @@ public class SwerveDrive extends SubsystemBase {
 
     public ChassisSpeeds getVelocity() {return m_speeds;}
 
-
     /**
      * Sets the gyroscope angle to zero. This can be used to set the direction the robot is currently facing to the
      * 'forwards' direction.
@@ -162,7 +151,17 @@ public class SwerveDrive extends SubsystemBase {
         m_navx.zeroYaw();
     }
 
+    public SwerveModulePosition[] getModulePosition() {
+        return new SwerveModulePosition[] {
+                m_frontLeftModule.getPosition(),
+                m_frontRightModule.getPosition(),
+                m_backLeftModule.getPosition(),
+                m_backRightModule.getPosition()
+        };
+    }
+
     public static Rotation2d getGyroscopeRotation() {
+        /*
         if (m_navx.isMagnetometerCalibrated()) {
             // We will only get valid fused headings if the magnetometer is calibrated
             return Rotation2d.fromDegrees(m_navx.getFusedHeading());
@@ -170,6 +169,9 @@ public class SwerveDrive extends SubsystemBase {
 
         // We have to invert the angle of the NavX so that rotating the robot counter-clockwise makes the angle increase.
         return Rotation2d.fromDegrees(360.0 - m_navx.getYaw());
+
+         */
+        return Rotation2d.fromDegrees(360 - m_navx.getYaw());
     }
 
 
@@ -202,19 +204,13 @@ public class SwerveDrive extends SubsystemBase {
 
         m_estimator.update(
                 getGyroscopeRotation(),
-                new SwerveModulePosition[] {
-                        m_frontLeftModule.getPosition(),
-                        m_frontRightModule.getPosition(),
-                        m_backLeftModule.getPosition(),
-                        m_backRightModule.getPosition()
-                }
+                getModulePosition()
         );
 
-        m_frontLeftModule.setDesiredState(m_states[0], true);
-        m_frontRightModule.setDesiredState(m_states[1], true);
-        m_backLeftModule.setDesiredState(m_states[2], true);
-        m_backRightModule.setDesiredState(m_states[3], true);
-
+        m_frontLeftModule.setDesiredState(m_states[0], m_IsOpenLoop);
+        m_frontRightModule.setDesiredState(m_states[1], m_IsOpenLoop);
+        m_backLeftModule.setDesiredState(m_states[2], m_IsOpenLoop);
+        m_backRightModule.setDesiredState(m_states[3], m_IsOpenLoop);
     }
 
 }
