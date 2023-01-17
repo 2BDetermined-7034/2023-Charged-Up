@@ -38,6 +38,7 @@ public class SwerveDrive extends SubsystemBase {
     private final SwerveModule m_backRightModule;
 
     private final SwerveDrivePoseEstimator m_estimator;
+    private boolean m_IsOpenLoop = false;
 
     SwerveModuleState[] m_states;
     ChassisSpeeds m_speeds;
@@ -187,10 +188,10 @@ public class SwerveDrive extends SubsystemBase {
                 getModulePosition()
         );
 
-        m_frontLeftModule.setDesiredState(m_states[0], true);
-        m_frontRightModule.setDesiredState(m_states[1], true);
-        m_backLeftModule.setDesiredState(m_states[2], true);
-        m_backRightModule.setDesiredState(m_states[3], true);
+        m_frontLeftModule.setDesiredState(m_states[0], m_IsOpenLoop);
+        m_frontRightModule.setDesiredState(m_states[1], m_IsOpenLoop);
+        m_backLeftModule.setDesiredState(m_states[2], m_IsOpenLoop);
+        m_backRightModule.setDesiredState(m_states[3], m_IsOpenLoop);
     }
 
 }

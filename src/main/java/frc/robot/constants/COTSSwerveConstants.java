@@ -77,21 +77,21 @@ public class COTSSwerveConstants {
         double angleKD = 0.0;
         double angleKF = 0.0;
 
-        double driveKP = 0.0;
+        double driveKP = 0;
         double driveKI = 0.0;
         double driveKD = 0.0;
         double driveKF = 0.0;
 
-        double driveKS = 0;
-        double driveKV = 0;
-        double driveKA = 0;
+        double driveKS = 0.18684;
+        double driveKV = 2.6395;
+        double driveKA = 0.38108;
 
         boolean driveMotorInvert = true;
         boolean angleMotorInvert = true;
         boolean canCoderInvert = false;
 
         return new COTSSwerveConstants(
-                (5880 / 60.0 * driveGearRatio * wheelDiameter * Math.PI),
+                (5880 / 60.0 / driveGearRatio * wheelDiameter * Math.PI),
                 wheelDiameter,
                 angleGearRatio,
                 driveGearRatio,
