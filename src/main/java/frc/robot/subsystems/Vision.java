@@ -26,7 +26,6 @@ public class Vision extends SubsystemBase {
 
   private RobotPoseEstimator poseEstimator;
   private PoseStrategy estimatorStrategy = PoseStrategy.LOWEST_AMBIGUITY;
-  private Pose2d latestEstimatedPose;
 
 
   public static final ArrayList<AprilTag> aprilTags = new ArrayList<>();
