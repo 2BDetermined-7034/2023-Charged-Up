@@ -6,6 +6,7 @@ package frc.robot.constants;
 
 import com.revrobotics.CANSparkMax;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.util.Units;
 
 public final class Constants {
     public static class OperatorConstants {
@@ -14,8 +15,8 @@ public final class Constants {
     public static class Drivebase {
 
         public static class Measurements {
-            public static final double width = 0.7;
-            public static final double length = 0.7;
+            public static final double width = Units.inchesToMeters(28);
+            public static final double length = Units.inchesToMeters(28);
             public static final double driveRatio = COTSSwerveConstants.driveGearRatios.SDSMK4i_L2;
 
         }
