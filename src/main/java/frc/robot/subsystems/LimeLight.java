@@ -13,7 +13,6 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class LimeLight extends SubsystemBase {
@@ -169,11 +168,14 @@ public class LimeLight extends SubsystemBase {
    * @return Transform from Camera to Target
    */
   public Transform2d getCamTransform2d() {
-    Number[] camTransform = camTran.getNumberArray(new Number[6]);
+    Number[] camTransform = camTran.getDoubleArray(new Double[] {0.0, 0.0, 0.0, 0.0, 0.0, 0.0});
+    if(camTransform.length != 0) {
     return new Transform2d(
       new Translation2d(camTransform[0].doubleValue(), camTransform[1].doubleValue()),
       new Rotation3d(camTransform[5].doubleValue(), camTransform[3].doubleValue(), camTransform[4].doubleValue()).toRotation2d()
     );
+    }
+    return new Transform2d();
   }
 
   /**
@@ -182,11 +184,14 @@ public class LimeLight extends SubsystemBase {
    * @return Pose3d of Robot 
    */
   public Pose3d getBotPose() {
-    Number[] poseVals = botpose.getNumberArray(new Number[6]);
+    Number[] poseVals = botpose.getDoubleArray(new Double[] {0.0, 0.0, 0.0, 0.0, 0.0, 0.0});
+    if(poseVals.length != 0) {
     return new Pose3d(
       new Translation3d(poseVals[0].doubleValue(), poseVals[1].doubleValue(), poseVals[2].doubleValue()),
       new Rotation3d(poseVals[3].doubleValue(), poseVals[4].doubleValue(), poseVals[5].doubleValue())
     );
+    }
+    return new Pose3d();
   }
 
   /**
@@ -283,18 +288,4 @@ public class LimeLight extends SubsystemBase {
       this.blinkLED();
     }
   }
-
-  /**
-   * SmartDashBoard Testing Method
-   */
-  public void putBotPose() {
-    Transform2d cTransform2d = getCamTransform2d();
-  
-    SmartDashboard.putNumber("tx", cTransform2d.getX());
-    SmartDashboard.putNumber("ty", cTransform2d.getY());
-  }
-
-
-
-
 }
