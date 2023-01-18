@@ -5,6 +5,7 @@ import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -14,6 +15,7 @@ import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
 import frc.robot.util.SwerveModule;
@@ -112,6 +114,8 @@ public class SwerveDrive extends SubsystemBase {
         tab.addNumber("Odometry Y", () -> getPosition().getY()).withPosition(1, 4);
         tab.addNumber("Odometry Angle", () -> getPosition().getRotation().getDegrees()).withPosition(2, 4);
         tab.addNumber("Gyroscope Angle", () -> getGyroscopeRotation().getDegrees()).withPosition(3, 4);
+        tab.addNumber("camX", () -> limeLight.getCamTransform2d().getX());
+        tab.addNumber("camY", () -> limeLight.getCamTransform2d().getY());
     }
 
     public void setPosition(Pose2d m_position) {
@@ -192,7 +196,7 @@ public class SwerveDrive extends SubsystemBase {
 
         updateOdometry();
 
-        limeLight.putBotPose();
+        
 
         m_frontLeftModule.setDesiredState(m_states[0], m_IsOpenLoop);
         m_frontRightModule.setDesiredState(m_states[1], m_IsOpenLoop);
@@ -201,7 +205,17 @@ public class SwerveDrive extends SubsystemBase {
     }
 
     private void updateOdometry() {
-        addVisionMeasurement(limeLight.getBotPose().toPose2d(), limeLight.getLatency());
+        if(limeLight.isTargetAvailable()) {
+            addVisionMeasurement(limeLight.getBotPose().toPose2d(), limeLight.getLatency());
+        } else return;
     }
+
+    public void displayOdometry() {
+        Pose2d robotPose = getPosition();
+        SmartDashboard.putNumber("Robotx", robotPose.getX());
+        SmartDashboard.putNumber("Roboty", robotPose.getY());
+    }
+
+    
 
 }

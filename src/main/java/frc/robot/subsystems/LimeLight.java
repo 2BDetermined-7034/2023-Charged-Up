@@ -4,8 +4,6 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.apriltag.AprilTag;
-import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform2d;
@@ -15,16 +13,11 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.constants.FieldConstants;
-
-import java.util.ArrayList;
 
 public class LimeLight extends SubsystemBase {
 
-  private NetworkTable limeLightTable = NetworkTableInstance.getDefault().getTable("limelight");
-
+  private NetworkTable limeLightTable;
   private static NetworkTableEntry getpipe;
 
   private static NetworkTableEntry tx;
@@ -40,19 +33,6 @@ public class LimeLight extends SubsystemBase {
 
   private static NetworkTableEntry camMode;
   private static NetworkTableEntry ledMode;
-
-  private static final ArrayList<AprilTag> aprilTags = new ArrayList<>();
-    static 
-    {
-      for(int i : FieldConstants.aprilTags.keySet()) {
-        aprilTags.add(new AprilTag(i, FieldConstants.aprilTags.get(i)));
-      }
-    }
-  
-    private static final AprilTagFieldLayout atfl = new AprilTagFieldLayout(aprilTags, FieldConstants.fieldLength, FieldConstants.fieldWidth);
-
-
-
 
   private enum LEDMode
   {
@@ -81,6 +61,10 @@ public class LimeLight extends SubsystemBase {
   }
   /** Creates a new LimeLight. */
   public LimeLight() {
+
+    limeLightTable = NetworkTableInstance.getDefault().getTable("limelight");
+
+
     getpipe = limeLightTable.getEntry("getpipe");
 
     tx = limeLightTable.getEntry("tx"); // Horizontal offset from crosshair to target (-29.8 to 29.8 degrees).
@@ -103,12 +87,6 @@ public class LimeLight extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-  }
-
-
-  public void updateTargetValues() {
-
-
   }
 
   /**
@@ -168,31 +146,30 @@ public class LimeLight extends SubsystemBase {
    * @return Latency (ms)
    */
   public long getLatency() {
-    return tl.getInteger(999) + 11;
+    return tl.getInteger(988) + 11;
   }
 
   /**
    * Get Camera transform in target space of primary apriltag or solvepnp target. NumberArray: Translation (x,y,z) Rotation(pitch,yaw,roll)
    * @return Transform from Camera to Target
    */
-  public Transform3d get3dCamTransform() {
-    if(isTargetAvailable()) {
+  public Transform3d getCamTransform3d() {
+
     Number[] camTransform = camTran.getNumberArray(new Number[6]);
     return new Transform3d(
       new Translation3d(camTransform[0].doubleValue(), camTransform[1].doubleValue(), camTransform[2].doubleValue()),
       new Rotation3d(camTransform[5].doubleValue(), camTransform[3].doubleValue(), camTransform[4].doubleValue())
     );
-    }
-    return new Transform3d();
+
   }
 
   /**
    * Get Camera transform in target space of primary apriltag or solvepnp target. NumberArray: Translation (x,y,z) Rotation(pitch,yaw,roll)
    * @return Transform from Camera to Target
    */
-  public Transform2d get2dCamTransform() {
-    if(isTargetAvailable()) {
-    Number[] camTransform = camTran.getNumberArray(new Number[6]);
+  public Transform2d getCamTransform2d() {
+    Number[] camTransform = camTran.getDoubleArray(new Double[] {0.0, 0.0, 0.0, 0.0, 0.0, 0.0});
+    if(camTransform.length != 0) {
     return new Transform2d(
       new Translation2d(camTransform[0].doubleValue(), camTransform[1].doubleValue()),
       new Rotation3d(camTransform[5].doubleValue(), camTransform[3].doubleValue(), camTransform[4].doubleValue()).toRotation2d()
@@ -203,14 +180,15 @@ public class LimeLight extends SubsystemBase {
 
   /**
    * Get Robot transform in field-space. Translation (X,Y,Z) Rotation(X,Y,Z)
+   * LimeLight has it's own dict for apriltag poses
    * @return Pose3d of Robot 
    */
   public Pose3d getBotPose() {
-    if(isTargetAvailable()) {
-    Number[] poseVals = botpose.getNumberArray(new Number[6]);
+    Number[] poseVals = botpose.getDoubleArray(new Double[] {0.0, 0.0, 0.0, 0.0, 0.0, 0.0});
+    if(poseVals.length != 0) {
     return new Pose3d(
       new Translation3d(poseVals[0].doubleValue(), poseVals[1].doubleValue(), poseVals[2].doubleValue()),
-      new Rotation3d(poseVals[5].doubleValue(), poseVals[3].doubleValue(), poseVals[4].doubleValue())
+      new Rotation3d(poseVals[3].doubleValue(), poseVals[4].doubleValue(), poseVals[5].doubleValue())
     );
     }
     return new Pose3d();
@@ -310,15 +288,4 @@ public class LimeLight extends SubsystemBase {
       this.blinkLED();
     }
   }
-
-  public void putBotPose() {
-    Transform2d cTransform2d = get2dCamTransform();
-  
-    SmartDashboard.putNumber("tx", cTransform2d.getX());
-    SmartDashboard.putNumber("ty", cTransform2d.getY());
-  }
-
-
-
-
 }
