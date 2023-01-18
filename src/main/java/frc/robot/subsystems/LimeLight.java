@@ -6,7 +6,9 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -154,11 +156,23 @@ public class LimeLight extends SubsystemBase {
    * Get Camera transform in target space of primary apriltag or solvepnp target. NumberArray: Translation (x,y,z) Rotation(pitch,yaw,roll)
    * @return Transform from Camera to Target
    */
-  public Transform3d getCamTransform() {
+  public Transform3d get3dCamTransform() {
     Number[] camTransform = camTran.getNumberArray(null);
     return new Transform3d(
       new Translation3d(camTransform[0].doubleValue(), camTransform[1].doubleValue(), camTransform[2].doubleValue()),
       new Rotation3d(camTransform[5].doubleValue(), camTransform[3].doubleValue(), camTransform[4].doubleValue())
+    );
+  }
+
+  /**
+   * Get Camera transform in target space of primary apriltag or solvepnp target. NumberArray: Translation (x,y,z) Rotation(pitch,yaw,roll)
+   * @return Transform from Camera to Target
+   */
+  public Transform2d get2dCamTransform() {
+    Number[] camTransform = camTran.getNumberArray(null);
+    return new Transform2d(
+      new Translation2d(camTransform[0].doubleValue(), camTransform[1].doubleValue()),
+      new Rotation3d(camTransform[5].doubleValue(), camTransform[3].doubleValue(), camTransform[4].doubleValue()).toRotation2d()
     );
   }
 
