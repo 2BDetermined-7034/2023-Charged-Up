@@ -43,6 +43,8 @@ public class SwerveDrive extends SubsystemBase {
     SwerveModuleState[] m_states;
     ChassisSpeeds m_speeds;
 
+    private LimeLight limeLight = new LimeLight();
+
     public SwerveDrive() {
         ShuffleboardTab tab = Shuffleboard.getTab("Drivetrain");
         zeroGyroscope();
@@ -188,10 +190,16 @@ public class SwerveDrive extends SubsystemBase {
                 getModulePosition()
         );
 
+        updateOdometry();
+
         m_frontLeftModule.setDesiredState(m_states[0], m_IsOpenLoop);
         m_frontRightModule.setDesiredState(m_states[1], m_IsOpenLoop);
         m_backLeftModule.setDesiredState(m_states[2], m_IsOpenLoop);
         m_backRightModule.setDesiredState(m_states[3], m_IsOpenLoop);
+    }
+
+    private void updateOdometry() {
+        addVisionMeasurement(limeLight.getBotPose().toPose2d(), limeLight.getLatency());
     }
 
 }
