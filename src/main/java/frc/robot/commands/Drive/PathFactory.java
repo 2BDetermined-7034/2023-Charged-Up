@@ -1,6 +1,9 @@
 package frc.robot.commands.Drive;
 
+import com.pathplanner.lib.PathConstraints;
+import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.PathPoint;
 import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -8,6 +11,9 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.SwerveDrive;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class PathFactory {
     SwerveDrive m_swerveDrive;
@@ -40,4 +46,13 @@ public class PathFactory {
     public Command getCommand() {
         return followTrajectoryCommand;
     }
+
+    public static PathPlannerTrajectory pathMaker(List<PathPoint> points){
+        PathPlannerTrajectory trajectory = PathPlanner.generatePath(
+            new PathConstraints(Constants.Drivebase.Auto.maxVelocity, Constants.Drivebase.Auto.maxAcceleration),
+            points
+        );
+        return trajectory;
+    }
+
 }
