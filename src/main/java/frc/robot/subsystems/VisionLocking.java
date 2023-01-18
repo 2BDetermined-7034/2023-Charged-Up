@@ -4,76 +4,114 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.FieldConstants;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import java.util.HashMap;
 
 public class VisionLocking extends SubsystemBase {
 
+    public enum Team{
+        RED, BLUE
+    }
     public enum Level {
-        HIGH, BETWEEN, LOW
+        HIGH, MID, LOW
     }
         public enum Side {
-        LEFT, MIDDLE, RIGHT
-    }
-
-    public enum Grid {
-        GRID1, GRID2, GRID3
+        LEFT, RIGHT
     }
 
     public enum PieceType {
         CONES, CUBES
     }
-    private Level m_Level;
-    private Side m_Side;
-    private Grid m_Grid;
+    private Team m_team;
+    private Level m_level;
+    private Side m_side;
+    private int m_grid;
     private PieceType m_pieceType;
+    private final int[] blueTags = {8,7,6};
+    private final int[] redTags = {3,2,1};
+
+
+
+
 
 
 
     /** Creates a new VisionLocking. */
     public VisionLocking() {
+        m_team = Team.BLUE;
         m_pieceType = PieceType.CONES;
-        m_Grid = Grid.GRID1;
-        m_Side = Side.LEFT;
-        m_Level = Level.HIGH;
+        m_grid = 1;
+        m_side = Side.LEFT;
+        m_level = Level.HIGH;
 
 
     }
 
-
-    public void setLeval(Level setTo){
-        m_Level = setTo ;
+    public void setTeam(Team setTo){
+        m_team = setTo;
+    }
+    public void setLevel(Level setTo){
+        m_level = setTo ;
     }
     public void setSide(Side setTo){
-        m_Side = setTo;
+        m_side = setTo;
     }
-    public void setGrid(Grid setTo){
-        m_Grid = setTo;
+    public void setGrid(int setTo){
+        m_grid = setTo;
     }
     public void setPieceType(PieceType setTo){
         m_pieceType = setTo;
     }
 
-
+    public Team getTeam(){
+        return m_team;
+    }
     public PieceType getPieceType(){
         return m_pieceType;
     }
-    public Grid setGrid(){
-        return m_Grid;
+    public int setGrid(){
+        return m_grid;
     }
     public Side setSide(){
-        return m_Side;
+        return m_side;
     }
-    public Level getLeval(){
-        return m_Level;
+    public Level getLevel(){
+        return m_level;
+    }
+    public void toggleGrid(){
+        if (m_grid < 3) {
+            m_grid += 1;
+        }else {
+            m_grid = 1;
+        }
+    }
+
+
+    public void toggleLevel(){
+        if (m_level.equals(Level.LOW)){
+                m_level = Level.MID;
+            } else if(m_level.equals(Level.MID)){
+                m_level = Level.HIGH;
+            } else {
+                m_level = Level.LOW;
+        }
+    }
+
+    public void toggleSide(){
+        if (m_side.equals(Side.LEFT)) {
+            m_side = Side.RIGHT;
+        } else {
+            m_side = Side.LEFT;
+        }
+    }
+    public void togglePiece(){
+        if (m_pieceType.equals(PieceType.CONES)) {
+            m_pieceType = PieceType.CUBES;
+        } else {
+            m_pieceType = PieceType.CONES;
+        }
     }
 
     /**
@@ -87,216 +125,20 @@ public class VisionLocking extends SubsystemBase {
      * @return position
      */
 
-    public Pose2d getLockedPositon(){
+    public Pose2d getLockedPosition() {
+        Pose2d position;
 
-
-
-        //return new Pose2d();
-        /*
-        if(SmartDashboard.getString("Team Color", "Blue").equals("Blue")){
-            if(m_Grid == Grid.GRID1){
-                if(m_Side == Side.LEFT){
-                    if(m_Level == Level.HIGH){
-                    } else if(m_Level == Level.BETWEEN){
-                        return new Pose2d();
-                    } else {
-                        return new Pose2d();
-                    }
-                } else if(m_Side == Side.MIDDLE){
-                    if(m_Level == Level.HIGH){
-                        return new Pose2d();
-                    } else if(m_Level == Level.BETWEEN){
-                        return new Pose2d();
-                    } else {
-                        return new Pose2d();
-                    }
-                } else {
-                    if(m_Level == Level.HIGH){
-                        return new Pose2d();
-                    } else if(m_Level == Level.BETWEEN){
-                        return new Pose2d();
-                    } else {
-                        return new Pose2d();
-                    }
-                }
-
-            } else if(m_Grid == Grid.GRID2){
-                if(m_Side == Side.LEFT){
-                    if(m_Level == Level.HIGH){
-                        return new Pose2d();
-                    } else if(m_Level == Level.BETWEEN){
-                        return new Pose2d();
-                    } else {
-                        return new Pose2d();
-                    }
-                } else if(m_Side == Side.MIDDLE){
-                    if(m_Level == Level.HIGH){
-                        return new Pose2d();
-                    } else if(m_Level == Level.BETWEEN){
-                        return new Pose2d();
-                    } else {
-                        return new Pose2d();
-                    }
-                } else {
-                    if(m_Level == Level.HIGH){
-                        return new Pose2d();
-                    } else if(m_Level == Level.BETWEEN){
-                        return new Pose2d();
-                    } else {
-                        return new Pose2d();
-                    }
-                }
-
-            } else {
-                if(m_Side == Side.LEFT){
-                    if(m_Level == Level.HIGH){
-                        return new Pose2d();
-                    } else if(m_Level == Level.BETWEEN){
-                        return new Pose2d();
-                    } else {
-                        return new Pose2d();
-                    }
-                } else if(m_Side == Side.MIDDLE){
-                    if(m_Level == Level.HIGH){
-                        return new Pose2d();
-                    } else if(m_Level == Level.BETWEEN){
-                        return new Pose2d();
-                    } else {
-                        return new Pose2d();
-                    }
-                } else {
-                    if(m_Level == Level.HIGH){
-                        return new Pose2d();
-                    } else if(m_Level == Level.BETWEEN){
-                        return new Pose2d();
-                    } else {
-                        return new Pose2d();
-                    }
-                }
-
-            }
+        if (m_team.equals(Team.BLUE)){
+            position = FieldConstants.aprilTags.get(blueTags[m_grid - 1]).toPose2d();
+            position.transformBy(new Transform2d(new Translation2d(Units.inchesToMeters(10),0),new Rotation2d()));
         } else {
-            if(m_Grid == Grid.GRID1){
-                if(m_Side == Side.LEFT){
-                    if(m_Level == Level.HIGH){
-                    } else if(m_Level == Level.BETWEEN){
-                        return new Pose2d();
-                    } else {
-                        return new Pose2d();
-                    }
-                } else if(m_Side == Side.MIDDLE){
-                    if(m_Level == Level.HIGH){
-                        return new Pose2d();
-                    } else if(m_Level == Level.BETWEEN){
-                        return new Pose2d();
-                    } else {
-                        return new Pose2d();
-                    }
-                } else {
-                    if(m_Level == Level.HIGH){
-                        return new Pose2d();
-                    } else if(m_Level == Level.BETWEEN){
-                        return new Pose2d();
-                    } else {
-                        return new Pose2d();
-                    }
-                }
-
-            } else if(m_Grid == Grid.GRID2){
-                if(m_Side == Side.LEFT){
-                    if(m_Level == Level.HIGH){
-                        return new Pose2d();
-                    } else if(m_Level == Level.BETWEEN){
-                        return new Pose2d();
-                    } else {
-                        return new Pose2d();
-                    }
-                } else if(m_Side == Side.MIDDLE){
-                    if(m_Level == Level.HIGH){
-                        return new Pose2d();
-                    } else if(m_Level == Level.BETWEEN){
-                        return new Pose2d();
-                    } else {
-                        return new Pose2d();
-                    }
-                } else {
-                    if(m_Level == Level.HIGH){
-                        return new Pose2d();
-                    } else if(m_Level == Level.BETWEEN){
-                        return new Pose2d();
-                    } else {
-                        return new Pose2d();
-                    }
-                }
-
-            } else {
-                if(m_Side == Side.LEFT){
-                    if(m_Level == Level.HIGH){
-                        return new Pose2d();
-                    } else if(m_Level == Level.BETWEEN){
-                        return new Pose2d();
-                    } else {
-                        return new Pose2d();
-                    }
-                } else if(m_Side == Side.MIDDLE){
-                    if(m_Level == Level.HIGH){
-                        return new Pose2d();
-                    } else if(m_Level == Level.BETWEEN){
-                        return new Pose2d();
-                    } else {
-                        return new Pose2d();
-                    }
-                } else {
-                    if(m_Level == Level.HIGH){
-                        return new Pose2d();
-                    } else if(m_Level == Level.BETWEEN){
-                        return new Pose2d();
-                    } else {
-                        return new Pose2d();
-                    }
-                }
-
-            }
+            position = FieldConstants.aprilTags.get(redTags[m_grid - 1]).toPose2d();
+            position.transformBy(new Transform2d(new Translation2d(Units.inchesToMeters(-10),0),new Rotation2d()));
         }
-        return new Pose2d();
 
-        */
-
-         Pose2d position; 
-         switch(m_Grid) {
-            case GRID1:
-            //initialize 
-            position = FieldConstants.aprilTags.get(1).toPose2d()
-            position.transformBy( new Transform2d(new Translation2d(0, Units.inchesToMeters(-6)), new Rotation2d(180)));
-         
-         case GRID2:
-         //initialize 
-         position = FieldConstants.aprilTags.get(2).toPose2d()
-         position.transformBy( new Transform2d(new Translation2d(0, Units.inchesToMeters(-6)), new Rotation2d(180)));
-      
-        case GRID3:
-      //initialize 
-      position = FieldConstants.aprilTags.get(3).toPose2d()
-      position.transformBy( new Transform2d(new Translation2d(0, Units.inchesToMeters(-6)), new Rotation2d(180)));
-         }
-         switch(m_Side) {
-            case LEFT:
-            //initialize 
-        
-            position.transformBy( new Transform2d(new Translation2d(-6, Units.inchesToMeters(0)), new Rotation2d(0)));
-         
-         case MIDDLE:
-         //initialize 
-
-         position.transformBy( new Transform2d(new Translation2d(0, Units.inchesToMeters(0)), new Rotation2d(0)));
-      
-        case RIGHT:
-      //initialize 
- 
-      position.transformBy( new Transform2d(new Translation2d(6, Units.inchesToMeters(0)), new Rotation2d(0)));
-         }
-         return position;
+        return position;
     }
+
 
     @Override
     public void periodic() {
