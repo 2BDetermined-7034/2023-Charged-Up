@@ -201,7 +201,9 @@ public class SwerveDrive extends SubsystemBase {
     }
 
     private void updateOdometry() {
-        addVisionMeasurement(limeLight.getBotPose().toPose2d(), limeLight.getLatency());
+        if(limeLight.isTargetAvailable()) {
+            addVisionMeasurement(limeLight.getBotPose().toPose2d(), limeLight.getLatency());
+        } else return;
     }
 
 }
