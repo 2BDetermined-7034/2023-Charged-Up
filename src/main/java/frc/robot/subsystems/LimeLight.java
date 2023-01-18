@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.apriltag.AprilTag;
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform2d;
@@ -13,7 +15,11 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.constants.FieldConstants;
+
+import java.util.ArrayList;
 
 public class LimeLight extends SubsystemBase {
 
@@ -34,6 +40,16 @@ public class LimeLight extends SubsystemBase {
 
   private static NetworkTableEntry camMode;
   private static NetworkTableEntry ledMode;
+
+  private static final ArrayList<AprilTag> aprilTags = new ArrayList<>();
+    static 
+    {
+      for(int i : FieldConstants.aprilTags.keySet()) {
+        aprilTags.add(new AprilTag(i, FieldConstants.aprilTags.get(i)));
+      }
+    }
+  
+    private static final AprilTagFieldLayout atfl = new AprilTagFieldLayout(aprilTags, FieldConstants.fieldLength, FieldConstants.fieldWidth);
 
 
 
@@ -79,6 +95,9 @@ public class LimeLight extends SubsystemBase {
     botpose = limeLightTable.getEntry("botpose");
 
     tclass = limeLightTable.getEntry("tclass");
+
+    
+
   }
 
   @Override
@@ -281,6 +300,11 @@ public class LimeLight extends SubsystemBase {
     {
       this.blinkLED();
     }
+  }
+
+  public void putBotPose() {
+    Transform2d cTransform2d = get2dCamTransform();
+    SmartDashboard.putNumberArray("Camera Transformation", new double[] {cTransform2d.getX(), cTransform2d.getY()});
   }
 
 

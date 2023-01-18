@@ -192,6 +192,8 @@ public class SwerveDrive extends SubsystemBase {
 
         updateOdometry();
 
+        limeLight.putBotPose();
+
         m_frontLeftModule.setDesiredState(m_states[0], m_IsOpenLoop);
         m_frontRightModule.setDesiredState(m_states[1], m_IsOpenLoop);
         m_backLeftModule.setDesiredState(m_states[2], m_IsOpenLoop);
