@@ -160,7 +160,7 @@ public class LimeLight extends SubsystemBase {
    * @return AprilTag Id from 1-8
    */
   public long getTargetID() {
-    return tid.getInteger(-1);
+    return tid.getInteger(0);
   }
 
   /**
@@ -176,11 +176,14 @@ public class LimeLight extends SubsystemBase {
    * @return Transform from Camera to Target
    */
   public Transform3d get3dCamTransform() {
-    Number[] camTransform = camTran.getNumberArray(null);
+    if(isTargetAvailable()) {
+    Number[] camTransform = camTran.getNumberArray(new Number[6]);
     return new Transform3d(
       new Translation3d(camTransform[0].doubleValue(), camTransform[1].doubleValue(), camTransform[2].doubleValue()),
       new Rotation3d(camTransform[5].doubleValue(), camTransform[3].doubleValue(), camTransform[4].doubleValue())
     );
+    }
+    return new Transform3d();
   }
 
   /**
@@ -188,11 +191,14 @@ public class LimeLight extends SubsystemBase {
    * @return Transform from Camera to Target
    */
   public Transform2d get2dCamTransform() {
-    Number[] camTransform = camTran.getNumberArray(null);
+    if(isTargetAvailable()) {
+    Number[] camTransform = camTran.getNumberArray(new Number[6]);
     return new Transform2d(
       new Translation2d(camTransform[0].doubleValue(), camTransform[1].doubleValue()),
       new Rotation3d(camTransform[5].doubleValue(), camTransform[3].doubleValue(), camTransform[4].doubleValue()).toRotation2d()
     );
+    }
+    return new Transform2d();
   }
 
   /**
@@ -200,11 +206,14 @@ public class LimeLight extends SubsystemBase {
    * @return Pose3d of Robot 
    */
   public Pose3d getBotPose() {
-    Number[] poseVals = botpose.getNumberArray(null);
+    if(isTargetAvailable()) {
+    Number[] poseVals = botpose.getNumberArray(new Number[6]);
     return new Pose3d(
       new Translation3d(poseVals[0].doubleValue(), poseVals[1].doubleValue(), poseVals[2].doubleValue()),
       new Rotation3d(poseVals[5].doubleValue(), poseVals[3].doubleValue(), poseVals[4].doubleValue())
     );
+    }
+    return new Pose3d();
   }
 
   /**
@@ -304,7 +313,9 @@ public class LimeLight extends SubsystemBase {
 
   public void putBotPose() {
     Transform2d cTransform2d = get2dCamTransform();
-    SmartDashboard.putNumberArray("Camera Transformation", new double[] {cTransform2d.getX(), cTransform2d.getY()});
+  
+    SmartDashboard.putNumber("tx", cTransform2d.getX());
+    SmartDashboard.putNumber("ty", cTransform2d.getY());
   }
 
 
