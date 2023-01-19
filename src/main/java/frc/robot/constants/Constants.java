@@ -6,6 +6,7 @@ package frc.robot.constants;
 
 import com.revrobotics.CANSparkMax;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.util.Units;
 
 public final class Constants {
@@ -60,5 +61,9 @@ public final class Constants {
             public static final double kP = 0.0;
         }
 
+    }
+
+    public static class Vision {
+        public static final Transform2d camToRobot = new Transform2d();
     }
 }
