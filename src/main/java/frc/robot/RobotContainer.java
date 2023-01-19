@@ -5,16 +5,22 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
+import frc.robot.commands.Drive.DriveToTarget;
+import frc.robot.commands.Drive.DumbDriveToTarget;
+import frc.robot.commands.Drive.PathFactory;
 import frc.robot.constants.Constants.OperatorConstants;
 import frc.robot.commands.Auto.AutoFactory;
 import frc.robot.commands.Drive.DefaultDriveCommand;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.SwerveDrive;
+import frc.robot.subsystems.VisionLocking;
 
 
 public class RobotContainer {
     private final SwerveDrive m_swerveDrive = new SwerveDrive();
     private final CommandPS4Controller m_driverController = new CommandPS4Controller(OperatorConstants.kDriverControllerPort);
+    private final VisionLocking m_visionLocker = new VisionLocking();
+
 
     public RobotContainer() {
 
@@ -30,6 +36,10 @@ public class RobotContainer {
     private void configureBindings() {
 
         m_driverController.share().whileTrue(m_swerveDrive.runOnce(m_swerveDrive::zeroGyroscope));
+
+
+        m_driverController.triangle().whileTrue(m_swerveDrive.runOnce(m_swerveDrive::setLimeLightVision));
+        m_driverController.circle().whileTrue(new DumbDriveToTarget(m_swerveDrive, m_visionLocker));
     }
 
 

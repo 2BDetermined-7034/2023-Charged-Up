@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
+import com.pathplanner.lib.PathPlannerTrajectory;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -15,6 +16,7 @@ import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
@@ -44,6 +46,8 @@ public class SwerveDrive extends SubsystemBase {
 
     SwerveModuleState[] m_states;
     ChassisSpeeds m_speeds;
+
+    private final Field2d m_field;
 
     private LimeLight limeLight = new LimeLight();
 
@@ -103,13 +107,17 @@ public class SwerveDrive extends SubsystemBase {
                 getGyroscopeRotation(),
                 getModulePosition(),
                 new Pose2d(),
-                VecBuilder.fill(0.02, 0.02, 0.01), // estimator values (x, y, rotation) std-devs
-                VecBuilder.fill(0.15, 0.15, 0.01)
+                VecBuilder.fill(0.1, 0.1, 0.1), // estimator values (x, y, rotation) std-devs
+                VecBuilder.fill(0.9, 0.9, 0.9)
         );
 
-        m_states = m_kinematics.toSwerveModuleStates(new ChassisSpeeds(0, 0, 0));
-        //tab.add("Field", m_field).withSize(4,2).withPosition(4, 0);
 
+        m_field = new Field2d();
+        m_states = m_kinematics.toSwerveModuleStates(new ChassisSpeeds(0, 0, 0));
+        limeLight.setModeVision();
+
+
+        tab.add(m_field);
         tab.addNumber("Odometry X", () -> getPosition().getX()).withPosition(0, 4);
         tab.addNumber("Odometry Y", () -> getPosition().getY()).withPosition(1, 4);
         tab.addNumber("Odometry Angle", () -> getPosition().getRotation().getDegrees()).withPosition(2, 4);
@@ -162,25 +170,24 @@ public class SwerveDrive extends SubsystemBase {
     }
 
     public static Rotation2d getGyroscopeRotation() {
-        /*
-        if (m_navx.isMagnetometerCalibrated()) {
-            // We will only get valid fused headings if the magnetometer is calibrated
-            return Rotation2d.fromDegrees(m_navx.getFusedHeading());
-        }
-
-        // We have to invert the angle of the NavX so that rotating the robot counter-clockwise makes the angle increase.
-        return Rotation2d.fromDegrees(360.0 - m_navx.getYaw());
-
-         */
         return Rotation2d.fromDegrees(360 - m_navx.getYaw());
     }
 
+    public void setLimeLightDriver() {
+        limeLight.setModeDriver();
+    }
+    public void setLimeLightVision() {
+        limeLight.setModeVision();
+    }
 
     public void drive(ChassisSpeeds chassisSpeeds) {
         m_speeds = chassisSpeeds;
         m_states = m_kinematics.toSwerveModuleStates(chassisSpeeds);
     }
-
+    public void stop(){
+        m_speeds = new ChassisSpeeds(0,0,0);
+        m_states = m_kinematics.toSwerveModuleStates(m_speeds);
+    }
     public void setModuleStates(SwerveModuleState[] states){
         m_states = states;
     }
@@ -195,8 +202,7 @@ public class SwerveDrive extends SubsystemBase {
         );
 
         updateOdometry();
-
-        
+        m_field.setRobotPose(getPosition());
 
         m_frontLeftModule.setDesiredState(m_states[0], m_IsOpenLoop);
         m_frontRightModule.setDesiredState(m_states[1], m_IsOpenLoop);
@@ -210,12 +216,8 @@ public class SwerveDrive extends SubsystemBase {
         } else return;
     }
 
-    public void displayOdometry() {
-        Pose2d robotPose = getPosition();
-        SmartDashboard.putNumber("Robotx", robotPose.getX());
-        SmartDashboard.putNumber("Roboty", robotPose.getY());
+    public void addTrajectory(PathPlannerTrajectory m_trajectory) {
+        m_field.getObject("traj").setTrajectory(m_trajectory);
     }
-
-    
 
 }
