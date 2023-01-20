@@ -4,7 +4,11 @@
 
 package frc.robot;
 
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistribution;
+import edu.wpi.first.wpilibj.Threads;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.util.Alert;
@@ -22,6 +26,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiConsumer;
 
+import static frc.robot.constants.AdvantageKitConstants.RobotType.ROBOT_2023C;
+
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
@@ -29,13 +35,21 @@ import java.util.function.BiConsumer;
  * project.
  */
 public class Robot extends LoggedRobot {
-  private Command m_autonomousCommand;
+  private RobotContainer robotContainer;
+  private Command autoCommand;
+  private double autoStart;
+  private boolean autoMessagePrinted;
 
-  private RobotContainer m_robotContainer;
   private final Alert logNoFileAlert =
-          new Alert("No log path set for current robot. Data will NOT be logged.", Alert.AlertType.WARNING);
+          new Alert("No log path set for current robot. Data will NOT be logged.",
+                  Alert.AlertType.WARNING);
   private final Alert logReceiverQueueAlert =
-          new Alert("Logging queue exceeded capacity, data will NOT be logged.", Alert.AlertType.ERROR);
+          new Alert("Logging queue exceeded capacity, data will NOT be logged.",
+                  Alert.AlertType.ERROR);
+
+  public Robot() {
+    super(AdvantageKitConstants.loopPeriodSecs);
+  }
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -44,15 +58,11 @@ public class Robot extends LoggedRobot {
   @Override
   public void robotInit() {
     Logger logger = Logger.getInstance();
-
-    // Record metadata
+    setUseTiming(AdvantageKitConstants.getMode() != AdvantageKitConstants.Mode.REPLAY);
     logger.recordMetadata("Robot", AdvantageKitConstants.getRobot().toString());
-    logger.recordMetadata("BatteryName", BatteryTracker.scanBattery(1.0));
     logger.recordMetadata("TuningMode", Boolean.toString(AdvantageKitConstants.tuningMode));
     logger.recordMetadata("RuntimeType", getRuntimeType().toString());
 
-
-    // Set up data receivers & replay source
     switch (AdvantageKitConstants.getMode()) {
       case REAL:
         String folder = AdvantageKitConstants.logFolders.get(AdvantageKitConstants.getRobot());
@@ -72,44 +82,15 @@ public class Robot extends LoggedRobot {
       case REPLAY:
         String path = LogFileUtil.findReplayLog();
         logger.setReplaySource(new WPILOGReader(path));
-        logger.addDataReceiver(new WPILOGWriter(LogFileUtil.addPathSuffix(path, "_sim")));
+        logger.addDataReceiver(
+                new WPILOGWriter(LogFileUtil.addPathSuffix(path, "_sim")));
         break;
     }
-
-    // Start AdvantageKit logger
-    setUseTiming(AdvantageKitConstants.getMode() != AdvantageKitConstants.Mode.REPLAY);
     logger.start();
 
-    // Log active commands
-    Map<String, Integer> commandCounts = new HashMap<>();
-    BiConsumer<Command, Boolean> logCommandFunction =
-            (Command command, Boolean active) -> {
-              String name = command.getName();
-              int count = commandCounts.getOrDefault(name, 0) + (active ? 1 : -1);
-              commandCounts.put(name, count);
-              Logger.getInstance()
-                      .recordOutput(
-                              "CommandsUnique/" + name + "_" + Integer.toHexString(command.hashCode()), active);
-              Logger.getInstance().recordOutput("CommandsAll/" + name, count > 0);
-            };
-    CommandScheduler.getInstance()
-            .onCommandInitialize(
-                    (Command command) -> {
-                      logCommandFunction.accept(command, true);
-                    });
-    CommandScheduler.getInstance()
-            .onCommandFinish(
-                    (Command command) -> {
-                      logCommandFunction.accept(command, false);
-                    });
-    CommandScheduler.getInstance()
-            .onCommandInterrupt(
-                    (Command command) -> {
-                      logCommandFunction.accept(command, false);
-                    });
-
-    // Instantiate RobotContainer
-    m_robotContainer = new RobotContainer();
+    // Instantiate our RobotContainer. This will perform all our button bindings, and put our
+    // autonomous chooser on the dashboard.
+    robotContainer = new RobotContainer();
   }
 
   /**
@@ -121,11 +102,34 @@ public class Robot extends LoggedRobot {
    */
   @Override
   public void robotPeriodic() {
-    // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
-    // commands, running already-scheduled commands, removing finished or interrupted commands,
-    // and running subsystem periodic() methods.  This must be called from the robot's periodic
-    // block in order for anything in the Command-based framework to work.
+    Threads.setCurrentThreadPriority(true, 99);
     CommandScheduler.getInstance().run();
+
+    // Log scheduled commands
+    Logger.getInstance().recordOutput("ActiveCommands/Scheduler",
+            NetworkTableInstance.getDefault()
+                    .getEntry("/LiveWindow/Ungrouped/Scheduler/Names")
+                    .getStringArray(new String[] {}));
+
+    // Check logging fault
+    logReceiverQueueAlert.set(Logger.getInstance().getReceiverQueueFault());
+
+    // Print auto duration
+    if (autoCommand != null) {
+      if (!autoCommand.isScheduled() && !autoMessagePrinted) {
+        if (DriverStation.isAutonomousEnabled()) {
+          System.out.println(String.format("*** Auto finished in %.2f secs ***",
+                  Timer.getFPGATimestamp() - autoStart));
+        } else {
+          System.out
+                  .println(String.format("*** Auto cancelled in %.2f secs ***",
+                          Timer.getFPGATimestamp() - autoStart));
+        }
+        autoMessagePrinted = true;
+      }
+    }
+
+    Threads.setCurrentThreadPriority(true, 10);
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
@@ -138,11 +142,11 @@ public class Robot extends LoggedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
-    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-
-    // schedule the autonomous command (example)
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.schedule();
+    autoStart = Timer.getFPGATimestamp();
+    autoMessagePrinted = false;
+    autoCommand = robotContainer.getAutonomousCommand();
+    if (autoCommand != null) {
+      autoCommand.schedule();
     }
   }
 
@@ -152,12 +156,8 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void teleopInit() {
-    // This makes sure that the autonomous stops running when
-    // teleop starts running. If you want the autonomous to
-    // continue until interrupted by another command, remove
-    // this line or comment it out.
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.cancel();
+    if (autoCommand != null) {
+      autoCommand.cancel();
     }
   }
 
