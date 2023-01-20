@@ -17,7 +17,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class LimeLight extends SubsystemBase {
 
-  private NetworkTable limeLightTable;
   private static NetworkTableEntry getpipe;
 
   private static NetworkTableEntry tx;
@@ -54,7 +53,7 @@ public class LimeLight extends SubsystemBase {
     DRIVER(1);
 
     private int modeValue;
-    private CamMode(int modeVal)
+    CamMode(int modeVal)
     {
       this.modeValue = modeVal;
     }
@@ -62,7 +61,7 @@ public class LimeLight extends SubsystemBase {
   /** Creates a new LimeLight. */
   public LimeLight() {
 
-    limeLightTable = NetworkTableInstance.getDefault().getTable("limelight");
+    NetworkTable limeLightTable = NetworkTableInstance.getDefault().getTable("limelight");
 
 
     getpipe = limeLightTable.getEntry("getpipe");
@@ -121,7 +120,7 @@ public class LimeLight extends SubsystemBase {
    */
   public boolean isTargetAvailable()
   {
-    return tv.getNumber(0).intValue() == 1 ? true : false;
+    return tv.getNumber(0).intValue() == 1;
   }
 
   /**
@@ -188,7 +187,7 @@ public class LimeLight extends SubsystemBase {
     if(poseVals.length != 0) {
     return new Pose3d(
       new Translation3d(poseVals[0].doubleValue(), poseVals[1].doubleValue(), poseVals[2].doubleValue()),
-      new Rotation3d(poseVals[3].doubleValue(), poseVals[4].doubleValue(), poseVals[5].doubleValue())
+      new Rotation3d(poseVals[5].doubleValue(), poseVals[3].doubleValue(), poseVals[4].doubleValue())
     );
     }
     return new Pose3d();
