@@ -23,6 +23,7 @@ import frc.robot.constants.Constants;
 import frc.robot.util.SwerveModule;
 import frc.robot.constants.COTSSwerveConstants;
 import frc.robot.constants.SwerveModuleConstants;
+import org.littletonrobotics.junction.Logger;
 
 public class SwerveDrive extends SubsystemBase {
 
@@ -123,6 +124,7 @@ public class SwerveDrive extends SubsystemBase {
         tab.addNumber("Gyroscope Angle", () -> getGyroscopeRotation().getDegrees()).withPosition(3, 4);
     }
 
+
     public void setPosition(Pose2d m_position) {
         zeroGyroscope();
         m_estimator.resetPosition(
@@ -140,6 +142,7 @@ public class SwerveDrive extends SubsystemBase {
         return m_frontLeftModule.cotsSwerveConstants.maxSpeed;
     }
     public Pose2d getPosition() {
+        //Logger.getInstance().recordOutput("Position", m_estimator.getEstimatedPosition());
         return m_estimator.getEstimatedPosition();
     }
 
@@ -182,6 +185,7 @@ public class SwerveDrive extends SubsystemBase {
     public void drive(ChassisSpeeds chassisSpeeds) {
         m_speeds = chassisSpeeds;
         m_states = m_kinematics.toSwerveModuleStates(chassisSpeeds);
+        Logger.getInstance().recordOutput("Pose2D", getPosition());
     }
     public void stop(){
         m_speeds = new ChassisSpeeds(0,0,0);
