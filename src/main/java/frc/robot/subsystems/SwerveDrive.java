@@ -186,7 +186,7 @@ public class SwerveDrive extends SubsystemBase {
     public void drive(ChassisSpeeds chassisSpeeds) {
         m_speeds = chassisSpeeds;
         m_states = m_kinematics.toSwerveModuleStates(chassisSpeeds);
-        Logger.getInstance().recordOutput("Pose2D", new Pose2d());
+        Logger.getInstance().recordOutput("Pose2D", getPosition());
     }
     public void stop(){
         m_speeds = new ChassisSpeeds(0,0,0);
