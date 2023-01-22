@@ -122,6 +122,8 @@ public class SwerveDrive extends SubsystemBase {
         tab.addNumber("Odometry Y", () -> getPosition().getY()).withPosition(1, 4);
         tab.addNumber("Odometry Angle", () -> getPosition().getRotation().getDegrees()).withPosition(2, 4);
         tab.addNumber("Gyroscope Angle", () -> getGyroscopeRotation().getDegrees()).withPosition(3, 4);
+        tab.addNumber("Translation X", () -> getCamTransform().getX());
+        tab.addNumber("Translation Y", () -> getCamTransform().getY());
     }
 
     public void setPosition(Pose2d m_position) {
@@ -218,6 +220,11 @@ public class SwerveDrive extends SubsystemBase {
 
     public void addTrajectory(PathPlannerTrajectory m_trajectory) {
         m_field.getObject("traj").setTrajectory(m_trajectory);
+    }
+
+    public Transform2d getCamTransform() {
+        if(limeLight.isTargetAvailable()) return limeLight.getCamTransform2d();
+        return new Transform2d();
     }
 
 }

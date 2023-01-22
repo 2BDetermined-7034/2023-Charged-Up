@@ -56,8 +56,8 @@ public final class Constants {
         }
 
         public static class Auto {
-            public static final double maxVelocity = 4;
-            public static final double maxAcceleration = 4;
+            public static final double maxVelocity = 1;
+            public static final double maxAcceleration = 2;
             public static final double kP = 0.0;
         }
 
