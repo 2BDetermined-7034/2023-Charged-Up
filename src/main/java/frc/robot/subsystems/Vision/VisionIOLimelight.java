@@ -11,7 +11,12 @@ import static edu.wpi.first.networktables.NetworkTableInstance.getDefault;
 /** Vision hardware implementation for a Limelight. */
 public class VisionIOLimelight implements frc.robot.subsystems.Vision.VisionIO {
   private double[] botpose = new double[0];
-  private double  tv = 0.0, ledMode = 0, tl = 999, getpipe = 0, tid = -1;
+  private double  tv = 0.0;
+  private double ledMode = 0;
+  private double camMode = 0;
+  private double tl = 999;
+  private double getpipe = 0;
+  private double tid = -1;
 
 
   private final NetworkTableEntry validEntry =
@@ -29,9 +34,19 @@ public class VisionIOLimelight implements frc.robot.subsystems.Vision.VisionIO {
   private final NetworkTableEntry targetID =
           getDefault().getTable("limelight").getEntry("tid");
 
-  public VisionIOLimelight() {}
+  public VisionIOLimelight() {
+    synchronized (VisionIOLimelight.this) {
+      tv = validEntry.getDouble(tv);
+      ledMode = ledEntry.getDouble(ledMode);
+      tl = latency.getDouble(tl);
+      camMode = cameraMode.getDouble(camMode);
+      botpose = robotPosition.getDoubleArray(botpose);
+      getpipe = pipelineEntry.getDouble(getpipe);
+      tid = targetID.getDouble(-1);
+    }
+  }
 
-  @Override
+
   public synchronized void updateInputs(VisionIO.VisionIOInputs inputs) {
     inputs.tv = tv;
     inputs.botpose = botpose;
@@ -41,17 +56,17 @@ public class VisionIOLimelight implements frc.robot.subsystems.Vision.VisionIO {
     inputs.tid = tid;
   }
 
-  @Override
+
   public void setLeds(int mode) {
     ledEntry.setDouble(mode);
   }
 
-  @Override
+
   public void setCamMode(int mode) {
     cameraMode.setNumber(mode);
   }
 
-  @Override
+
   public void setPipeline(int pipeline) {
     pipelineEntry.setNumber(pipeline);
   }
