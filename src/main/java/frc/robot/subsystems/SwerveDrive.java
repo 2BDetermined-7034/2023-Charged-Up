@@ -22,6 +22,9 @@ import frc.robot.constants.Constants;
 import frc.robot.util.SwerveModule;
 import frc.robot.constants.COTSSwerveConstants;
 import frc.robot.constants.SwerveModuleConstants;
+import frc.robot.subsystems.Vision.Vision;
+import frc.robot.subsystems.Vision.VisionIO;
+import frc.robot.subsystems.Vision.VisionIOLimelight;;
 
 public class SwerveDrive extends SubsystemBase {
 
@@ -48,7 +51,7 @@ public class SwerveDrive extends SubsystemBase {
 
     private final Field2d m_field;
 
-    private LimeLight limeLight = new LimeLight();
+    private Vision limeLight = new Vision(new VisionIOLimelight());
 
     public SwerveDrive() {
         ShuffleboardTab tab = Shuffleboard.getTab("Drivetrain");
@@ -123,8 +126,6 @@ public class SwerveDrive extends SubsystemBase {
         tab.addNumber("Odometry Y", () -> getPosition().getY()).withPosition(1, 4);
         tab.addNumber("Odometry Angle", () -> getPosition().getRotation().getDegrees()).withPosition(2, 4);
         tab.addNumber("Gyroscope Angle", () -> getGyroscopeRotation().getDegrees()).withPosition(3, 4);
-        tab.addNumber("Translation X", () -> getCamTransform().getX());
-        tab.addNumber("Translation Y", () -> getCamTransform().getY());
     }
     public void setPosition(Pose2d m_position) {
         zeroGyroscope();
@@ -150,7 +151,7 @@ public class SwerveDrive extends SubsystemBase {
         return m_kinematics;
     }
 
-    public LimeLight getLimeLight() {return limeLight;}
+    public Vision getVision() {return limeLight;}
 
     public ChassisSpeeds getVelocity() {return m_speeds;}
 
@@ -220,11 +221,6 @@ public class SwerveDrive extends SubsystemBase {
 
     public void addTrajectory(PathPlannerTrajectory m_trajectory) {
         m_field.getObject("traj").setTrajectory(m_trajectory);
-    }
-
-    public Transform2d getCamTransform() {
-        if(limeLight.isTargetAvailable()) return limeLight.getCamTransform2d();
-        return new Transform2d();
     }
 
 }
