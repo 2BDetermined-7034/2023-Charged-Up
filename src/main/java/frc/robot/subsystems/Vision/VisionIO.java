@@ -11,7 +11,7 @@ import org.littletonrobotics.junction.inputs.LoggableInputs;
 public interface VisionIO {
   /** The set of loggable inputs for the vision subsystem. */
   public static class VisionIOInputs implements LoggableInputs {
-    public double tv = 0.0, ledMode = 0.0, tl = 999, getpipe = 0, camMode = 0, tid = 0;
+    public double tv = 0.0, ledMode = 0.0, tl = 999, getpipe = 0, camMode = 0, tid = 0, tx = 0;
     public double[] botpose = new double[] {};
 
 
@@ -24,6 +24,7 @@ public interface VisionIO {
       table.put("getpipe", getpipe);
       table.put("camMode", camMode);
       table.put("tid", tid);
+      table.put("tx", tx);
     }
 
     public void fromLog(LogTable table) {
@@ -34,6 +35,7 @@ public interface VisionIO {
       getpipe = table.getDouble("getpipe", getpipe);
       camMode = table.getDouble("camMode", camMode);
       tid = table.getDouble("tid", tid);
+      tx = table.getDouble("tx" , tx);
     }
   }
 

@@ -67,6 +67,16 @@ public class DriveToTarget extends CommandBase {
 
         this.outputModuleStates.accept(targetModuleStates);
 
+        if(!m_swerve.getVision().isTargetAvailable()) {
+            if(m_swerve.getVision().getPipeLine() != 1) {
+                m_swerve.getVision().setPipeLine(1);
+            }
+
+            //Do Something with retroreflective tape Here
+
+            double tx = m_swerve.getVision().getHorizontalOffset();
+        }
+
     }
 
     @Override
@@ -78,6 +88,7 @@ public class DriveToTarget extends CommandBase {
     public void end(boolean interrupted) {
         this.timer.stop();
         m_swerve.setLimeLightVision();
+        m_swerve.getVision().setPipeLine(0);
         if (interrupted) {
             this.outputModuleStates.accept(
                     this.kinematics.toSwerveModuleStates(new ChassisSpeeds(0, 0, 0)));
