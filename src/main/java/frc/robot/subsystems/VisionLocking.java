@@ -136,7 +136,7 @@ public class VisionLocking extends SubsystemBase {
             position.transformBy(new Transform2d(new Translation2d(Units.inchesToMeters(0),0),new Rotation2d()));
         }
         //return position;
-        return new Pose2d(new Translation2d(13.67, 2.65), new Rotation2d(0));
+        return new Pose2d(new Translation2d(2, 1), new Rotation2d(0));
     }
 
 

@@ -17,7 +17,6 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
 import frc.robot.util.SwerveModule;
@@ -107,17 +106,19 @@ public class SwerveDrive extends SubsystemBase {
                 getGyroscopeRotation(),
                 getModulePosition(),
                 new Pose2d(),
-                VecBuilder.fill(0.1, 0.1, 0.1), // estimator values (x, y, rotation) std-devs
-                VecBuilder.fill(0.9, 0.9, 0.9)
+                VecBuilder.fill(0.02, 0.02, 0.01), // estimator values (x, y, rotation) std-devs
+                VecBuilder.fill(0.005, 0.005, 0.001)
         );
-
 
         m_field = new Field2d();
         m_states = m_kinematics.toSwerveModuleStates(new ChassisSpeeds(0, 0, 0));
         limeLight.setModeVision();
+        shuffleBoard();
+    }
 
-
-        tab.add(m_field);
+    public void shuffleBoard() {
+        ShuffleboardTab tab = Shuffleboard.getTab("Drivetrain");
+        tab.add(m_field).withPosition(4, 0).withSize(5,4);
         tab.addNumber("Odometry X", () -> getPosition().getX()).withPosition(0, 4);
         tab.addNumber("Odometry Y", () -> getPosition().getY()).withPosition(1, 4);
         tab.addNumber("Odometry Angle", () -> getPosition().getRotation().getDegrees()).withPosition(2, 4);
@@ -125,7 +126,6 @@ public class SwerveDrive extends SubsystemBase {
         tab.addNumber("Translation X", () -> getCamTransform().getX());
         tab.addNumber("Translation Y", () -> getCamTransform().getY());
     }
-
     public void setPosition(Pose2d m_position) {
         zeroGyroscope();
         m_estimator.resetPosition(
