@@ -29,6 +29,7 @@ public class DriveToTarget extends CommandBase {
     private final SwerveDriveKinematics kinematics;
     private final PPHolonomicDriveController controller;
     private final Consumer<SwerveModuleState[]> outputModuleStates;
+    private final PIDController secondaryController;
 
 
     public DriveToTarget(SwerveDrive m_swerve, VisionLocking m_locker) {
@@ -42,6 +43,7 @@ public class DriveToTarget extends CommandBase {
                 new PIDController(0.0, 0, 0)
         );
         this.outputModuleStates = m_swerve::setModuleStates;
+        this.secondaryController = new PIDController(0, 0, 0);
         addRequirements(m_swerve, m_locker);
     }
 
@@ -56,6 +58,44 @@ public class DriveToTarget extends CommandBase {
 
     @Override
     public void execute() {
+
+        if(!m_swerve.getVision().isTargetAvailable()) {
+            if(m_swerve.getVision().getPipeLine() != 1) {
+                m_swerve.getVision().setPipeLine(1);
+            }
+
+            //Do Something with retroreflective tape Here
+
+            float KpAim = -0.1f;
+            float KpDistance = -0.1f;
+            float min_aim_command = 0.05f;
+
+
+            double tx = m_swerve.getVision().getHorizontalOffset();
+            double ty = m_swerve.getVision().getVerticalOffset();
+            double steeringAdjust = 0;
+
+            double heading_error = -tx;
+        double distance_error = -ty;
+        double steering_adjust = 0.0;
+
+        if (tx > 1.0)
+        {
+                steering_adjust = KpAim*heading_error - min_aim_command;
+        }
+        else if (tx < -1.0)
+        {
+                steering_adjust = KpAim*heading_error + min_aim_command;
+        }
+
+        double distance_adjust = KpDistance * distance_error;
+
+
+            m_swerve.drive(new ChassisSpeeds(distance_adjust, steering_adjust, distance_adjust));    
+
+            return;
+        }
+
         double currentTime = this.timer.get();
         PathPlannerTrajectory.PathPlannerState desiredState = (PathPlannerTrajectory.PathPlannerState) this.m_trajectory.sample(currentTime);
 
@@ -67,15 +107,7 @@ public class DriveToTarget extends CommandBase {
 
         this.outputModuleStates.accept(targetModuleStates);
 
-        if(!m_swerve.getVision().isTargetAvailable()) {
-            if(m_swerve.getVision().getPipeLine() != 1) {
-                m_swerve.getVision().setPipeLine(1);
-            }
 
-            //Do Something with retroreflective tape Here
-
-            double tx = m_swerve.getVision().getHorizontalOffset();
-        }
 
     }
 
