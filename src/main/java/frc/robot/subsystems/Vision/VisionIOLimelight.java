@@ -17,7 +17,7 @@ public class VisionIOLimelight implements frc.robot.subsystems.Vision.VisionIO {
   private double tl = 999;
   private double getpipe = 0;
   private double tid = -1;
-  private double tx = 0;
+  private double tx = 0, ty = 0;
 
 
   private final NetworkTableEntry validEntry =
@@ -36,6 +36,8 @@ public class VisionIOLimelight implements frc.robot.subsystems.Vision.VisionIO {
           getDefault().getTable("limelight").getEntry("tid");
   private final NetworkTableEntry horiEntry = 
           getDefault().getTable("limelight").getEntry("tx");
+  private final NetworkTableEntry vEntry = 
+          getDefault().getTable("limelight").getEntry("ty");
 
   public VisionIOLimelight() {
     synchronized (VisionIOLimelight.this) {
@@ -47,6 +49,7 @@ public class VisionIOLimelight implements frc.robot.subsystems.Vision.VisionIO {
       getpipe = pipelineEntry.getDouble(getpipe);
       tid = targetID.getDouble(-1);
       tx = horiEntry.getDouble(tx);
+      ty = vEntry.getDouble(ty);
     }
   }
 
@@ -59,6 +62,7 @@ public class VisionIOLimelight implements frc.robot.subsystems.Vision.VisionIO {
     inputs.getpipe = getpipe;
     inputs.tid = tid;
     inputs.tx = tx;
+    inputs.ty = ty;
   }
 
 

@@ -65,6 +65,10 @@ public class Vision extends SubsystemBase {
     return inputs.tx;
   }
 
+  public double getVerticalOffset() {
+    return inputs.ty;
+  }
+
   public double getLatency() {
     return inputs.tl;
   }
@@ -108,4 +112,6 @@ public class Vision extends SubsystemBase {
     // This method will be called once per scheduler run
     io.updateInputs(inputs);
   }
+
+
 }
