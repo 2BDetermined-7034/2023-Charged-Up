@@ -10,19 +10,17 @@ import frc.robot.subsystems.VisionLocking;
 
 public class ChaseTagCommand extends CommandBase {
   
-  private static final TrapezoidProfile.Constraints X_CONSTRAINTS = new TrapezoidProfile.Constraints(3, 2);
-  private static final TrapezoidProfile.Constraints Y_CONSTRAINTS = new TrapezoidProfile.Constraints(3, 2);
-  private static final TrapezoidProfile.Constraints OMEGA_CONSTRAINTS =   new TrapezoidProfile.Constraints(8, 8);
+  private static final TrapezoidProfile.Constraints X_CONSTRAINTS = new TrapezoidProfile.Constraints(1, 2);
+  private static final TrapezoidProfile.Constraints Y_CONSTRAINTS = new TrapezoidProfile.Constraints(1, 2);
+  private static final TrapezoidProfile.Constraints OMEGA_CONSTRAINTS = new TrapezoidProfile.Constraints(2, 3);
   
 
   private final SwerveDrive swerveDrive;
   private final VisionLocking visionLocking;
 
-  private final ProfiledPIDController xController = new ProfiledPIDController(3, 0, 0, X_CONSTRAINTS);
-  private final ProfiledPIDController yController = new ProfiledPIDController(3, 0, 0, Y_CONSTRAINTS);
-  private final ProfiledPIDController omegaController = new ProfiledPIDController(2, 0, 0, OMEGA_CONSTRAINTS);
-
-  private int lastTargetID;
+  private final ProfiledPIDController xController = new ProfiledPIDController(0.2, 0.1, 0, X_CONSTRAINTS);
+  private final ProfiledPIDController yController = new ProfiledPIDController(0.2, 0.1, 0, Y_CONSTRAINTS);
+  private final ProfiledPIDController omegaController = new ProfiledPIDController(0.5, 0.1, 0, OMEGA_CONSTRAINTS);
 
   public ChaseTagCommand( 
         SwerveDrive swerveDrive,
@@ -30,9 +28,9 @@ public class ChaseTagCommand extends CommandBase {
     this.swerveDrive = swerveDrive;
     this.visionLocking = visionLocking;
 
-    xController.setTolerance(0.2);
-    yController.setTolerance(0.2);
-    omegaController.setTolerance(Units.degreesToRadians(3));
+    xController.setTolerance(0.01);
+    yController.setTolerance(0.01);
+    omegaController.setTolerance(Units.degreesToRadians(1.5));
     omegaController.enableContinuousInput(-Math.PI, Math.PI);
 
     addRequirements(swerveDrive);
@@ -40,7 +38,6 @@ public class ChaseTagCommand extends CommandBase {
 
   @Override
   public void initialize() {
-    lastTargetID = -1;
     var robotPose = swerveDrive.getLimeLight().getBotPose().toPose2d();
     omegaController.reset(robotPose.getRotation().getRadians());
     xController.reset(robotPose.getX());
@@ -49,35 +46,14 @@ public class ChaseTagCommand extends CommandBase {
 
   @Override
   public void execute() {
-    var robotPose = swerveDrive.getPosition();
-
-    if (swerveDrive.getLimeLight().isTargetAvailable()) {
-      // Find the tag we want to chase
-      
-        int target = (int) swerveDrive.getLimeLight().getTargetID();
-        // This is new target data, so recalculate the goal
-        lastTargetID = target;
-        
-        // Transform the robot's pose to find the camera's pose
-
-        // Transform the tag's pose to set our goal
+        var robotPose = swerveDrive.getPosition();
         var goalPose = visionLocking.getLockedPosition();
 
 
-        // Drive
         xController.setGoal(goalPose.getX());
         yController.setGoal(goalPose.getY());
         omegaController.setGoal(goalPose.getRotation().getRadians());
-      
-    }
 
-    //TODO fix this part for Swerve
-    
-    if (lastTargetID == -1) {
-      // No target has been visible
-      
-    } else {
-      // Drive to the target
       var xSpeed = xController.calculate(robotPose.getX());
       if (xController.atGoal()) {
         xSpeed = 0;
@@ -93,16 +69,14 @@ public class ChaseTagCommand extends CommandBase {
         omegaSpeed = 0;
       }
 
-      swerveDrive.drive(
-        ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, omegaSpeed, robotPose.getRotation()));
-    }
+      swerveDrive.drive(ChassisSpeeds.fromFieldRelativeSpeeds(-xSpeed, -ySpeed, omegaSpeed, SwerveDrive.getGyroscopeRotation()));
   }
-
+  public boolean isFinished() {
+    return omegaController.atGoal() && xController.atGoal() && yController.atGoal();
+  }
   @Override
   public void end(boolean interrupted) {
     swerveDrive.stop();
   }
-
-  
 
 }

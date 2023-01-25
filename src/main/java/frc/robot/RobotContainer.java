@@ -36,7 +36,7 @@ public class RobotContainer {
 
 
         m_driverController.triangle().whileTrue(m_swerveDrive.runOnce(m_swerveDrive::setLimeLightVision));
-        m_driverController.circle().whileTrue(new DriveToTarget(m_swerveDrive, m_visionLocker));
+        m_driverController.circle().whileTrue(new DriveToTarget(m_swerveDrive, m_visionLocker).andThen(new ChaseTagCommand(m_swerveDrive, m_visionLocker)));
     }
 
 
