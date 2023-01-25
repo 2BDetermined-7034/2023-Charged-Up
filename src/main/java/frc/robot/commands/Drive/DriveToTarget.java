@@ -64,7 +64,7 @@ public class DriveToTarget extends CommandBase {
                 m_swerve.getVision().setPipeLine(1);
             }
 
-            //Do Something with retroreflective tape Here
+            //Do Something with retro-reflective tape Here
 
             float KpAim = -0.1f;
             float KpDistance = -0.1f;
@@ -76,22 +76,27 @@ public class DriveToTarget extends CommandBase {
             double steeringAdjust = 0;
 
             double heading_error = -tx;
-        double distance_error = -ty;
-        double steering_adjust = 0.0;
+            double distance_error = -ty;
+            double steering_adjust = 0.0;
 
-        if (tx > 1.0)
-        {
+            if (tx > 1.0)
+            {
                 steering_adjust = KpAim*heading_error - min_aim_command;
-        }
-        else if (tx < -1.0)
-        {
+            }
+            else if (tx < -1.0)
+            {
                 steering_adjust = KpAim*heading_error + min_aim_command;
-        }
+            }
 
-        double distance_adjust = KpDistance * distance_error;
+            double distance_adjust = KpDistance * distance_error;
 
 
-            m_swerve.drive(new ChassisSpeeds(distance_adjust, steering_adjust, distance_adjust));    
+            ChassisSpeeds speeds = new ChassisSpeeds(distance_adjust, 0, steeringAdjust);
+
+            SwerveModuleState[] targetModuleStates =
+                    this.kinematics.toSwerveModuleStates(speeds);
+
+            this.outputModuleStates.accept(targetModuleStates);
 
             return;
         }
