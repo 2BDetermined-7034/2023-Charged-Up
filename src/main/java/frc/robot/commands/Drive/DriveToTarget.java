@@ -9,6 +9,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.constants.Constants;
 import frc.robot.subsystems.SwerveDrive;
 import frc.robot.subsystems.VisionLocking;
 
@@ -28,6 +29,7 @@ public class DriveToTarget extends CommandBase {
     private final SwerveDriveKinematics kinematics;
     private final PPHolonomicDriveController controller;
     private final Consumer<SwerveModuleState[]> outputModuleStates;
+    private final PIDController secondaryController;
 
 
     public DriveToTarget(SwerveDrive m_swerve, VisionLocking m_locker) {
@@ -41,6 +43,7 @@ public class DriveToTarget extends CommandBase {
                 new PIDController(0.0, 0, 0)
         );
         this.outputModuleStates = m_swerve::setModuleStates;
+        this.secondaryController = new PIDController(0, 0, 0);
         addRequirements(m_swerve, m_locker);
     }
 
@@ -61,7 +64,7 @@ public class DriveToTarget extends CommandBase {
                 m_swerve.getVision().setPipeLine(1);
             }
 
-            //Do Something with retro-reflective tape Here
+            //Do Something with retroreflective tape Here
 
             float KpAim = -0.1f;
             float KpDistance = -0.1f;
@@ -88,12 +91,7 @@ public class DriveToTarget extends CommandBase {
         double distance_adjust = KpDistance * distance_error;
 
 
-            ChassisSpeeds speeds = new ChassisSpeeds(distance_adjust, 0, steeringAdjust);
-
-            SwerveModuleState[] targetModuleStates =
-                    this.kinematics.toSwerveModuleStates(speeds);
-
-            this.outputModuleStates.accept(targetModuleStates);
+            m_swerve.drive(new ChassisSpeeds(distance_adjust, steering_adjust, distance_adjust));    
 
             return;
         }
