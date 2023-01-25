@@ -20,9 +20,14 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
+import frc.robot.subsystems.Vision.Vision;
+import frc.robot.subsystems.Vision.VisionIO;
+import frc.robot.subsystems.Vision.VisionIOLimelight;
 import frc.robot.util.SwerveModule;
 import frc.robot.constants.COTSSwerveConstants;
 import frc.robot.constants.SwerveModuleConstants;
+
+import org.littletonrobotics.junction.Logger;
 
 public class SwerveDrive extends SubsystemBase {
 
@@ -42,14 +47,13 @@ public class SwerveDrive extends SubsystemBase {
     private final SwerveModule m_backRightModule;
 
     private final SwerveDrivePoseEstimator m_estimator;
-    private boolean m_IsOpenLoop = false;
 
     SwerveModuleState[] m_states;
     ChassisSpeeds m_speeds;
 
     private final Field2d m_field;
 
-    private LimeLight limeLight = new LimeLight();
+    private Vision vision = new Vision(new VisionIOLimelight() );
 
     public SwerveDrive() {
         ShuffleboardTab tab = Shuffleboard.getTab("Drivetrain");
@@ -114,7 +118,7 @@ public class SwerveDrive extends SubsystemBase {
 
         m_field = new Field2d();
         m_states = m_kinematics.toSwerveModuleStates(new ChassisSpeeds(0, 0, 0));
-        limeLight.setModeVision();
+        vision.setModeVision();
 
 
         tab.add(m_field);
@@ -122,9 +126,8 @@ public class SwerveDrive extends SubsystemBase {
         tab.addNumber("Odometry Y", () -> getPosition().getY()).withPosition(1, 4);
         tab.addNumber("Odometry Angle", () -> getPosition().getRotation().getDegrees()).withPosition(2, 4);
         tab.addNumber("Gyroscope Angle", () -> getGyroscopeRotation().getDegrees()).withPosition(3, 4);
-        tab.addNumber("Translation X", () -> getCamTransform().getX());
-        tab.addNumber("Translation Y", () -> getCamTransform().getY());
     }
+
 
     public void setPosition(Pose2d m_position) {
         zeroGyroscope();
@@ -143,6 +146,7 @@ public class SwerveDrive extends SubsystemBase {
         return m_frontLeftModule.cotsSwerveConstants.maxSpeed;
     }
     public Pose2d getPosition() {
+        //Logger.getInstance().recordOutput("Position", m_estimator.getEstimatedPosition());
         return m_estimator.getEstimatedPosition();
     }
 
@@ -150,7 +154,7 @@ public class SwerveDrive extends SubsystemBase {
         return m_kinematics;
     }
 
-    public LimeLight getLimeLight() {return limeLight;}
+    public Vision getLimeLight() {return vision;}
 
     public ChassisSpeeds getVelocity() {return m_speeds;}
 
@@ -176,15 +180,16 @@ public class SwerveDrive extends SubsystemBase {
     }
 
     public void setLimeLightDriver() {
-        limeLight.setModeDriver();
+        vision.setModeDriver();
     }
     public void setLimeLightVision() {
-        limeLight.setModeVision();
+        vision.setModeVision();
     }
 
     public void drive(ChassisSpeeds chassisSpeeds) {
         m_speeds = chassisSpeeds;
         m_states = m_kinematics.toSwerveModuleStates(chassisSpeeds);
+        Logger.getInstance().recordOutput("Pose2D", getPosition());
     }
     public void stop(){
         m_speeds = new ChassisSpeeds(0,0,0);
@@ -206,6 +211,7 @@ public class SwerveDrive extends SubsystemBase {
         updateOdometry();
         m_field.setRobotPose(getPosition());
 
+        boolean m_IsOpenLoop = false;
         m_frontLeftModule.setDesiredState(m_states[0], m_IsOpenLoop);
         m_frontRightModule.setDesiredState(m_states[1], m_IsOpenLoop);
         m_backLeftModule.setDesiredState(m_states[2], m_IsOpenLoop);
@@ -213,8 +219,8 @@ public class SwerveDrive extends SubsystemBase {
     }
 
     private void updateOdometry() {
-        if(limeLight.isTargetAvailable()) {
-            addVisionMeasurement(limeLight.getBotPose().toPose2d(), limeLight.getLatency());
+        if(vision.isTargetAvailable()) {
+            addVisionMeasurement(vision.getBotPose().toPose2d(), vision.getLatency());
         } else return;
     }
 
@@ -222,9 +228,6 @@ public class SwerveDrive extends SubsystemBase {
         m_field.getObject("traj").setTrajectory(m_trajectory);
     }
 
-    public Transform2d getCamTransform() {
-        if(limeLight.isTargetAvailable()) return limeLight.getCamTransform2d();
-        return new Transform2d();
-    }
+
 
 }
