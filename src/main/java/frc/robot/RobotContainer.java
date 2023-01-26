@@ -43,6 +43,7 @@ public class RobotContainer {
     public Command getAutonomousCommand() {
         // An example command will be run in autonomous
         return AutoFactory.getSmallSquare(m_swerveDrive);
+
     }
 
     private static double deadband(double value, double deadband) {
