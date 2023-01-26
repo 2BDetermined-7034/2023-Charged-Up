@@ -17,17 +17,14 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
-import frc.robot.subsystems.Vision.Vision;
-import frc.robot.subsystems.Vision.VisionIO;
-import frc.robot.subsystems.Vision.VisionIOLimelight;
 import frc.robot.util.SwerveModule;
 import frc.robot.constants.COTSSwerveConstants;
 import frc.robot.constants.SwerveModuleConstants;
-
-import org.littletonrobotics.junction.Logger;
+import frc.robot.subsystems.Vision.Vision;
+import frc.robot.subsystems.Vision.VisionIO;
+import frc.robot.subsystems.Vision.VisionIOLimelight;;
 
 public class SwerveDrive extends SubsystemBase {
 
@@ -47,13 +44,14 @@ public class SwerveDrive extends SubsystemBase {
     private final SwerveModule m_backRightModule;
 
     private final SwerveDrivePoseEstimator m_estimator;
+    private boolean m_IsOpenLoop = false;
 
     SwerveModuleState[] m_states;
     ChassisSpeeds m_speeds;
 
     private final Field2d m_field;
 
-    private Vision vision = new Vision(new VisionIOLimelight() );
+    private Vision limeLight = new Vision(new VisionIOLimelight());
 
     public SwerveDrive() {
         ShuffleboardTab tab = Shuffleboard.getTab("Drivetrain");
@@ -111,24 +109,24 @@ public class SwerveDrive extends SubsystemBase {
                 getGyroscopeRotation(),
                 getModulePosition(),
                 new Pose2d(),
-                VecBuilder.fill(0.1, 0.1, 0.1), // estimator values (x, y, rotation) std-devs
-                VecBuilder.fill(0.9, 0.9, 0.9)
+                VecBuilder.fill(0.02, 0.02, 0.01), // estimator values (x, y, rotation) std-devs
+                VecBuilder.fill(0.005, 0.005, 0.001)
         );
-
 
         m_field = new Field2d();
         m_states = m_kinematics.toSwerveModuleStates(new ChassisSpeeds(0, 0, 0));
-        vision.setModeVision();
+        limeLight.setModeVision();
+        shuffleBoard();
+    }
 
-
-        tab.add(m_field);
+    public void shuffleBoard() {
+        ShuffleboardTab tab = Shuffleboard.getTab("Drivetrain");
+        tab.add(m_field).withPosition(4, 0).withSize(5,4);
         tab.addNumber("Odometry X", () -> getPosition().getX()).withPosition(0, 4);
         tab.addNumber("Odometry Y", () -> getPosition().getY()).withPosition(1, 4);
         tab.addNumber("Odometry Angle", () -> getPosition().getRotation().getDegrees()).withPosition(2, 4);
         tab.addNumber("Gyroscope Angle", () -> getGyroscopeRotation().getDegrees()).withPosition(3, 4);
     }
-
-
     public void setPosition(Pose2d m_position) {
         zeroGyroscope();
         m_estimator.resetPosition(
@@ -146,7 +144,6 @@ public class SwerveDrive extends SubsystemBase {
         return m_frontLeftModule.cotsSwerveConstants.maxSpeed;
     }
     public Pose2d getPosition() {
-        //Logger.getInstance().recordOutput("Position", m_estimator.getEstimatedPosition());
         return m_estimator.getEstimatedPosition();
     }
 
@@ -154,7 +151,7 @@ public class SwerveDrive extends SubsystemBase {
         return m_kinematics;
     }
 
-    public Vision getLimeLight() {return vision;}
+    public Vision getVision() {return limeLight;}
 
     public ChassisSpeeds getVelocity() {return m_speeds;}
 
@@ -180,16 +177,15 @@ public class SwerveDrive extends SubsystemBase {
     }
 
     public void setLimeLightDriver() {
-        vision.setModeDriver();
+        limeLight.setModeDriver();
     }
     public void setLimeLightVision() {
-        vision.setModeVision();
+        limeLight.setModeVision();
     }
 
     public void drive(ChassisSpeeds chassisSpeeds) {
         m_speeds = chassisSpeeds;
         m_states = m_kinematics.toSwerveModuleStates(chassisSpeeds);
-        Logger.getInstance().recordOutput("Pose2D", getPosition());
     }
     public void stop(){
         m_speeds = new ChassisSpeeds(0,0,0);
@@ -211,7 +207,6 @@ public class SwerveDrive extends SubsystemBase {
         updateOdometry();
         m_field.setRobotPose(getPosition());
 
-        boolean m_IsOpenLoop = false;
         m_frontLeftModule.setDesiredState(m_states[0], m_IsOpenLoop);
         m_frontRightModule.setDesiredState(m_states[1], m_IsOpenLoop);
         m_backLeftModule.setDesiredState(m_states[2], m_IsOpenLoop);
@@ -219,15 +214,13 @@ public class SwerveDrive extends SubsystemBase {
     }
 
     private void updateOdometry() {
-        if(vision.isTargetAvailable()) {
-            addVisionMeasurement(vision.getBotPose().toPose2d(), vision.getLatency());
+        if(limeLight.isTargetAvailable()) {
+            addVisionMeasurement(limeLight.getBotPose().toPose2d(), limeLight.getLatency());
         } else return;
     }
 
     public void addTrajectory(PathPlannerTrajectory m_trajectory) {
         m_field.getObject("traj").setTrajectory(m_trajectory);
     }
-
-
 
 }

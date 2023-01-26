@@ -29,6 +29,7 @@ public class DriveToTarget extends CommandBase {
     private final SwerveDriveKinematics kinematics;
     private final PPHolonomicDriveController controller;
     private final Consumer<SwerveModuleState[]> outputModuleStates;
+    private final PIDController secondaryController;
 
 
     public DriveToTarget(SwerveDrive m_swerve, VisionLocking m_locker) {
@@ -42,6 +43,7 @@ public class DriveToTarget extends CommandBase {
                 new PIDController(0.0, 0, 0)
         );
         this.outputModuleStates = m_swerve::setModuleStates;
+        this.secondaryController = new PIDController(0, 0, 0);
         addRequirements(m_swerve, m_locker);
     }
 
@@ -52,11 +54,53 @@ public class DriveToTarget extends CommandBase {
         //m_swerve.setLimeLightDriver();
         this.timer.reset();
         this.timer.start();
-
     }
 
     @Override
     public void execute() {
+
+        if(!m_swerve.getVision().isTargetAvailable()) {
+            if(m_swerve.getVision().getPipeLine() != 1) {
+                m_swerve.getVision().setPipeLine(1);
+            }
+
+            //Do Something with retro-reflective tape Here
+
+            float KpAim = -0.1f;
+            float KpDistance = -0.1f;
+            float min_aim_command = 0.05f;
+
+
+            double tx = m_swerve.getVision().getHorizontalOffset();
+            double ty = m_swerve.getVision().getVerticalOffset();
+            double steeringAdjust = 0;
+
+            double heading_error = -tx;
+            double distance_error = -ty;
+            double steering_adjust = 0.0;
+
+            if (tx > 1.0)
+            {
+                steering_adjust = KpAim*heading_error - min_aim_command;
+            }
+            else if (tx < -1.0)
+            {
+                steering_adjust = KpAim*heading_error + min_aim_command;
+            }
+
+            double distance_adjust = KpDistance * distance_error;
+
+
+            ChassisSpeeds speeds = new ChassisSpeeds(distance_adjust, 0, steeringAdjust);
+
+            SwerveModuleState[] targetModuleStates =
+                    this.kinematics.toSwerveModuleStates(speeds);
+
+            this.outputModuleStates.accept(targetModuleStates);
+
+            return;
+        }
+
         double currentTime = this.timer.get();
         PathPlannerTrajectory.PathPlannerState desiredState = (PathPlannerTrajectory.PathPlannerState) this.m_trajectory.sample(currentTime);
 
@@ -67,6 +111,8 @@ public class DriveToTarget extends CommandBase {
                 this.kinematics.toSwerveModuleStates(targetChassisSpeeds);
 
         this.outputModuleStates.accept(targetModuleStates);
+
+
 
     }
 
@@ -79,6 +125,7 @@ public class DriveToTarget extends CommandBase {
     public void end(boolean interrupted) {
         this.timer.stop();
         m_swerve.setLimeLightVision();
+        m_swerve.getVision().setPipeLine(0);
         if (interrupted) {
             this.outputModuleStates.accept(
                     this.kinematics.toSwerveModuleStates(new ChassisSpeeds(0, 0, 0)));

@@ -56,8 +56,25 @@ public class Vision extends SubsystemBase {
     return (int) inputs.tid;
   }
 
+
+  /**
+   * Gets horizontal Angle Offset from crosshair for Retroreflective tape pipeline
+   * @return double
+   */
+  public double getHorizontalOffset() {
+    return inputs.tx;
+  }
+
+  public double getVerticalOffset() {
+    return inputs.ty;
+  }
+
   public double getLatency() {
     return inputs.tl;
+  }
+
+  public int getPipeLine() {
+    return (int) inputs.getpipe;
   }
 
   public Pose3d getBotPose() {
@@ -86,9 +103,15 @@ public class Vision extends SubsystemBase {
     this.setCamera(CamMode.VISION);
   }
 
+  public void setPipeLine(int pipeLine) {
+    io.setPipeline(pipeLine);
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
     io.updateInputs(inputs);
   }
+
+
 }
