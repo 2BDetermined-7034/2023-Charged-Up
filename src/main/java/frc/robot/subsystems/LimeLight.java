@@ -35,6 +35,8 @@ public class LimeLight extends SubsystemBase {
   private static NetworkTableEntry camMode;
   private static NetworkTableEntry ledMode;
 
+  private static long[] legalTags = new long[] {1,2,3,4,5,6,7,8};
+
   private enum LEDMode
   {
     PIPELINE(0),
@@ -81,7 +83,7 @@ public class LimeLight extends SubsystemBase {
 
     tclass = limeLightTable.getEntry("tclass");
 
-    
+    legalTags = new long[] {1, 2, 3,4,5,6,7,8};
 
   }
 
@@ -139,7 +141,14 @@ public class LimeLight extends SubsystemBase {
    * @return AprilTag Id from 1-8
    */
   public long getTargetID() {
-    return tid.getInteger(0);
+    long id = tid.getInteger(-1);
+    for(long i : legalTags) {
+      if(id == i) {
+        return id;
+      }
+    }
+    return -1;
+
   }
 
   /**
