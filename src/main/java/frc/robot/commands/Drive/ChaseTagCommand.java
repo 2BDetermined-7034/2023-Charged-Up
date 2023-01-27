@@ -38,9 +38,6 @@ public class ChaseTagCommand extends CommandBase {
     omegaController.enableContinuousInput(-Math.PI, Math.PI);
     omegaController.setIntegratorRange(-1, 1);
 
-      SmartDashboard.putData(xController);
-      SmartDashboard.putData(yController);
-
     addRequirements(swerveDrive);
   }
 
