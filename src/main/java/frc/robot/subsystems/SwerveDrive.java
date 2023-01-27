@@ -117,13 +117,12 @@ public class SwerveDrive extends SubsystemBase {
         limeLight.setModeVision();
 
 
-        tab.add(m_field);
+        tab.add(m_field).withPosition(4,0).withSize(5,4);
         tab.addNumber("Odometry X", () -> getPosition().getX()).withPosition(0, 4);
         tab.addNumber("Odometry Y", () -> getPosition().getY()).withPosition(1, 4);
         tab.addNumber("Odometry Angle", () -> getPosition().getRotation().getDegrees()).withPosition(2, 4);
         tab.addNumber("Gyroscope Angle", () -> getGyroscopeRotation().getDegrees()).withPosition(3, 4);
-        tab.addNumber("Translation X", () -> getCamTransform().getX());
-        tab.addNumber("Translation Y", () -> getCamTransform().getY());
+        tab.addBoolean("Tag", () -> limeLight.isTargetAvailable()).withPosition(4,5);
     }
 
 
