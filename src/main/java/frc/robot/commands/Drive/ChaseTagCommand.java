@@ -4,6 +4,7 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.SwerveDrive;
 import frc.robot.subsystems.VisionLocking;
@@ -18,8 +19,8 @@ public class ChaseTagCommand extends CommandBase {
   private final SwerveDrive swerveDrive;
   private final VisionLocking visionLocking;
 
-  private final ProfiledPIDController xController = new ProfiledPIDController(0.3, 0, 0, X_CONSTRAINTS);
-  private final ProfiledPIDController yController = new ProfiledPIDController(0.3, 0, 0, Y_CONSTRAINTS);
+  private final ProfiledPIDController xController = new ProfiledPIDController(0.2, 0.1, 0, X_CONSTRAINTS);
+  private final ProfiledPIDController yController = new ProfiledPIDController(0.2, 0.1, 0, Y_CONSTRAINTS);
   private final ProfiledPIDController omegaController = new ProfiledPIDController(0.3, 0.01, 0, OMEGA_CONSTRAINTS);
 
   public ChaseTagCommand( 
@@ -30,9 +31,15 @@ public class ChaseTagCommand extends CommandBase {
 
     xController.setTolerance(0.01);
     yController.setTolerance(0.01);
+    xController.setIntegratorRange(-1, 1);
+    yController.setIntegratorRange(-1, 1);
+
     omegaController.setTolerance(Units.degreesToRadians(1.5));
     omegaController.enableContinuousInput(-Math.PI, Math.PI);
     omegaController.setIntegratorRange(-1, 1);
+
+      SmartDashboard.putData(xController);
+      SmartDashboard.putData(yController);
 
     addRequirements(swerveDrive);
   }

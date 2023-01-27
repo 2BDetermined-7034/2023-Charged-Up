@@ -37,8 +37,8 @@ public class DriveToTarget extends CommandBase {
         this.poseSupplier = m_swerve::getPosition;
         this.kinematics = m_swerve.getKinematics();
         this.controller = new PPHolonomicDriveController(
-                new PIDController(0, 0.00, 0), // X controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
-                new PIDController(0, 0.00, 0), // Y controller (usually the same values as X controller)
+                new PIDController(0.1, 0.00, 0), // X controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
+                new PIDController(0.1, 0.00, 0), // Y controller (usually the same values as X controller)
                 new PIDController(0.0, 0, 0)
         );
         this.outputModuleStates = m_swerve::setModuleStates;
