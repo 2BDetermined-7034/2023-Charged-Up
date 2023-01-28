@@ -6,12 +6,20 @@ package frc.robot.subsystems.Arm;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
+import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.math.MatBuilder;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.Nat;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N2;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.util.ArmState;
 
 import static frc.robot.constants.Constants.ArmConstants.*;
 
@@ -21,93 +29,69 @@ import static frc.robot.constants.Constants.ArmConstants.*;
 
 public class Arm extends SubsystemBase {
 
-    private CANSparkMax m_motor1;
-    private CANSparkMax m_motor2;
+    private final CANSparkMax m_motor1;
+    private final CANSparkMax m_motor2;
+    private final RelativeEncoder m_motor1Encoder;
+    private final RelativeEncoder m_motor2Encoder;
+    private ArmState goalState;
+
+
+    private static final PIDController controller1 = new PIDController(0, 0, 0);
+    private static final PIDController controller2 = new PIDController(0, 0, 0);
 
     /** Creates a new Arm. */
     public Arm() {
-        m_motor1 = new CANSparkMax(motor1ID, CANSparkMaxLowLevel.MotorType.kBrushed);
-        m_motor2 = new CANSparkMax(motor2ID, CANSparkMaxLowLevel.MotorType.kBrushed);
+        m_motor1 = new CANSparkMax(motor1ID, CANSparkMaxLowLevel.MotorType.kBrushless);
+        m_motor2 = new CANSparkMax(motor2ID, CANSparkMaxLowLevel.MotorType.kBrushless);
+        m_motor1Encoder = m_motor1.getEncoder();
+        m_motor2Encoder= m_motor2.getEncoder();
+
+        m_motor1Encoder.setPositionConversionFactor(S1);
+        m_motor2Encoder.setPositionConversionFactor(S2);
+
+        m_motor1Encoder.setPosition(Units.degreesToRadians(90));
+        m_motor2Encoder.setPosition(Units.degreesToRadians(180) + m_motor1Encoder.getPosition());
+
+        configureDashBoard();
     }
 
+    public void configureDashBoard() {
+        ShuffleboardTab tab = Shuffleboard.getTab("Arm");
+        tab.addDouble("Current theta1", () -> getCurrentState().theta1.getDegrees()).withPosition(0,0);
+        tab.addDouble("Current theta2", () -> getCurrentState().theta2.getDegrees()).withPosition(1, 0);
+        tab.addDouble("omega1", () -> getCurrentState().omega1).withPosition(2, 0);
+        tab.addDouble("omega2", () -> getCurrentState().omega2).withPosition(3, 0);
 
-
-    @Override
-    public void periodic() {
-        // This method will be called once per scheduler run
+        tab.addDouble("Target theta1", () -> getGoalState().theta1.getDegrees()).withPosition(0,1);
+        tab.addDouble("Target theta2", () -> getGoalState().theta2.getDegrees()).withPosition(1,1);
     }
-
-    /**
-     * Made for convenience
-     */
-    public static class ArmState {
-        public double theta1;
-        public double theta2;
-        public double omega1;
-        public double omega2;
-        public double inputError1;
-        public double inputError2;
-
-        ArmState(double[] states) {
-            this.theta1 = states[0];
-            this.theta2 = states[1];
-            this.omega1 = states[2];
-            this.omega2 = states[3];
-            if(states.length == 6){
-                this.inputError1 = states[4];
-                this.inputError2 = states[5];
-            }
-
-        }
-
-        public ArmState(Matrix<N2, N1> thetas) {
-            this.theta1 = thetas.get(1, 1);
-            this.theta2 = thetas.get(1, 2);
-            this.omega2 = 0;
-            this.omega1 = 0;
-        }
+    public ArmState getGoalState() {
+        return goalState;
+    }
+    public void setGoalState(ArmState state) {
+        goalState = state;
+    }
+    public ArmState getCurrentState() {
+        Rotation2d theta1 = Rotation2d.fromRadians(m_motor1Encoder.getPosition());
+        Rotation2d theta2 = Rotation2d.fromRadians(m_motor2Encoder.getPosition() - theta1.getRadians());
+        double omega1 = m_motor1Encoder.getVelocity();
+        double omega2 = m_motor2Encoder.getVelocity();
+        return new ArmState(theta1, theta2, omega1, omega2);
     }
 
     /**
      *
-     * @param state
+     * @param x
+     * @param y
      * @return
      */
-    public Matrix<N1, N2> joint2fwdKinematics(ArmState state) {
+    public static ArmState inverseKinematics(double x, double y) {
 
-        Matrix<N1, N2> joint2 = joint1fwdKinematics(state);
+        Rotation2d theta2 = Rotation2d.fromRadians(Math.acos((x * x + y * y - (l1 * l1 + l2 * l2)) / (2 * l1 * l2)));
+        Rotation2d theta1 = Rotation2d.fromRadians(Math.atan2(y, x) - Math.atan2(l2 * Math.sin(theta2.getRadians()), l1 + l2 * Math.cos(theta2.getRadians())));
 
-        return joint2.plus(
-                new MatBuilder<>(Nat.N1(), Nat.N2()).fill(
-                        l2 * Math.cos(state.theta1 + state.theta2),
-                        l2 * Math.sin(state.theta1 + state.theta2)
-                )
-        );
-
+        return new ArmState(theta1, theta2, 0,0);
     }
-
-    /**
-     * Inverts kinematics for a target position xy
-     * @param xy double[] {x, y}
-     * @return
-     */
-    public static Matrix<N2, N1> inverseKinematics(double[] xy) {
-        double x = xy[0];
-        double y = xy[1];
-        double theta2 = Math.acos((x * x + y * y - (l1 * l1 + l2 * l2)) / (2 * l1 * l2));
-
-        double theta1 = Math.atan2(y, x) - Math.atan2(l2 * Math.sin(theta2), l1 + l2 * Math.cos(theta2));
-        return new MatBuilder<>(Nat.N2(), Nat.N1()).fill(theta1, theta2);
-    }
-
-    public Matrix<edu.wpi.first.math.numbers.N1, edu.wpi.first.math.numbers.N2> joint1fwdKinematics(ArmState state) {
-        return new MatBuilder<>(Nat.N1(), Nat.N2()).fill(
-                l1 * Math.cos(state.theta1),
-                l1 * Math.sin(state.theta1)
-        );
-    }
-
-    //I know this is stupid, but I want to know if this will work
 
     /**
      * gets the intertia matrix
@@ -117,7 +101,7 @@ public class Arm extends SubsystemBase {
     private Matrix<N2, N2> getDynamicMatrixM(ArmState state) {
 
         //Encoder stuff
-        double theta2 = state.theta2;
+        double theta2 = state.theta2.getRadians();
 
 
         double c2 = Math.cos(theta2);
@@ -163,7 +147,7 @@ public class Arm extends SubsystemBase {
      */
     public Matrix<N2, N2> getDynamicMatrixC(ArmState state) {
 
-        double theta2 = state.theta2;
+        double theta2 = state.theta2.getRadians();
         double omega1 = state.omega1, omega2 = state.omega2;
 
 
@@ -184,7 +168,7 @@ public class Arm extends SubsystemBase {
      * @return
      */
     public Matrix<N2, N1> getDynamicMatrixG(ArmState state) {
-        double theta1 = state.theta1, theta2 = state.theta2;
+        double theta1 = state.theta1.getRadians(), theta2 = state.theta2.getRadians();
 
 
 
@@ -201,6 +185,28 @@ public class Arm extends SubsystemBase {
                                 .transpose()
                 );
 
+    }
+
+    public Matrix<N2, N1> getAccels(ArmState state, double inputVolt1, double inputVolt2) {
+        Matrix<N2, N1> omegas = new MatBuilder<>(Nat.N2(), Nat.N1()).fill(
+                state.omega1,
+                state.omega2
+        );
+        Matrix<N2, N1> inputs = new MatBuilder<N2, N1>(Nat.N2(), Nat.N1()).fill(
+                inputVolt1,
+                inputVolt2
+        );
+        Matrix<N2, N1> basic_torque = K3.times(inputs);
+        Matrix<N2, N2> M = getDynamicMatrixM(state);
+        Matrix<N2, N1> G = getDynamicMatrixG(state);
+        Matrix<N2, N2> C = getDynamicMatrixC(state);
+
+        Matrix<N2, N1>  back_emf_loss = K4.times(omegas);
+
+
+        Matrix<N2, N1> torque = basic_torque.minus(back_emf_loss);
+
+        return M.inv().times(torque.minus(C.times(omegas).minus(G)));
     }
 
     /**
@@ -236,17 +242,22 @@ public class Arm extends SubsystemBase {
         m_motor2.setVoltage(volt2);
     }
 
-    public double[] getThetaValues() {
-        return null;
-    }
+    @Override
+    public void periodic() {
+        ArmState goalState = getGoalState();
 
-    public ArmState getState() {
-        return new ArmState(new double[]{
-                getThetaValues()[0],
-                getThetaValues()[1],
-                m_motor1.getEncoder().getVelocity(),
-                m_motor2.getEncoder().getVelocity()
-        }
+        if(goalState.theta1.getDegrees() <= 60 || goalState.theta1.getDegrees() >= 120) return;
+
+        double input1 = MathUtil.clamp(controller1.calculate(getCurrentState().theta1.getRadians(), goalState.theta1.getRadians()), -2, 2);
+        double input2 = MathUtil.clamp(controller2.calculate(getCurrentState().theta2.getRadians(), goalState.theta2.getRadians()) , -2, 2);
+
+        Matrix<N2, N1> accels = getAccels(getCurrentState(), input1, input2);
+
+        Matrix<N2, N1> ffs = feedForward(goalState, accels);
+        setVoltages(
+                input1 + ffs.get(0,0),
+                input2 + ffs.get(1,0)
         );
+
     }
 }

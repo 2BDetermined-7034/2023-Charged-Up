@@ -26,27 +26,27 @@ public final class Constants {
             public static final int flDrive = 3;
             public static final int flSteer = 13;
             public static final int flEncoder = 1;
-            //public static final Rotation2d flOffset = Rotation2d.fromDegrees(173.1);
-            public static final Rotation2d flOffset = Rotation2d.fromDegrees(263.1 + 0); //266.6
+            public static final Rotation2d flOffset = Rotation2d.fromDegrees(173.1);
+            //public static final Rotation2d flOffset = Rotation2d.fromDegrees(263.1 + 0); //266.6
 
             public static final int frDrive = 12;
             public static final int frSteer = 11;
             public static final int frEncoder = 2;
-            //public static final Rotation2d frOffset = Rotation2d.fromDegrees(252.8 + 0);
-            public static final Rotation2d frOffset = Rotation2d.fromDegrees(68.7 - 2);
+            public static final Rotation2d frOffset = Rotation2d.fromDegrees(252.8 + 0);
+            //public static final Rotation2d frOffset = Rotation2d.fromDegrees(68.7 - 2);
 
             public static final int blDrive = 5;
             public static final int blSteer = 14;
             public static final int blEncoder = 4;
-            //public static final Rotation2d blOffset = Rotation2d.fromDegrees(217.3 - 0);
+            public static final Rotation2d blOffset = Rotation2d.fromDegrees(217.3 - 0);
 
-            public static final Rotation2d blOffset = Rotation2d.fromDegrees(160.83 - 1);
+//            public static final Rotation2d blOffset = Rotation2d.fromDegrees(160.83 - 1);
 
             public static final int brDrive = 2;
             public static final int brSteer = 6;
             public static final int brEncoder = 3;
-            //public static final Rotation2d brOffset = Rotation2d.fromDegrees(155.4 + 0);
-            public static final Rotation2d brOffset = Rotation2d.fromDegrees(266.5 + 0);
+            public static final Rotation2d brOffset = Rotation2d.fromDegrees(155.4 + 0);
+//            public static final Rotation2d brOffset = Rotation2d.fromDegrees(266.5 + 0);
         }
         public static class MotorConfig {
             public static int angleSmartCurrentLimit = 25;
@@ -75,38 +75,42 @@ public final class Constants {
 
     public static class ArmConstants {
 
-        public static final int motor1ID = 12;
-        public static final int motor2ID = 13;
+        public static final int motor1ID = 9;
+        public static final int motor2ID = 15;
         //Length of Segments
-        public static final double l1 = 46.25 * .0254;
-        public static final double l2 = 41.80 * .0254;
+        public static final double l1 = Units.inchesToMeters(38.5);
+        public static final double l2 = Units.inchesToMeters(33.5);
+        public static final double fullRadius = l1 + l2;
 
         //Mass of segments
-        public static final double m1 = 9.34 * .4536;
-        public static final double m2 = 9.77 * .4536;
+        public static final double m1 = 1.3;
+        public static final double m2 = 0.53;
 
         //Distance from pivot to CG for each segment
         public static final double r1 = 21.64 * .0254;
         public static final double r2 = 26.70 * .0254;
 
         //Moment of inertia about CG for each segment
-        public static final double I1 = 2957.05 * .0254 * .0254 * .4536;
-        public static final double I2 = 2824.70 * .0254 * .0254 * .4536;
+        public static final double I1 = .118;
+        public static final double I2 = .031;
 
         //Gearing of each segment
-        public static final double G1 = 140.;
-        public static final double G2 = 90.;
+        public static final double G1 = 80.;
+        public static final double G2 = 112.5;
+
+        public static final double S1 = 2 * Math.PI * (1/r1);
+        public static final double S2 = 2 * Math.PI * (1/r2);
 
         //Number of motors in each gearbox
-        public static final int N1 = 1;
-        public static final int N2 = 2;
+        public static final int N1 = 2;
+        public static final int N2 = 1;
 
         //Gravity
         public static final double g = 9.81;
 
-        public static final double stall_torque = 3.36;
-        public static final double free_speed = 5880.0 * 2.0 * Math.PI / 60.0;
-        public static final double stall_current = 166;
+        public static final double stall_torque = 3.28;
+        public static final double free_speed = 5820 * 2.0 * Math.PI / 60.0;
+        public static final double stall_current = 181;
 
         public static final double Rm = 12.0 / stall_current;
 
@@ -128,5 +132,4 @@ public final class Constants {
                 G2 * G2 * N2
         ).times(Kt / Kv / Rm);
     }
-
 }
