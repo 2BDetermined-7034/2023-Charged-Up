@@ -18,6 +18,7 @@ import edu.wpi.first.math.numbers.N2;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.util.ArmState;
 
@@ -34,15 +35,19 @@ public class Arm extends SubsystemBase {
     private final RelativeEncoder m_motor1Encoder;
     private final RelativeEncoder m_motor2Encoder;
     private ArmState goalState;
+    private double lastinput1;
+    private double lastinput2;
 
 
-    private static final PIDController controller1 = new PIDController(0, 0, 0);
-    private static final PIDController controller2 = new PIDController(0, 0, 0);
+    private static final PIDController controller1 = new PIDController(0.5, 0, 0);
+    private static final PIDController controller2 = new PIDController(0.3, 0, 0);
 
     /** Creates a new Arm. */
     public Arm() {
         m_motor1 = new CANSparkMax(motor1ID, CANSparkMaxLowLevel.MotorType.kBrushless);
         m_motor2 = new CANSparkMax(motor2ID, CANSparkMaxLowLevel.MotorType.kBrushless);
+        m_motor1.setInverted(true);
+        m_motor2.setInverted(true);
         m_motor1Encoder = m_motor1.getEncoder();
         m_motor2Encoder= m_motor2.getEncoder();
 
@@ -51,6 +56,8 @@ public class Arm extends SubsystemBase {
 
         m_motor1Encoder.setPosition(Units.degreesToRadians(90));
         m_motor2Encoder.setPosition(Units.degreesToRadians(180) + m_motor1Encoder.getPosition());
+
+        goalState = new ArmState(Rotation2d.fromRadians(m_motor1Encoder.getPosition()), Rotation2d.fromRadians(m_motor2Encoder.getPosition()), 0, 0);
 
         configureDashBoard();
     }
@@ -64,6 +71,10 @@ public class Arm extends SubsystemBase {
 
         tab.addDouble("Target theta1", () -> getGoalState().theta1.getDegrees()).withPosition(0,1);
         tab.addDouble("Target theta2", () -> getGoalState().theta2.getDegrees()).withPosition(1,1);
+
+        tab.addDouble("motor1 appliedOutput", () -> m_motor1.getAppliedOutput());
+        tab.addDouble("motor2 appliedOutput", () -> m_motor2.getAppliedOutput());
+
     }
     public ArmState getGoalState() {
         return goalState;
@@ -72,8 +83,8 @@ public class Arm extends SubsystemBase {
         goalState = state;
     }
     public ArmState getCurrentState() {
-        Rotation2d theta1 = Rotation2d.fromRadians(m_motor1Encoder.getPosition());
-        Rotation2d theta2 = Rotation2d.fromRadians(m_motor2Encoder.getPosition() - theta1.getRadians());
+        Rotation2d theta1 = Rotation2d.fromRadians(m_motor1Encoder.getPosition() % (2*Math.PI));
+        Rotation2d theta2 = Rotation2d.fromRadians(m_motor2Encoder.getPosition() % (2*Math.PI) - theta1.getRadians());
         double omega1 = m_motor1Encoder.getVelocity();
         double omega2 = m_motor2Encoder.getVelocity();
         return new ArmState(theta1, theta2, omega1, omega2);
@@ -81,22 +92,22 @@ public class Arm extends SubsystemBase {
 
     /**
      *
-     * @param x
-     * @param y
-     * @return
+     * @param x end effector pos x (m)
+     * @param y end effector pos y (m)
+     * @return ArmState identical to position
      */
-    public static ArmState inverseKinematics(double x, double y) {
+    public static ArmState inverseKinematics(double x, double y, boolean invert) {
 
         Rotation2d theta2 = Rotation2d.fromRadians(Math.acos((x * x + y * y - (l1 * l1 + l2 * l2)) / (2 * l1 * l2)));
-        Rotation2d theta1 = Rotation2d.fromRadians(Math.atan2(y, x) - Math.atan2(l2 * Math.sin(theta2.getRadians()), l1 + l2 * Math.cos(theta2.getRadians())));
+        Rotation2d theta1 = Rotation2d.fromRadians(Math.atan2(y, x) + (invert ? -1 : 1) * Math.atan2(l2 * Math.sin(theta2.getRadians()), l1 + l2 * Math.cos(theta2.getRadians())));
 
         return new ArmState(theta1, theta2, 0,0);
     }
 
     /**
-     * gets the intertia matrix
-     * @param state
-     * @return
+     * gets the inertia matrix
+     * @param state ArmState
+     * @return inertia matrix at the current state
      */
     private Matrix<N2, N2> getDynamicMatrixM(ArmState state) {
 
@@ -142,8 +153,8 @@ public class Arm extends SubsystemBase {
 
     /**
      * Represents centrifugal and coriolis terms
-     * @param state
-     * @return
+     * @param state ArmState
+     * @return Coriolis and Centrifugal Matrix
      */
     public Matrix<N2, N2> getDynamicMatrixC(ArmState state) {
 
@@ -164,8 +175,8 @@ public class Arm extends SubsystemBase {
 
     /**
      * Torque applied by gravity
-     * @param state
-     * @return
+     * @param state ArmState
+     * @return Torque Matrix
      */
     public Matrix<N2, N1> getDynamicMatrixG(ArmState state) {
         double theta1 = state.theta1.getRadians(), theta2 = state.theta2.getRadians();
@@ -187,12 +198,12 @@ public class Arm extends SubsystemBase {
 
     }
 
-    public Matrix<N2, N1> getAccels(ArmState state, double inputVolt1, double inputVolt2) {
+    public ArmState getAccels(ArmState state, double inputVolt1, double inputVolt2) {
         Matrix<N2, N1> omegas = new MatBuilder<>(Nat.N2(), Nat.N1()).fill(
                 state.omega1,
                 state.omega2
         );
-        Matrix<N2, N1> inputs = new MatBuilder<N2, N1>(Nat.N2(), Nat.N1()).fill(
+        Matrix<N2, N1> inputs = new MatBuilder<>(Nat.N2(), Nat.N1()).fill(
                 inputVolt1,
                 inputVolt2
         );
@@ -205,17 +216,17 @@ public class Arm extends SubsystemBase {
 
 
         Matrix<N2, N1> torque = basic_torque.minus(back_emf_loss);
+        Matrix<N2, N1> accels = M.inv().times(torque.minus(C.times(omegas).minus(G)));
 
-        return M.inv().times(torque.minus(C.times(omegas).minus(G)));
+        return new ArmState(state.theta1, state.theta2, state.omega1, state.omega2, accels.get(0,0), accels.get(1,0));
     }
 
     /**
      * Gets feedForward Voltages
-     * @param states ArmStates values
-     * @param accels theta double dot
+     * @param states ArmStates values (include accels if you can)
      * @return [voltage 1, voltage v2]
      */
-    public Matrix<N2, N1> feedForward(ArmState states, Matrix<N2, N1> accels) {
+    public Matrix<N2, N1> feedForward(ArmState states) {
         Matrix<N2, N2> M = getDynamicMatrixM(states);
         Matrix<N2, N2> C = getDynamicMatrixC(states);
         Matrix<N2, N1> G = getDynamicMatrixG(states);
@@ -226,16 +237,16 @@ public class Arm extends SubsystemBase {
                 states.omega2
         );
 
+        Matrix<N2, N1> accels = new MatBuilder<>(Nat.N2(), Nat.N1()).fill(
+                states.accel1,
+                states.accel2
+        );
+
         return K3.inv().times(
                 M.times(accels).plus(C.times(omegas)).plus(G).plus(K4.times(omegas))
         );
     }
-    /**
-     * Gets feedForward Voltages wrapper
-     * @param states ArmStates values
-     * @return
-     */
-    public Matrix<N2, N1> feedForward(ArmState states) {return this.feedForward(states, new Matrix<>(Nat.N2(), Nat.N1()));}
+
 
     public void setVoltages(double volt1, double volt2) {
         m_motor1.setVoltage(volt1);
@@ -248,16 +259,20 @@ public class Arm extends SubsystemBase {
 
         if(goalState.theta1.getDegrees() <= 60 || goalState.theta1.getDegrees() >= 120) return;
 
-        double input1 = MathUtil.clamp(controller1.calculate(getCurrentState().theta1.getRadians(), goalState.theta1.getRadians()), -2, 2);
-        double input2 = MathUtil.clamp(controller2.calculate(getCurrentState().theta2.getRadians(), goalState.theta2.getRadians()) , -2, 2);
+        double input1 = controller1.calculate(getCurrentState().theta1.getRadians(), goalState.theta1.getRadians());
+        double input2 = controller2.calculate(getCurrentState().theta2.getRadians(), goalState.theta2.getRadians());
 
-        Matrix<N2, N1> accels = getAccels(getCurrentState(), input1, input2);
+        ArmState accels = getAccels(getCurrentState(), input1, input2);
 
-        Matrix<N2, N1> ffs = feedForward(goalState, accels);
-        setVoltages(
-                input1 + ffs.get(0,0),
-                input2 + ffs.get(1,0)
-        );
+
+        Matrix<N2, N1> ffs = feedForward(accels);
+        SmartDashboard.putNumber("ff1", ffs.get(0, 0));
+        SmartDashboard.putNumber("ff2", ffs.get(1,0));
+
+        lastinput1 = MathUtil.clamp(input1 + ffs.get(0,0), -3, 3);
+        lastinput2 = MathUtil.clamp(input2 + ffs.get(1,0), -3, 3);
+
+        setVoltages(lastinput1, lastinput2);
 
     }
 }

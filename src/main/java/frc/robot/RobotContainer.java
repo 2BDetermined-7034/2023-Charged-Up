@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 import frc.robot.commands.Drive.*;
 import frc.robot.constants.Constants.OperatorConstants;
@@ -11,10 +12,12 @@ import frc.robot.commands.Auto.AutoFactory;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.SwerveDrive;
 import frc.robot.subsystems.VisionLocking;
+import frc.robot.subsystems.Arm.Arm;
 
 
 public class RobotContainer {
     private final SwerveDrive m_swerveDrive = new SwerveDrive();
+    private final Arm m_Arm = new Arm();
     private final CommandPS4Controller m_driverController = new CommandPS4Controller(OperatorConstants.kDriverControllerPort);
     private final VisionLocking m_visionLocker = new VisionLocking();
 
@@ -35,8 +38,12 @@ public class RobotContainer {
         m_driverController.share().whileTrue(m_swerveDrive.runOnce(m_swerveDrive::zeroGyroscope));
 
 
-        m_driverController.triangle().whileTrue(m_swerveDrive.runOnce(m_swerveDrive::setLimeLightVision));
-        m_driverController.circle().whileTrue(new DriveToTarget(m_swerveDrive, m_visionLocker).andThen(new ChaseTagCommand(m_swerveDrive, m_visionLocker)));
+        //m_driverController.triangle().whileTrue(m_swerveDrive.runOnce(m_swerveDrive::setLimeLightVision));
+        //m_driverController.circle().whileTrue(new DriveToTarget(m_swerveDrive, m_visionLocker).andThen(new ChaseTagCommand(m_swerveDrive, m_visionLocker)));
+
+        m_driverController.triangle().onTrue(new SetArmCommand(m_Arm, 0, Units.inchesToMeters(72)));
+        m_driverController.square().onTrue(new SetArmCommand(m_Arm, 0.5, 0.5));
+        m_driverController.cross().onTrue(new SetArmCommand(m_Arm, 0, Units.inchesToMeters(5)));
     }
 
 

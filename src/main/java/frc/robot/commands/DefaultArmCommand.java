@@ -24,7 +24,7 @@ public class DefaultArmCommand extends CommandBase {
 
     if(x == 0 && y == 0) return;
 
-   ArmState invkinematics = Arm.inverseKinematics(x, y);
+   ArmState invkinematics = Arm.inverseKinematics(x, y, true);
 
     arm.setGoalState(invkinematics);
 

@@ -8,14 +8,14 @@ import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N2;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Arm.Arm;
+import frc.robot.util.ArmState;
 
 public class ArmCommand extends CommandBase {
 
     private final Arm arm;
-
-    private static final Arm.ArmState extendedState = new Arm.ArmState(Arm.inverseKinematics(new double[] {1.5, 3}));
 
     private static final PIDController controller1 = new PIDController(0, 0, 0);
     private static final PIDController controller2 = new PIDController(0, 0, 0);
@@ -34,12 +34,7 @@ public class ArmCommand extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        Matrix<N2, N1> ffs = arm.feedForward(extendedState);
 
-        arm.setVoltages(
-                controller1.calculate(arm.getThetaValues()[0], extendedState.theta1) + ffs.get(1, 1),
-                controller2.calculate(arm.getThetaValues()[1], extendedState.theta2) + ffs.get(2, 1)
-        );
     }
 
     // Called once the command ends or is interrupted.
@@ -51,7 +46,8 @@ public class ArmCommand extends CommandBase {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        Arm.ArmState currentState = arm.getState();
-        return Math.abs(extendedState.theta1 - currentState.theta1) <= 4 && Math.abs(extendedState.theta2 - currentState.theta2) <= 4;
+        ArmState currentState = arm.getCurrentState();
+        return Math.abs(arm.getGoalState().theta1.getRadians() - currentState.theta1.getRadians()) <= Units.degreesToRadians(4)
+                && Math.abs(arm.getGoalState().theta1.getRadians() - currentState.theta2.getRadians()) <= Units.degreesToRadians(4);
     }
 }

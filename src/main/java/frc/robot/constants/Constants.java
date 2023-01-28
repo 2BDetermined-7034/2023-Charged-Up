@@ -75,8 +75,8 @@ public final class Constants {
 
     public static class ArmConstants {
 
-        public static final int motor1ID = 9;
-        public static final int motor2ID = 15;
+        public static final int motor1ID = 15;
+        public static final int motor2ID = 9;
         //Length of Segments
         public static final double l1 = Units.inchesToMeters(38.5);
         public static final double l2 = Units.inchesToMeters(33.5);
@@ -98,11 +98,11 @@ public final class Constants {
         public static final double G1 = 80.;
         public static final double G2 = 112.5;
 
-        public static final double S1 = 2 * Math.PI * (1/r1);
-        public static final double S2 = 2 * Math.PI * (1/r2);
+        public static final double S1 = 2 * Math.PI * (1/G1);
+        public static final double S2 = 2 * Math.PI * (1/G2);
 
         //Number of motors in each gearbox
-        public static final int N1 = 2;
+        public static final int N1 = 1;
         public static final int N2 = 1;
 
         //Gravity
