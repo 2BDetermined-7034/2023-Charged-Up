@@ -112,41 +112,54 @@ public class Arm extends SubsystemBase {
     private Matrix<N2, N2> getDynamicMatrixM(ArmState state) {
 
         //Encoder stuff
+//        double theta2 = state.theta2.getRadians();
+//
+//
+//        double c2 = Math.cos(theta2);
+//
+//
+//        double hM = l1 * r2 * c2;
+//
+//        //Inertia Matrix
+//        return
+//                new MatBuilder<>(Nat.N2(), Nat.N2()).fill(r1 * r1, 0, 0, 0).times(m1)
+//                        .plus(
+//                                new MatBuilder<>(Nat.N2(), Nat.N2()).fill(
+//                                        l1 * l1 + r2 * r2 + 2 * hM,
+//                                        r2 * r2 + hM,
+//                                        r2 * r2 + hM,
+//                                        r2 * r2
+//                                ).times(m2)
+//                        )
+//                        .plus(
+//                                new MatBuilder<>(Nat.N2(), Nat.N2()).fill(
+//                                        1,
+//                                        0,
+//                                        0,
+//                                        0
+//                                ).times(I1)
+//                        )
+//                        .plus(
+//                                new MatBuilder<>(Nat.N2(), Nat.N2()).fill(
+//                                        1,
+//                                        1,
+//                                        1,
+//                                        1
+//                                ).times(I2)
+//                        );
+
         double theta2 = state.theta2.getRadians();
+        double M1 = m1 * r1 * r1 + m2 * (l1 * l1 + r2 * r2) + I1 + I2 + 2 * m2 * r1 * l2 * Math.cos(theta2);
+        double M2 = m2 * r2 * r2 + I2 + m2 * l1 * r2 * Math.cos(theta2);
+        double M3 = M2;
+        double M4 = m2 * r2 * r2 + I2;
 
-
-        double c2 = Math.cos(theta2);
-
-
-        double hM = l1 * r2 * c2;
-
-        //Inertia Matrix
-        return
-                new MatBuilder<>(Nat.N2(), Nat.N2()).fill(r1 * r1, 0, 0, 0).times(m1)
-                        .plus(
-                                new MatBuilder<>(Nat.N2(), Nat.N2()).fill(
-                                        l1 * l1 + r2 * r2 + 2 * hM,
-                                        r2 * r2 + hM,
-                                        r2 * r2 + hM,
-                                        r2 * r2
-                                ).times(m2)
-                        )
-                        .plus(
-                                new MatBuilder<>(Nat.N2(), Nat.N2()).fill(
-                                        1,
-                                        0,
-                                        0,
-                                        0
-                                ).times(I1)
-                        )
-                        .plus(
-                                new MatBuilder<>(Nat.N2(), Nat.N2()).fill(
-                                        1,
-                                        1,
-                                        1,
-                                        1
-                                ).times(I2)
-                        );
+        return new MatBuilder<>(Nat.N2(), Nat.N2()).fill(
+                M1,
+                M2,
+                M3,
+                M4
+        );
 
 
     }
@@ -162,13 +175,16 @@ public class Arm extends SubsystemBase {
         double omega1 = state.omega1, omega2 = state.omega2;
 
 
-
-
-        double hC = -m2 * l1 * r2 * Math.sin(theta2);
+        double C1 = -m2 * l1 * r2 * Math.sin(theta2) * omega2;
+        double C2 = -m2 * l1 * r2 * Math.sin(theta2) * (omega2 + omega1);
+        double C3 = -m2 * l1 * r2 * Math.sin(theta2);
+        double C4 = 0;
 
         return new MatBuilder<>(Nat.N2(), Nat.N2()).fill(
-                hC * omega2, hC * omega1 + hC * omega2,
-                -hC * omega1, 0
+                C1,
+                C2,
+                (C3),
+                C4
         );
 
     }
@@ -183,18 +199,26 @@ public class Arm extends SubsystemBase {
 
 
 
-        return new MatBuilder<>(Nat.N1(), Nat.N2()).fill(
-                        m1 * r1 + m2 * l1,
-                        0
-                ).times(g * Math.cos(theta1))
-                .transpose()
-                .plus(
-                        new MatBuilder<>(Nat.N1(), Nat.N2()).fill(
-                                        m2 * r2,
-                                        m2 * r2
-                                ).times(g * Math.cos(theta1 + theta2))
-                                .transpose()
-                );
+//        return new MatBuilder<>(Nat.N1(), Nat.N2()).fill(
+//                        m1 * r1 + m2 * l1,
+//                        0
+//                ).times(g * Math.cos(theta1))
+//                .transpose()
+//                .plus(
+//                        new MatBuilder<>(Nat.N1(), Nat.N2()).fill(
+//                                        m2 * r2,
+//                                        m2 * r2
+//                                ).times(g * Math.cos(theta1 + theta2))
+//                                .transpose()
+//                );
+
+        double G1 = (m1 * r1 + m2 * l1) * g * Math.cos(theta1) * m2 * r2 * g * Math.cos(theta1 + theta2);
+        double G2  = m2 * r2 * g * Math.cos(theta1 + theta2);
+
+        return new MatBuilder<>(Nat.N2(), Nat.N1()).fill(
+                G1,
+                G2
+        );
 
     }
 
