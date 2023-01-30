@@ -42,7 +42,7 @@ public class RobotContainer {
         //m_driverController.circle().whileTrue(new DriveToTarget(m_swerveDrive, m_visionLocker).andThen(new ChaseTagCommand(m_swerveDrive, m_visionLocker)));
 
         m_driverController.triangle().onTrue(new SetArmCommand(m_Arm, 0, Units.inchesToMeters(72)));
-        m_driverController.square().onTrue(new SetArmCommand(m_Arm, 0.5, 0.5));
+        m_driverController.square().onTrue(new SetArmCommand(m_Arm, 1, 1.3));
         m_driverController.cross().onTrue(new SetArmCommand(m_Arm, 0, Units.inchesToMeters(5)));
     }
 

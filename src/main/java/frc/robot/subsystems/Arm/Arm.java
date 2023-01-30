@@ -40,7 +40,7 @@ public class Arm extends SubsystemBase {
 
 
     private static final PIDController controller1 = new PIDController(0.5, 0, 0);
-    private static final PIDController controller2 = new PIDController(0.3, 0, 0);
+    private static final PIDController controller2 = new PIDController(0.3, 0.00, 0);
 
     /** Creates a new Arm. */
     public Arm() {
@@ -57,7 +57,7 @@ public class Arm extends SubsystemBase {
         m_motor1Encoder.setPosition(Units.degreesToRadians(90));
         m_motor2Encoder.setPosition(Units.degreesToRadians(180) + m_motor1Encoder.getPosition());
 
-        goalState = new ArmState(Rotation2d.fromRadians(m_motor1Encoder.getPosition()), Rotation2d.fromRadians(m_motor2Encoder.getPosition()), 0, 0);
+        goalState = new ArmState(Rotation2d.fromDegrees(m_motor1Encoder.getPosition()), Rotation2d.fromRadians(m_motor2Encoder.getPosition()), 0, 0);
 
         configureDashBoard();
     }
@@ -151,13 +151,12 @@ public class Arm extends SubsystemBase {
         double theta2 = state.theta2.getRadians();
         double M1 = m1 * r1 * r1 + m2 * (l1 * l1 + r2 * r2) + I1 + I2 + 2 * m2 * r1 * l2 * Math.cos(theta2);
         double M2 = m2 * r2 * r2 + I2 + m2 * l1 * r2 * Math.cos(theta2);
-        double M3 = M2;
         double M4 = m2 * r2 * r2 + I2;
 
         return new MatBuilder<>(Nat.N2(), Nat.N2()).fill(
                 M1,
                 M2,
-                M3,
+                M2,
                 M4
         );
 
@@ -177,7 +176,7 @@ public class Arm extends SubsystemBase {
 
         double C1 = -m2 * l1 * r2 * Math.sin(theta2) * omega2;
         double C2 = -m2 * l1 * r2 * Math.sin(theta2) * (omega2 + omega1);
-        double C3 = -m2 * l1 * r2 * Math.sin(theta2);
+        double C3 = m2 * l1 * r2 * Math.sin(theta2);
         double C4 = 0;
 
         return new MatBuilder<>(Nat.N2(), Nat.N2()).fill(
@@ -212,7 +211,7 @@ public class Arm extends SubsystemBase {
 //                                .transpose()
 //                );
 
-        double G1 = (m1 * r1 + m2 * l1) * g * Math.cos(theta1) * m2 * r2 * g * Math.cos(theta1 + theta2);
+        double G1 = (m1 * r1 + m2 * l1) * g * Math.cos(theta1) + m2 * r2 * g * Math.cos(theta1 + theta2);
         double G2  = m2 * r2 * g * Math.cos(theta1 + theta2);
 
         return new MatBuilder<>(Nat.N2(), Nat.N1()).fill(
@@ -286,7 +285,7 @@ public class Arm extends SubsystemBase {
         double input1 = controller1.calculate(getCurrentState().theta1.getRadians(), goalState.theta1.getRadians());
         double input2 = controller2.calculate(getCurrentState().theta2.getRadians(), goalState.theta2.getRadians());
 
-        ArmState accels = getAccels(getCurrentState(), input1, input2);
+        ArmState accels = getAccels(getCurrentState(), lastinput1, lastinput2);
 
 
         Matrix<N2, N1> ffs = feedForward(accels);
