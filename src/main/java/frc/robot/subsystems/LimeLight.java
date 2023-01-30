@@ -35,6 +35,8 @@ public class LimeLight extends SubsystemBase {
   private static NetworkTableEntry camMode;
   private static NetworkTableEntry ledMode;
 
+  private static NetworkTableEntry crop;
+
   private enum LEDMode
   {
     PIPELINE(0),
@@ -74,12 +76,14 @@ public class LimeLight extends SubsystemBase {
     ta = limeLightTable.getEntry("ta"); // Target area (0% of image to 100% of image).
     tid = limeLightTable.getEntry("tid");
     tl = limeLightTable.getEntry("tl");
-    camTran = limeLightTable.getEntry("camTran");
+    camTran = limeLightTable.getEntry("campose");
     ledMode = limeLightTable.getEntry("ledMode"); // limelight's LED state (0-3).
     camMode = limeLightTable.getEntry("camMode"); // limelight's operation mode (0-1).
-    botpose = limeLightTable.getEntry("botpose");
+    botpose = limeLightTable.getEntry("botpose_wpired");
 
     tclass = limeLightTable.getEntry("tclass");
+
+    crop = limeLightTable.getEntry("crop");
 
     
 
@@ -198,6 +202,14 @@ public class LimeLight extends SubsystemBase {
    */
   public Class<? extends NetworkTableEntry> getDetectorClass() {
     return tclass.getClass();
+  }
+
+  public boolean isDynamicCroppingEnabled() {
+    return crop.getBoolean(false);
+  }
+
+  public void setDynamicCropping(boolean enabled) {
+    crop.setBoolean(enabled);
   }
 
   /**
