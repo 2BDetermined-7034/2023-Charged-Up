@@ -80,7 +80,6 @@ public final class Constants {
         //Length of Segments
         public static final double l1 = Units.inchesToMeters(38.5);
         public static final double l2 = Units.inchesToMeters(33.5);
-        public static final double fullRadius = l1 + l2;
 
         //Mass of segments
         public static final double m1 = 1.3;
