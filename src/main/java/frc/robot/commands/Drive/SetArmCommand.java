@@ -4,8 +4,7 @@
 
 package frc.robot.commands.Drive;
 
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Arm.Arm;
 import frc.robot.util.ArmState;
@@ -35,8 +34,6 @@ public class SetArmCommand extends CommandBase {
     @Override
     public void initialize() {
         ArmState goalState = Arm.inverseKinematics(x, y, false);
-        SmartDashboard.putNumber("goalstate theta", goalState.theta1.getDegrees());
-        SmartDashboard.putNumber("goalstate theta2", goalState.theta2.getDegrees());
 
         arm.setGoalState(goalState);
     }

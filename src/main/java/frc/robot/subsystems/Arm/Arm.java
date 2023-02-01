@@ -16,9 +16,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N2;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.networktables.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.util.ArmState;
 
@@ -29,14 +27,28 @@ import static frc.robot.constants.Constants.ArmConstants.*;
 
 
 public class Arm extends SubsystemBase {
-
     private final CANSparkMax m_motor1;
     private final CANSparkMax m_motor2;
     private final RelativeEncoder m_motor1Encoder;
     private final RelativeEncoder m_motor2Encoder;
     private ArmState goalState;
-    private double lastinput1;
-    private double lastinput2;
+    private double last_input1;
+    private double last_input2;
+
+    private double last_velocity1;
+    private double last_velocity2;
+
+    private DoublePublisher currentTheta1;
+    private DoublePublisher currentTheta2;
+    private  DoublePublisher omega1;
+    private  DoublePublisher omega2;
+    private  DoublePublisher alpha1;
+    private  DoublePublisher alpha2;
+    private  DoublePublisher targetTheta1;
+    private  DoublePublisher targetTheta2;
+    private  DoublePublisher appliedOutput1;
+    private  DoublePublisher appliedOutput2;
+    private final NetworkTable networkTable = NetworkTableInstance.getDefault().getTable("Arm");
 
 
     private final PIDController controller1;
@@ -44,14 +56,14 @@ public class Arm extends SubsystemBase {
 
     /** Creates a new Arm. */
     public Arm() {
-        controller1 = new PIDController(0.001, 0, 0);
-        controller2 = new PIDController(0.1, 0.01, 0);
+        controller1 = new PIDController(0.001, 0, 0 );
+        controller2 = new PIDController(0.15, 0.1, 0);
 
         controller1.enableContinuousInput(0, 2 * Math.PI);
         controller2.enableContinuousInput(0, 2 * Math.PI);
 
         controller1.setIntegratorRange(-1, 1);
-        controller2.setIntegratorRange(-3, 3);
+        controller2.setIntegratorRange(-5, 5);
 
         m_motor1 = new CANSparkMax(motor1ID, CANSparkMaxLowLevel.MotorType.kBrushless);
         m_motor2 = new CANSparkMax(motor2ID, CANSparkMaxLowLevel.MotorType.kBrushless);
@@ -74,24 +86,37 @@ public class Arm extends SubsystemBase {
     }
 
     public void configureDashBoard() {
-        ShuffleboardTab tab = Shuffleboard.getTab("Arm");
-        tab.addDouble("Current theta1", () -> getCurrentState().theta1.getDegrees()).withPosition(0,0);
-        tab.addDouble("Current theta2", () -> getCurrentState().theta2.getDegrees()).withPosition(1, 0);
-        tab.addDouble("theta 1 error", ()-> Units.radiansToDegrees(controller1.getPositionError()));
-        tab.addDouble("theta 2 error", ()-> Units.radiansToDegrees(controller2.getPositionError()));
-        tab.addDouble("omega1", () -> getCurrentState().omega1).withPosition(2, 0);
-        tab.addDouble("omega2", () -> getCurrentState().omega2).withPosition(3, 0);
-        tab.addDouble("Alpha1", () -> getCurrentState().accel1).withPosition(4, 0);
-        tab.addDouble("Alpha2", () -> getCurrentState().accel2).withPosition(5, 0);
+        currentTheta1 =  networkTable.getDoubleTopic("Current theta1").publish();
+        currentTheta2 =  networkTable.getDoubleTopic("Current theta2").publish();
 
-        tab.addDouble("Target theta1", () -> getGoalState().theta1.getDegrees()).withPosition(0,1);
-        tab.addDouble("Target theta2", () -> getGoalState().theta2.getDegrees()).withPosition(1,1);
+        omega1 =  networkTable.getDoubleTopic("Current omega1").publish();
+        omega2 =  networkTable.getDoubleTopic("Current omega2").publish();
 
-        tab.addDouble("motor1 appliedOutput", () -> m_motor1.getAppliedOutput());
-        tab.addDouble("motor2 appliedOutput", () -> m_motor2.getAppliedOutput());
+        alpha1  =  networkTable.getDoubleTopic("Current alpha").publish();
+        alpha2 =  networkTable.getDoubleTopic("Current alpha2").publish();
 
-        tab.add("M1 controller", controller1);
-        tab.add("M2 controller", controller2);
+        targetTheta1 =  networkTable.getDoubleTopic("targetTheta1").publish();
+        targetTheta2 =  networkTable.getDoubleTopic("Target Theta2").publish();
+
+        appliedOutput1 =  networkTable.getDoubleTopic("Current appliedOutput1").publish();
+        appliedOutput2 =  networkTable.getDoubleTopic("Current appliedOutput2").publish();
+    }
+
+    public void updateDashBoard() {
+        currentTheta1.set(getCurrentState().theta1.getDegrees());
+        currentTheta2.set(getCurrentState().theta2.getDegrees());
+
+        omega1.set(getCurrentState().omega1);
+        omega2.set(getCurrentState().omega2);
+
+        alpha1.set(getCurrentState().accel1);
+        alpha2.set(getCurrentState().accel2);
+
+        targetTheta1.set(getGoalState().theta1.getDegrees());
+        targetTheta2.set(getGoalState().theta2.getDegrees());
+
+        appliedOutput1.set(m_motor1.getAppliedOutput());
+        appliedOutput2.set(m_motor2.getAppliedOutput());
     }
     public ArmState getGoalState() {
         return goalState;
@@ -106,7 +131,7 @@ public class Arm extends SubsystemBase {
         double omega1 = m_motor1Encoder.getVelocity();
         double omega2 = m_motor2Encoder.getVelocity();
 
-        return getAccels(new ArmState(theta1, theta2, omega1, omega2), lastinput1, lastinput2);
+        return getAccels(new ArmState(theta1, theta2, omega1, omega2), last_input1, last_input2);
     }
 
     /**
@@ -203,9 +228,16 @@ public class Arm extends SubsystemBase {
         Matrix<N2, N1> torque = basic_torque.minus(back_emf_loss);
 
         Matrix<N2, N1> accels = M.inv().times(torque.minus(C.times(omegas)).minus(G));
-        accels.set(0,0, MathUtil.clamp(accels.get(0,0), -25, 25));
-        accels.set(1,0, MathUtil.clamp(accels.get(1,0), -25, 25));
+        //accels.set(0,0, MathUtil.clamp(accels.get(0,0), -25, 25));
+        //accels.set(1,0, MathUtil.clamp(accels.get(1,0), -25, 25));
+        double firstAcceleration = m_motor1Encoder.getVelocity() - last_velocity1 / (0.02);
+        double secondAcceleration = m_motor2Encoder.getVelocity() - last_velocity2 / (0.02);
 
+        last_velocity1 = m_motor1Encoder.getVelocity();
+        last_velocity2 = m_motor2Encoder.getVelocity();
+
+        accels.set(0, 0 , firstAcceleration);
+        accels.set(1,0, secondAcceleration);
 
         return new ArmState(state.theta1, state.theta2, state.omega1, state.omega2, accels.get(0,0), accels.get(1,0));
     }
@@ -248,21 +280,21 @@ public class Arm extends SubsystemBase {
         ArmState goalState = getGoalState();
 
         if(goalState.theta1.getDegrees() <= 50 || goalState.theta1.getDegrees() >= 130) return;
-        if(getCurrentState().theta1.getDegrees() <= 50 || getCurrentState().theta1.getDegrees() >= 200) return;
+        if(getCurrentState().theta1.getDegrees() <= 50 || getCurrentState().theta1.getDegrees() >= 130) return;
+
+        ArmState accels = getAccels(getCurrentState(), last_input1, last_input2);
+
+        Matrix<N2, N1> ffs = feedForward(accels);
 
         double input1 = controller1.calculate(getCurrentState().theta1.getRadians(), goalState.theta1.getRadians());
         double input2 = controller2.calculate(getCurrentState().theta2.getRadians(), goalState.theta2.getRadians());
 
-        ArmState accels = getAccels(getCurrentState(), input1, input2);
+        last_input1 = MathUtil.clamp(input1, -8, 8);
+        last_input2 = MathUtil.clamp(input2 + ffs.get(1, 0), -8, 8);
 
-        Matrix<N2, N1> ffs = feedForward(accels);
-        SmartDashboard.putNumber("ff1", ffs.get(0, 0));
-        SmartDashboard.putNumber("ff2", ffs.get(1,0));
+        setVoltages(last_input1, last_input2);
 
-        lastinput1 = MathUtil.clamp(input1  + ffs.get(0, 0), -8, 8);
-        lastinput2 = MathUtil.clamp(input2 + ffs.get(1, 0), -8, 8);
-
-        setVoltages(lastinput1, lastinput2);
+        updateDashBoard();
     }
 
     public static double normalizeAngle(double radians) {
