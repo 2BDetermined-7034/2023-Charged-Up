@@ -5,7 +5,6 @@ import edu.wpi.first.math.MatBuilder;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.numbers.N2;
 import edu.wpi.first.math.util.Units;
 
@@ -69,10 +68,6 @@ public final class Constants {
 
     }
 
-    public static class VisionConstants {
-        public static final Transform2d camToRobot = new Transform2d();
-    }
-
     public static class ArmConstants {
 
         public static final int motor1ID = 15;
@@ -86,8 +81,8 @@ public final class Constants {
         public static final double m2 = 0.53;
 
         //Distance from pivot to CG for each segment
-        public static final double r1 = 21.64 * .0254;
-        public static final double r2 = 26.70 * .0254;
+        public static final double r1 = l1 / 2;
+        public static final double r2 = l2 / 2;
 
         //Moment of inertia about CG for each segment
         public static final double I1 = .118;
@@ -107,9 +102,9 @@ public final class Constants {
         //Gravity
         public static final double g = 9.81;
 
-        public static final double stall_torque = 3.28;
-        public static final double free_speed = 5820 * 2.0 * Math.PI / 60.0;
-        public static final double stall_current = 181;
+        public static final double stall_torque = 2.6;
+        public static final double free_speed = 5676 * 2.0 * Math.PI / 60.0;
+        public static final double stall_current = 105;
 
         public static final double Rm = 12.0 / stall_current;
 
@@ -130,5 +125,15 @@ public final class Constants {
                 0,
                 G2 * G2 * N2
         ).times(Kt / Kv / Rm);
+
+        final static double B1 = G1 * N1  *Kt / Rm;
+        final static double B4 = G2 * N2 * Kt / Rm;
+        public static final Matrix<N2, N2> B = new MatBuilder<>(Nat.N2(), Nat.N2()).fill(
+                B1,
+                0,
+                0,
+                B4
+        );
+
     }
 }
