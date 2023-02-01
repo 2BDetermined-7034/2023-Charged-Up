@@ -183,11 +183,11 @@ public class LimeLight extends SubsystemBase {
    * @return Pose3d of Robot 
    */
   public Pose3d getBotPose() {
-    Number[] poseVals = botpose.getDoubleArray(new Double[] {0.0, 0.0, 0.0, 0.0, 0.0, 0.0});
+    Double[] poseVals = botpose.getDoubleArray(new Double[] {0.0, 0.0, 0.0, 0.0, 0.0, 0.0});
     if(poseVals.length != 0) {
     return new Pose3d(
-      new Translation3d(poseVals[0].doubleValue(), poseVals[1].doubleValue(), poseVals[2].doubleValue()),
-      new Rotation3d(poseVals[5].doubleValue(), poseVals[3].doubleValue(), poseVals[4].doubleValue())
+      new Translation3d(poseVals[0], poseVals[1], poseVals[2]),
+      new Rotation3d(poseVals[5], poseVals[3], poseVals[4])
     );
     }
     return new Pose3d();

@@ -107,7 +107,7 @@ public class SwerveDrive extends SubsystemBase {
                 getModulePosition(),
                 new Pose2d(),
                 VecBuilder.fill(0.1, 0.1, 0.1), // estimator values (x, y, rotation) std-devs
-                VecBuilder.fill(0.9, 0.9, 0.9)
+                VecBuilder.fill(0.5, 0.5, 0.5)
         );
 
 
@@ -211,7 +211,7 @@ public class SwerveDrive extends SubsystemBase {
     }
 
     private void updateOdometry() {
-        if(limeLight.isTargetAvailable()) {
+        if(limeLight.isTargetAvailable() && limeLight.getBotPose().getX() == 0.0) {
             addVisionMeasurement(limeLight.getBotPose().toPose2d(), limeLight.getLatency());
         } else return;
     }
