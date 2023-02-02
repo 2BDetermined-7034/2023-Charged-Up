@@ -11,10 +11,13 @@ import edu.wpi.first.math.MatBuilder;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.Nat;
+import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N2;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -51,13 +54,15 @@ public class Arm extends SubsystemBase {
     private final NetworkTable networkTable = NetworkTableInstance.getDefault().getTable("Arm");
 
 
-    private final PIDController controller1;
-    private final PIDController controller2;
+    private final ProfiledPIDController controller1;
+    private final ProfiledPIDController controller2;
+    private final ArmFeedforward armFeedforward;
 
     /** Creates a new Arm. */
     public Arm() {
-        controller1 = new PIDController(0.001, 0, 0 );
-        controller2 = new PIDController(0.15, 0.1, 0);
+        controller1 = new ProfiledPIDController(0.001, 0, 0, new TrapezoidProfile.Constraints(10, 25));
+        controller2 = new ProfiledPIDController(0.01, 0.075, 0, new TrapezoidProfile.Constraints(15, 50));
+        armFeedforward = new ArmFeedforward(0, 0.25, 0.19, 0.01);
 
         controller1.enableContinuousInput(0, 2 * Math.PI);
         controller2.enableContinuousInput(0, 2 * Math.PI);
@@ -285,14 +290,15 @@ public class Arm extends SubsystemBase {
         ArmState accels = getAccels(getCurrentState(), last_input1, last_input2);
 
         Matrix<N2, N1> ffs = feedForward(accels);
-
         double input1 = controller1.calculate(getCurrentState().theta1.getRadians(), goalState.theta1.getRadians());
         double input2 = controller2.calculate(getCurrentState().theta2.getRadians(), goalState.theta2.getRadians());
 
-        last_input1 = MathUtil.clamp(input1, -8, 8);
-        last_input2 = MathUtil.clamp(input2 + ffs.get(1, 0), -8, 8);
+        double betterFeedForward = armFeedforward.calculate(controller2.getSetpoint().position, controller2.getSetpoint().velocity, 0);
 
-        setVoltages(last_input1, last_input2);
+        last_input1 = MathUtil.clamp(input1, -12, 12);
+        last_input2 = MathUtil.clamp(input2 + betterFeedForward, -12, 12);
+
+        setVoltages(0, last_input2);
 
         updateDashBoard();
     }

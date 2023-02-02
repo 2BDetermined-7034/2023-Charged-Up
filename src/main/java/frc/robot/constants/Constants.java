@@ -78,7 +78,7 @@ public final class Constants {
 
         //Mass of segments
         public static final double m1 = 1.3;
-        public static final double m2 = 0.53;
+        public static final double m2 = 0.53 + 0.9;
 
         //Distance from pivot to CG for each segment
         public static final double r1 = l1 / 2;
