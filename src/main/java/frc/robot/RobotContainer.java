@@ -41,9 +41,10 @@ public class RobotContainer {
         //m_driverController.triangle().whileTrue(m_swerveDrive.runOnce(m_swerveDrive::setLimeLightVision));
         //m_driverController.circle().whileTrue(new DriveToTarget(m_swerveDrive, m_visionLocker).andThen(new ChaseTagCommand(m_swerveDrive, m_visionLocker)));
 
-        m_driverController.triangle().onTrue(new SetArmCommand(m_Arm, 0, Units.inchesToMeters(72)));
-        m_driverController.square().onTrue(new SetArmCommand(m_Arm, 1, 1.3));
-        m_driverController.cross().onTrue(new SetArmCommand(m_Arm, 0, Units.inchesToMeters(5)));
+        m_driverController.triangle().onTrue(new SetArmCommand(m_Arm, 0));
+        m_driverController.square().onTrue(new SetArmCommand(m_Arm, Units.degreesToRadians(309)));
+        m_driverController.circle().onTrue(new SetArmCommand(m_Arm, Units.degreesToRadians(40)));
+        m_driverController.cross().onTrue(new SetArmCommand(m_Arm, Units.degreesToRadians(180)));
     }
 
 

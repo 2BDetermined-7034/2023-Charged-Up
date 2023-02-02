@@ -5,23 +5,22 @@
 package frc.robot.commands.Drive;
 
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Arm.Arm;
 import frc.robot.util.ArmState;
 
 public class SetArmCommand extends CommandBase {
 
-    private final double x;
-    private final double y;
+    private final double theta2;
 
     private final Arm arm;
 
 
     /** Creates a new ArmCommand. */
 
-    public SetArmCommand(Arm arm, double x, double y ) {
-        this.x = x;
-        this.y = y;
+    public SetArmCommand(Arm arm, double theta2 ) {
+        this.theta2 = theta2;
         this.arm = arm;
 
         // Use addRequirements() here to declare subsystem dependencies.
@@ -33,7 +32,7 @@ public class SetArmCommand extends CommandBase {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        ArmState goalState = Arm.inverseKinematics(x, y, false);
+        ArmState goalState = new ArmState(Rotation2d.fromDegrees(90), Rotation2d.fromRadians(theta2));
 
         arm.setGoalState(goalState);
     }

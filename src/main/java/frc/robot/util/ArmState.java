@@ -39,4 +39,8 @@ public class ArmState {
         this.accel1 = accel1;
         this.accel2 = accel2;
     }
+
+    public ArmState(Rotation2d theta1, Rotation2d theta2) {
+        this(theta1, theta2, 0, 0);
+    }
 }
