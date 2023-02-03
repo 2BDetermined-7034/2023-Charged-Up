@@ -12,6 +12,7 @@ import frc.robot.util.ArmState;
 
 public class SetArmCommand extends CommandBase {
 
+    private final double theta1;
     private final double theta2;
 
     private final Arm arm;
@@ -19,7 +20,8 @@ public class SetArmCommand extends CommandBase {
 
     /** Creates a new ArmCommand. */
 
-    public SetArmCommand(Arm arm, double theta2 ) {
+    public SetArmCommand(Arm arm, double theta1, double theta2 ) {
+        this.theta1 = theta1;
         this.theta2 = theta2;
         this.arm = arm;
 
@@ -32,7 +34,7 @@ public class SetArmCommand extends CommandBase {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        ArmState goalState = new ArmState(Rotation2d.fromDegrees(90), Rotation2d.fromRadians(theta2));
+        ArmState goalState = new ArmState(Rotation2d.fromRadians(theta1), Rotation2d.fromRadians(theta2));
 
         arm.setGoalState(goalState);
     }
