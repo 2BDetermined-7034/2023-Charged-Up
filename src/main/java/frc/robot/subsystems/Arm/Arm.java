@@ -114,17 +114,17 @@ public class Arm extends SubsystemBase {
      * Updates NetworkTables Publishers
      */
     public void updateDashBoard() {
-        currentTheta1.set(getCurrentState().theta1.getDegrees());
-        currentTheta2.set(getCurrentState().theta2.getDegrees());
+        currentTheta1.set(getCurrentState().getTheta1());
+        currentTheta2.set(getCurrentState().getTheta2());
 
-        omega1.set(getCurrentState().omega1);
-        omega2.set(getCurrentState().omega2);
+        omega1.set(getCurrentState().getOmega1());
+        omega2.set(getCurrentState().getOmega2());
 
-        alpha1.set(getCurrentState().accel1);
-        alpha2.set(getCurrentState().accel2);
+        alpha1.set(getCurrentState().getAlpha1());
+        alpha2.set(getCurrentState().getAlpha2());
 
-        targetTheta1.set(getGoalState().theta1.getDegrees());
-        targetTheta2.set(getGoalState().theta2.getDegrees());
+        targetTheta1.set(getGoalState().getTheta1());
+        targetTheta2.set(getGoalState().getTheta2());
 
         error2.set(Math.toDegrees(controller2.getPositionError()));
 
@@ -145,15 +145,15 @@ public class Arm extends SubsystemBase {
 
     /**
      * Sets arm Goal State only called by Commands
-     * @param goalState
+     * @param goalState ArmState to which the arm will go to
      */
     public void setGoalState(ArmState goalState) {
         this.goalState = goalState;
     }
 
     /**
-     * TODO add state-space estimation
-     *
+     * TODO set state-space estimation
+     * <p>
      * Gets the current state of the arm
      * @return Arm State
      */
@@ -171,16 +171,6 @@ public class Arm extends SubsystemBase {
         return new ArmState(theta1, theta2, omega1, omega2, firstAcceleration, secondAcceleration);
     }
 
-    /**
-     * Checks if an inverse-kinematics solution exists for the given point in space
-     * @param x position in space of end effector
-     * @param y position in space of end effector
-     * @return whether the solution exists
-     */
-    public static boolean solutionExists(double x, double y) {
-        double sqrt = Math.sqrt(x * x + y * y);
-        return !(l1 + l2 < sqrt || Math.abs(l1 - l2) > sqrt);
-    }
 
     /**
      * Sets Motor Voltages for the Arm
@@ -192,12 +182,16 @@ public class Arm extends SubsystemBase {
         m_motor2.setVoltage(volt2);
     }
 
+    /**
+     * Integrates inverse kinematics, state space estimation, feedForward, PID feedback, and pathfinding to navigate to a goal set by a command
+     * theta time derivatives are calculated via a jacobian to the inverse kinematics function
+     */
     @Override
     public void periodic() {
         ArmState goalState = getGoalState();
 
-        double input1 = controller1.calculate(getCurrentState().theta1.getRadians(), goalState.theta1.getRadians());
-        double input2 = controller2.calculate(getCurrentState().theta2.getRadians(), goalState.theta2.getRadians());
+        double input1 = controller1.calculate(getCurrentState().getTheta1(), goalState.getTheta1());
+        double input2 = controller2.calculate(getCurrentState().getTheta2(), goalState.getOmega2());
         double betterFeedForward1 = armFeedForward1.calculate(controller1.getSetpoint().position, controller1.getSetpoint().velocity);
         double betterFeedForward2 = armFeedForward2.calculate(controller2.getSetpoint().position, controller2.getSetpoint().velocity);
 
