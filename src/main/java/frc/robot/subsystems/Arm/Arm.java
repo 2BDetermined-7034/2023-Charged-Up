@@ -16,12 +16,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.util.ArmState;
-
 import static frc.robot.constants.Constants.ArmConstants.*;
-
-//Check out this https://www.chiefdelphi.com/t/whitepaper-two-jointed-arm-dynamics/423060
-//Copied from here
-
 
 public class Arm extends SubsystemBase {
     private final CANSparkMax m_motor1;
@@ -29,10 +24,8 @@ public class Arm extends SubsystemBase {
     private final RelativeEncoder m_motor1Encoder;
     private final RelativeEncoder m_motor2Encoder;
     private ArmState goalState;
-
     private double last_velocity1;
     private double last_velocity2;
-
     private DoublePublisher currentTheta1;
     private DoublePublisher currentTheta2;
     private  DoublePublisher omega1;
@@ -47,12 +40,9 @@ public class Arm extends SubsystemBase {
     private DoublePublisher feedForwardOutput1;
     private DoublePublisher feedForwardOutput2;
     private final NetworkTable networkTable = NetworkTableInstance.getDefault().getTable("Arm");
-
-
     private final ProfiledPIDController controller2;
     private final ProfiledPIDController controller1;
     private final ArmFeedforward armFeedForward2;
-
     private final ArmFeedforward armFeedForward1;
 
     /** Creates a new Arm. */
@@ -170,7 +160,6 @@ public class Arm extends SubsystemBase {
 
         return new ArmState(theta1, theta2, omega1, omega2, firstAcceleration, secondAcceleration);
     }
-
 
     /**
      * Sets Motor Voltages for the Arm
