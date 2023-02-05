@@ -6,6 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
+import frc.robot.commands.Arm.ArmOverride;
 import frc.robot.commands.Arm.SetArmCommand;
 import frc.robot.commands.Drive.*;
 import frc.robot.constants.Constants.OperatorConstants;
@@ -25,16 +26,17 @@ public class RobotContainer {
 
     public RobotContainer() {
 
-        m_swerveDrive.setDefaultCommand(new DefaultDriveCommand(
-                m_swerveDrive,
-                () -> -square(modifyAxis(m_driverController.getLeftY() ) * m_swerveDrive.getMaxSpeed()),
-                () -> -square(modifyAxis(m_driverController.getLeftX()) * m_swerveDrive.getMaxSpeed()),
-                () -> -square(modifyAxis(m_driverController.getRightX()) * m_swerveDrive.getMaxSpeed())
-        ));
+//        m_swerveDrive.setDefaultCommand(new DefaultDriveCommand(
+//                m_swerveDrive,
+//                () -> -square(modifyAxis(m_driverController.getLeftY() ) * m_swerveDrive.getMaxSpeed()),
+//                () -> -square(modifyAxis(m_driverController.getLeftX()) * m_swerveDrive.getMaxSpeed()),
+//                () -> -square(modifyAxis(m_driverController.getRightX()) * m_swerveDrive.getMaxSpeed())
+//        ));
         configureBindings();
     }
 
     private void configureBindings() {
+        m_driverController.R1().whileTrue(new ArmOverride(m_Arm, () -> m_driverController.getLeftX(), () -> m_driverController.getRightY()));
 
         m_driverController.share().whileTrue(m_swerveDrive.runOnce(m_swerveDrive::zeroGyroscope));
 

@@ -24,6 +24,8 @@ public class Arm extends SubsystemBase {
     private final RelativeEncoder m_motor1Encoder;
     private final RelativeEncoder m_motor2Encoder;
     private ArmState goalState;
+    private double input1;
+    private double input2;
     private double last_velocity1;
     private double last_velocity2;
     private DoublePublisher currentTheta1;
@@ -44,6 +46,7 @@ public class Arm extends SubsystemBase {
     private final ProfiledPIDController controller1;
     private final ArmFeedforward armFeedForward2;
     private final ArmFeedforward armFeedForward1;
+    private boolean isOpenLoop;
 
     /** Creates a new Arm. */
     public Arm() {
@@ -51,7 +54,7 @@ public class Arm extends SubsystemBase {
         controller1 = new ProfiledPIDController(4, 0, 0, new TrapezoidProfile.Constraints(2.5, 3));
 
         armFeedForward2 = new ArmFeedforward(0.05, 0.25, 0.19, 0.01);
-        armFeedForward1 = new ArmFeedforward(0.05, .36, 3.9, .03);
+        armFeedForward1 = new ArmFeedforward(0.0, .36, 3.9, .03);
 
         m_motor1 = new CANSparkMax(motor1ID, CANSparkMaxLowLevel.MotorType.kBrushless);
         m_motor2 = new CANSparkMax(motor2ID, CANSparkMaxLowLevel.MotorType.kBrushless);
@@ -73,6 +76,7 @@ public class Arm extends SubsystemBase {
         last_velocity2 = 0;
 
         configureDashBoard();
+        isOpenLoop = false;
     }
 
     /**
@@ -104,19 +108,20 @@ public class Arm extends SubsystemBase {
      * Updates NetworkTables Publishers
      */
     public void updateDashBoard() {
-        currentTheta1.set(getCurrentState().getTheta1());
-        currentTheta2.set(getCurrentState().getTheta2());
+        currentTheta1.set(Units.radiansToDegrees(getCurrentState().getTheta1()));
+        currentTheta2.set(Units.radiansToDegrees(getCurrentState().getTheta2()));
 
-        omega1.set(getCurrentState().getOmega1());
-        omega2.set(getCurrentState().getOmega2());
 
-        alpha1.set(getCurrentState().getAlpha1());
-        alpha2.set(getCurrentState().getAlpha2());
+        omega1.set(Units.radiansToDegrees(getCurrentState().getOmega1()));
+        omega2.set(Units.radiansToDegrees(getCurrentState().getOmega2()));
 
-        targetTheta1.set(getGoalState().getTheta1());
-        targetTheta2.set(getGoalState().getTheta2());
+        alpha1.set(Units.radiansToDegrees(getCurrentState().getAlpha1()));
+        alpha2.set(Units.radiansToDegrees(getCurrentState().getAlpha2()));
 
-        error2.set(Math.toDegrees(controller2.getPositionError()));
+        targetTheta1.set(Units.radiansToDegrees(getGoalState().getTheta1()));
+        targetTheta2.set(Units.radiansToDegrees(getGoalState().getTheta2()));
+
+        error2.set(Units.radiansToDegrees(controller2.getPositionError()));
 
         appliedOutput1.set(m_motor1.getAppliedOutput());
         appliedOutput2.set(m_motor2.getAppliedOutput());
@@ -139,6 +144,10 @@ public class Arm extends SubsystemBase {
      */
     public void setGoalState(ArmState goalState) {
         this.goalState = goalState;
+    }
+
+    public void setIsOpenLoop(boolean condition) {
+        this.isOpenLoop = condition;
     }
 
     /**
@@ -170,6 +179,10 @@ public class Arm extends SubsystemBase {
         m_motor1.setVoltage(volt1);
         m_motor2.setVoltage(volt2);
     }
+    public void setInput(double i1, double i2) {
+        input1 = i1;
+        input2 = i2;
+    }
 
     /**
      * Integrates inverse kinematics, state space estimation, feedForward, PID feedback, and pathfinding to navigate to a goal set by a command
@@ -177,14 +190,16 @@ public class Arm extends SubsystemBase {
      */
     @Override
     public void periodic() {
-        ArmState goalState = getGoalState();
+        if(!isOpenLoop) {
+            ArmState goalState = getGoalState();
+            input1 = controller1.calculate(getCurrentState().getTheta1(), goalState.getTheta1());
+            input2 = controller2.calculate(getCurrentState().getTheta2(), goalState.getTheta2());
 
-        double input1 = controller1.calculate(getCurrentState().getTheta1(), goalState.getTheta1());
-        double input2 = controller2.calculate(getCurrentState().getTheta2(), goalState.getOmega2());
-        double betterFeedForward1 = armFeedForward1.calculate(controller1.getSetpoint().position, controller1.getSetpoint().velocity);
-        double betterFeedForward2 = armFeedForward2.calculate(controller2.getSetpoint().position, controller2.getSetpoint().velocity);
+            double betterFeedForward1 = armFeedForward1.calculate(controller1.getSetpoint().position, controller1.getSetpoint().velocity);
+            double betterFeedForward2 = armFeedForward2.calculate(controller2.getSetpoint().position, controller2.getSetpoint().velocity);
 
-        setVoltages(MathUtil.clamp(input1 + betterFeedForward1, -12, 12), MathUtil.clamp(input2 + betterFeedForward2, -12, 12));
+            setVoltages(MathUtil.clamp(input1 + betterFeedForward1, -12, 12), MathUtil.clamp(input2 + betterFeedForward2, -12, 12));
+        }
 
         updateDashBoard();
     }

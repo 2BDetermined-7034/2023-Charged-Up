@@ -6,11 +6,12 @@ import static frc.robot.constants.Constants.ArmConstants.*;
 
 public class ArmState {
 
-    private final Rotation2d theta1, theta2;
-    private final double omega1;
-    private final double omega2;
-    private final double accel1;
-    private final double accel2;
+    private Rotation2d theta1;
+    private Rotation2d theta2;
+    private double omega1;
+    private double omega2;
+    private double accel1;
+    private double accel2;
 
     public ArmState(Rotation2d theta1, Rotation2d theta2, double omega1, double omega2, double accel1, double accel2) {
         this.theta1 = theta1;
@@ -57,6 +58,20 @@ public class ArmState {
     }
     public double getAlpha2() {
         return this.accel2;
+    }
+    public ArmState clear() {
+        this.omega1 = 0;
+        this.omega2 = 0;
+        this.accel1 = 0;
+        this.accel2 = 0;
+        return this;
+    }
+
+    public ArmState incrementDegrees(double theta1, double theta2) {
+        this.theta1 = Rotation2d.fromDegrees(this.theta1.getDegrees() + theta1);
+        this.theta2 = Rotation2d.fromDegrees(this.theta2.getDegrees() + theta2);
+        return this;
+
     }
 
 }
