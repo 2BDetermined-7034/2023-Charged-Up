@@ -13,6 +13,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -213,8 +214,8 @@ public class SwerveDrive extends SubsystemBase {
     }
 
     private void updateOdometry() {
-        if(limeLight.isTargetAvailable() && limeLight.getLatency() > 900) {
-            addVisionMeasurement(limeLight.getBotPose().toPose2d(), limeLight.getLatency());
+        if(limeLight.isTargetAvailable()) {
+            addVisionMeasurement(limeLight.getBotPose().toPose2d(), Timer.getFPGATimestamp());
         } else return;
     }
 
