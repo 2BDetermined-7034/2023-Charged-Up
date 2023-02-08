@@ -5,15 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="452aa9b7-8048-422e-bff9-c7f331f820f3" name="Changes" comment="maybe autobuilder">
-      <change beforePath="$PROJECT_DIR$/.idea/jarRepositories.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_1_17_2023_7_05_PM__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_1_17_2023_7_05_PM__Changes_.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/frc/robot/subsystems/AutoAction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_1_17_2023_7_05_PM_[Changes]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_1_17_2023_7_05_PM__Changes_.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/deploy/pathplanner/New Path.path" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/deploy/pathplanner/New Path.path" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/commands/Auto/AutoFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/commands/Auto/AutoFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/commands/Drive/PathFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/commands/Drive/PathFactory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/commands/Drive/DefaultDriveCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/commands/Drive/DefaultDriveCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/constants/Constants.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/constants/Constants.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/subsystems/SwerveDrive.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/subsystems/SwerveDrive.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vendordeps/PathplannerLib.json" beforeDir="false" afterPath="$PROJECT_DIR$/vendordeps/PathplannerLib.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -51,10 +50,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Class" />
-        <option value="FRC v2 Subsystem" />
-        <option value="package-info" />
         <option value="FRC v2 Command" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -158,7 +155,7 @@
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="452aa9b7-8048-422e-bff9-c7f331f820f3" name="Changes" comment="New FeedForward Implementation" />
+      <changelist id="8be0e9b2-7bbf-401b-9710-29a56a36eb81" name="Changes" comment="" />
       <created>1673223532025</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
@@ -175,7 +172,6 @@
       <workItem from="1673371902826" duration="13298000" />
       <workItem from="1673403264848" duration="6082000" />
       <workItem from="1674085459703" duration="16010000" />
-      <workItem from="1675225086960" duration="11849000" />
     </task>
     <task id="LOCAL-00001" summary="askdnasl">
       <created>1673225455965</created>
@@ -247,21 +243,7 @@
       <option name="project" value="LOCAL" />
       <updated>1674778805114</updated>
     </task>
-    <task id="LOCAL-00011" summary="New FeedForward Implementation">
-      <created>1675393458749</created>
-      <option name="number" value="00011" />
-      <option name="presentableId" value="LOCAL-00011" />
-      <option name="project" value="LOCAL" />
-      <updated>1675393458750</updated>
-    </task>
-    <task id="LOCAL-00012" summary="Intake and indexer subsystems">
-      <created>1675394585729</created>
-      <option name="number" value="00012" />
-      <option name="presentableId" value="LOCAL-00012" />
-      <option name="project" value="LOCAL" />
-      <updated>1675394585729</updated>
-    </task>
-    <option name="localTasksCounter" value="13" />
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -300,13 +282,10 @@
     <MESSAGE value="pathplannertrajectory thing" />
     <MESSAGE value="push" />
     <MESSAGE value="good locking" />
-    <MESSAGE value="New FeedForward Implementation" />
-    <MESSAGE value="Intake and indexer subsystems" />
-    <MESSAGE value="maybe autobuilder" />
-    <option name="LAST_COMMIT_MESSAGE" value="maybe autobuilder" />
+    <option name="LAST_COMMIT_MESSAGE" value="good locking" />
   </component>
   <component name="WpiLibVersionService">
-    <option name="lastChecked" value="20230203075950" />
+    <option name="lastChecked" value="20230121141902" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
