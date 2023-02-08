@@ -1,6 +1,11 @@
 package frc.robot.util;
 
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.numbers.N4;
+import edu.wpi.first.math.numbers.N1;
+
 import static frc.robot.constants.Constants.ArmConstants.*;
 
 
@@ -27,6 +32,14 @@ public class ArmState {
 
     public ArmState(double theta1, double theta2) {this(Rotation2d.fromRadians(theta1), Rotation2d.fromRadians(theta2), 0, 0);}
 
+    public ArmState(double theta1, double theta2, double omega1, double omega2, double alpha1, double alpha2) {
+        this(Rotation2d.fromRadians(theta1), Rotation2d.fromRadians(theta2), omega1, omega2, alpha1, alpha2);
+    }
+
+    public ArmState(Matrix<N4, N1> mat) {
+        this(mat.get(0,0), mat.get(1,0), mat.get(2,0), mat.get(3,0), 0, 0);
+
+    }
     /**
      * Checks if an inverse-kinematics solution exists for the given point in space
      * @param x position in space of end effector
@@ -58,6 +71,12 @@ public class ArmState {
     }
     public double getAlpha2() {
         return this.accel2;
+    }
+    public Matrix<N4, N1> getStateMatrixDot() {
+        return VecBuilder.fill(omega1, omega2, accel1, accel2);
+    }
+    public Matrix<N4, N1> getStateMatrix4() {
+        return VecBuilder.fill(getTheta1(), getTheta2(), omega1, omega2);
     }
     public ArmState clear() {
         this.omega1 = 0;
