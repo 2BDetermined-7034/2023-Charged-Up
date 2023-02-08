@@ -148,6 +148,8 @@ public class Arm extends SubsystemBase {
 
     public void setIsOpenLoop(boolean condition) {
         this.isOpenLoop = condition;
+        controller1.reset(new TrapezoidProfile.State(getCurrentState().getTheta1(), getCurrentState().getOmega1()));
+        controller2.reset(new TrapezoidProfile.State(getCurrentState().getTheta2(), getCurrentState().getOmega2()));
     }
 
     /**
@@ -179,6 +181,12 @@ public class Arm extends SubsystemBase {
         m_motor1.setVoltage(volt1);
         m_motor2.setVoltage(volt2);
     }
+
+    /**
+     * Sets inputs and then adds feedForwards to apply to the motors
+     * @param i1 motor1
+     * @param i2 motor2
+     */
     public void setInput(double i1, double i2) {
         input1 = i1;
         input2 = i2;
@@ -194,12 +202,12 @@ public class Arm extends SubsystemBase {
             ArmState goalState = getGoalState();
             input1 = controller1.calculate(getCurrentState().getTheta1(), goalState.getTheta1());
             input2 = controller2.calculate(getCurrentState().getTheta2(), goalState.getTheta2());
+        }
 
             double betterFeedForward1 = armFeedForward1.calculate(controller1.getSetpoint().position, controller1.getSetpoint().velocity);
             double betterFeedForward2 = armFeedForward2.calculate(controller2.getSetpoint().position, controller2.getSetpoint().velocity);
 
             setVoltages(MathUtil.clamp(input1 + betterFeedForward1, -12, 12), MathUtil.clamp(input2 + betterFeedForward2, -12, 12));
-        }
 
         updateDashBoard();
     }
