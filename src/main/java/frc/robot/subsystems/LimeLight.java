@@ -11,29 +11,30 @@ import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class LimeLight extends SubsystemBase {
 
-  private NetworkTable limeLightTable;
-  private static NetworkTableEntry getpipe;
+  private final NetworkTable limeLightTable;
+  private static IntegerPublisher getpipePub;
+  private static IntegerSubscriber getPipeSub;
 
-  private static NetworkTableEntry tx;
-  private static NetworkTableEntry ty;
-  private static NetworkTableEntry tv;
-  private static NetworkTableEntry ta;
-  private static NetworkTableEntry tid;
-  private static NetworkTableEntry tl;
-  private static NetworkTableEntry camTran;
-  private static NetworkTableEntry botpose;
-  
-  private static NetworkTableEntry tclass;
+  private static DoubleSubscriber tx;
+  private static DoubleSubscriber ty;
+  private static DoubleSubscriber tv;
+  private static DoubleSubscriber ta;
+  private static IntegerSubscriber tid;
+  private static IntegerSubscriber tl;
+  private static DoubleArraySubscriber camTran;
+  private static DoubleArraySubscriber botpose;
 
-  private static NetworkTableEntry camMode;
-  private static NetworkTableEntry ledMode;
+  private static IntegerPublisher camModePub;
+  private static IntegerSubscriber camModeSub;
+  private static IntegerPublisher ledModePub;
+  private static IntegerSubscriber ledModeSub;
+
+  private static long[] legalTags = new long[] {1,2,3,4,5,6,7,8};
 
   private enum LEDMode
   {
@@ -42,8 +43,8 @@ public class LimeLight extends SubsystemBase {
     BLINK(2),
     ON(3);
 
-    private int modeValue;
-    private LEDMode(int modeVal)
+    private final int modeValue;
+    LEDMode(int modeVal)
     {
       this.modeValue = modeVal;
     }
@@ -54,8 +55,8 @@ public class LimeLight extends SubsystemBase {
     VISION(0),
     DRIVER(1);
 
-    private int modeValue;
-    private CamMode(int modeVal)
+    private final int modeValue;
+    CamMode(int modeVal)
     {
       this.modeValue = modeVal;
     }
@@ -66,23 +67,23 @@ public class LimeLight extends SubsystemBase {
     limeLightTable = NetworkTableInstance.getDefault().getTable("limelight");
 
 
-    getpipe = limeLightTable.getEntry("getpipe");
+    getPipeSub = limeLightTable.getIntegerTopic("getpipe").subscribe(0);
 
-    tx = limeLightTable.getEntry("tx"); // Horizontal offset from crosshair to target (-29.8 to 29.8 degrees).
-    ty = limeLightTable.getEntry("ty"); // Vertical offset from crosshair to target (-24.85 to 24.85 degrees).
-    tv = limeLightTable.getEntry("tv"); // Whether the limelight has any valid targets (0 or 1).
-    ta = limeLightTable.getEntry("ta"); // Target area (0% of image to 100% of image).
-    tid = limeLightTable.getEntry("tid");
-    tl = limeLightTable.getEntry("tl");
-    camTran = limeLightTable.getEntry("camTran");
-    ledMode = limeLightTable.getEntry("ledMode"); // limelight's LED state (0-3).
-    camMode = limeLightTable.getEntry("camMode"); // limelight's operation mode (0-1).
-    botpose = limeLightTable.getEntry("botpose");
+    tx = limeLightTable.getDoubleTopic("tx").subscribe(0); // Horizontal offset from crosshair to target (-29.8 to 29.8 degrees).
+    ty = limeLightTable.getDoubleTopic("ty").subscribe(0); // Vertical offset from crosshair to target (-24.85 to 24.85 degrees).
+    tv = limeLightTable.getDoubleTopic("tv").subscribe(0); // Whether the limelight has any valid targets (0 or 1).
+    ta = limeLightTable.getDoubleTopic("ta").subscribe(0); // Target area (0% of image to 100% of image).
+    tid = limeLightTable.getIntegerTopic("tid").subscribe(0);
+    tl = limeLightTable.getIntegerTopic("tl").subscribe(999);
+    camTran = limeLightTable.getDoubleArrayTopic("camTran").subscribe(new double[] {});
+    ledModeSub = limeLightTable.getIntegerTopic("ledMode").subscribe(0); // limelight's LED state (0-3).
+    camModeSub = limeLightTable.getIntegerTopic("camMode").subscribe(0); // limelight's operation mode (0-1).
+    botpose = limeLightTable.getDoubleArrayTopic("botpose_wpired").subscribe(new double[] {});
 
-    tclass = limeLightTable.getEntry("tclass");
 
-    
-
+    ledModePub = limeLightTable.getIntegerTopic("ledMode").publish();
+    camModePub = limeLightTable.getIntegerTopic("camMode").publish();
+    getpipePub = limeLightTable.getIntegerTopic("getpipe").publish();
   }
 
   @Override
@@ -95,7 +96,7 @@ public class LimeLight extends SubsystemBase {
    * @return ID from 0-9
    */
   public long getActivePipeLine() {
-    return getpipe.getInteger(0);
+    return getPipeSub.get();
   }
 
   /**
@@ -104,7 +105,7 @@ public class LimeLight extends SubsystemBase {
    */
   public double getTargetOffsetX()
   {
-    return tx.getDouble(0.0);
+    return tx.get(0.0);
   }
 
   /**
@@ -113,7 +114,7 @@ public class LimeLight extends SubsystemBase {
    */
   public double getTargetOffsetY()
   {
-    return ty.getDouble(0.0);
+    return ty.get(0.0);
   }
 
   /**
@@ -122,7 +123,7 @@ public class LimeLight extends SubsystemBase {
    */
   public boolean isTargetAvailable()
   {
-    return tv.getNumber(0).intValue() == 1 ? true : false;
+    return tv.get() == 1;
   }
 
   /**
@@ -131,7 +132,7 @@ public class LimeLight extends SubsystemBase {
    */
   public double getTargetArea()
   {
-    return ta.getDouble(0.0);
+    return ta.get(0.0);
   }
   
   /**
@@ -139,7 +140,14 @@ public class LimeLight extends SubsystemBase {
    * @return AprilTag Id from 1-8
    */
   public long getTargetID() {
-    return tid.getInteger(0);
+    long id = tid.get(-1);
+    for(long i : legalTags) {
+      if(id == i) {
+        return id;
+      }
+    }
+    return -1;
+
   }
 
   /**
@@ -147,7 +155,7 @@ public class LimeLight extends SubsystemBase {
    * @return Latency (ms)
    */
   public long getLatency() {
-    return tl.getInteger(988) + 11;
+    return tl.get(988) + 11;
   }
 
   /**
@@ -156,10 +164,10 @@ public class LimeLight extends SubsystemBase {
    */
   public Transform3d getCamTransform3d() {
 
-    Number[] camTransform = camTran.getNumberArray(new Number[6]);
+    double[] camTransform = camTran.get(new double[0]);
     return new Transform3d(
-      new Translation3d(camTransform[0].doubleValue(), camTransform[1].doubleValue(), camTransform[2].doubleValue()),
-      new Rotation3d(camTransform[3].doubleValue(), camTransform[4].doubleValue(), camTransform[5].doubleValue())
+      new Translation3d(camTransform[0], camTransform[1], camTransform[2]),
+      new Rotation3d(camTransform[3], camTransform[4], camTransform[5])
     );
 
   }
@@ -169,8 +177,8 @@ public class LimeLight extends SubsystemBase {
    * @return Transform from Camera to Target
    */
   public Transform2d getCamTransform2d() {
-    Double[] camTransform = camTran.getDoubleArray(new Double[] {0.0, 0.0, 0.0, 0.0, 0.0, 0.0});
-    if(camTransform.length != 0) {
+    double[] camTransform = camTran.get(new double[] {0.0, 0.0, 0.0, 0.0, 0.0, 0.0});
+    if(0 != camTransform.length) {
     return new Transform2d(
       new Translation2d(camTransform[0], camTransform[1]), new Rotation3d(Units.degreesToRadians(camTransform[3]), Units.degreesToRadians(camTransform[4]), Units.degreesToRadians(camTransform[5])).toRotation2d());
     }
@@ -183,7 +191,7 @@ public class LimeLight extends SubsystemBase {
    * @return Pose3d of Robot 
    */
   public Pose3d getBotPose() {
-    Double[] poseVals = botpose.getDoubleArray(new Double[] {0.0, 0.0, 0.0, 0.0, 0.0, 0.0});
+    double[] poseVals = botpose.get();
     if(poseVals.length != 0) {
     return new Pose3d(
       new Translation3d(poseVals[0], poseVals[1], poseVals[2]),
@@ -192,13 +200,6 @@ public class LimeLight extends SubsystemBase {
     return new Pose3d();
   }
 
-  /**
-   * Gets the Label for the primary detected object
-   * @return Class of the detected object
-   */
-  public Class<? extends NetworkTableEntry> getDetectorClass() {
-    return tclass.getClass();
-  }
 
   /**
    * Method to set the green light's status.
@@ -206,7 +207,7 @@ public class LimeLight extends SubsystemBase {
    */
   private void setLEDMode(LEDMode mode)
   {
-    ledMode.setNumber(mode.modeValue);
+    ledModePub.set(mode.modeValue);
   }
 
   /**
@@ -231,7 +232,7 @@ public class LimeLight extends SubsystemBase {
    */
   private void setCamMode(CamMode mode)
   {
-    camMode.setNumber(mode.modeValue);
+    camModePub.set(mode.modeValue);
   }
 
   /**
@@ -261,11 +262,11 @@ public class LimeLight extends SubsystemBase {
    */
   private boolean isModeDriver()
   {
-    return ledMode.getDouble(0.0) == LEDMode.OFF.modeValue && camMode.getDouble(0.0) == CamMode.DRIVER.modeValue;
+    return ledModeSub.get(0) == LEDMode.OFF.modeValue && camModeSub.get(0) == CamMode.DRIVER.modeValue;
   }
   private boolean isModeVision()
   {
-    return ledMode.getDouble(0.0) == LEDMode.ON.modeValue && camMode.getDouble(0.0) == CamMode.VISION.modeValue;
+    return ledModeSub.get(0) == LEDMode.ON.modeValue && camModeSub.get(0) == CamMode.VISION.modeValue;
   }
   
   /**
