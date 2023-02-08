@@ -23,6 +23,7 @@ import frc.robot.constants.Constants;
 import frc.robot.util.SwerveModule;
 import frc.robot.constants.COTSSwerveConstants;
 import frc.robot.constants.SwerveModuleConstants;
+import org.littletonrobotics.junction.Logger;
 
 public class SwerveDrive extends SubsystemBase {
 
@@ -116,12 +117,14 @@ public class SwerveDrive extends SubsystemBase {
         limeLight.setModeVision();
 
 
-        tab.add(m_field);
+        tab.add(m_field).withPosition(4,0).withSize(5,4);
         tab.addNumber("Odometry X", () -> getPosition().getX()).withPosition(0, 4);
         tab.addNumber("Odometry Y", () -> getPosition().getY()).withPosition(1, 4);
         tab.addNumber("Odometry Angle", () -> getPosition().getRotation().getDegrees()).withPosition(2, 4);
         tab.addNumber("Gyroscope Angle", () -> getGyroscopeRotation().getDegrees()).withPosition(3, 4);
+        tab.addBoolean("Tag", () -> limeLight.isTargetAvailable()).withPosition(4,5);
     }
+
 
     public void setPosition(Pose2d m_position) {
         zeroGyroscope();
@@ -140,6 +143,7 @@ public class SwerveDrive extends SubsystemBase {
         return m_frontLeftModule.cotsSwerveConstants.maxSpeed;
     }
     public Pose2d getPosition() {
+        //Logger.getInstance().recordOutput("Position", m_estimator.getEstimatedPosition());
         return m_estimator.getEstimatedPosition();
     }
 
@@ -182,6 +186,7 @@ public class SwerveDrive extends SubsystemBase {
     public void drive(ChassisSpeeds chassisSpeeds) {
         m_speeds = chassisSpeeds;
         m_states = m_kinematics.toSwerveModuleStates(chassisSpeeds);
+        Logger.getInstance().recordOutput("Pose2D", getPosition());
     }
     public void stop(){
         m_speeds = new ChassisSpeeds(0,0,0);
@@ -218,6 +223,11 @@ public class SwerveDrive extends SubsystemBase {
 
     public void addTrajectory(PathPlannerTrajectory m_trajectory) {
         m_field.getObject("traj").setTrajectory(m_trajectory);
+    }
+
+    public Transform2d getCamTransform() {
+        if(limeLight.isTargetAvailable()) return limeLight.getCamTransform2d();
+        return new Transform2d();
     }
 
 }

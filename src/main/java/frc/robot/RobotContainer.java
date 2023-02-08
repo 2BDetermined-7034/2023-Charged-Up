@@ -5,12 +5,9 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
-import frc.robot.commands.Drive.DriveToTarget;
-import frc.robot.commands.Drive.DumbDriveToTarget;
-import frc.robot.commands.Drive.PathFactory;
+import frc.robot.commands.Drive.*;
 import frc.robot.constants.Constants.OperatorConstants;
 import frc.robot.commands.Auto.AutoFactory;
-import frc.robot.commands.Drive.DefaultDriveCommand;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.SwerveDrive;
 import frc.robot.subsystems.VisionLocking;
@@ -39,13 +36,14 @@ public class RobotContainer {
 
 
         m_driverController.triangle().whileTrue(m_swerveDrive.runOnce(m_swerveDrive::setLimeLightVision));
-        m_driverController.circle().whileTrue(new DumbDriveToTarget(m_swerveDrive, m_visionLocker));
+        m_driverController.circle().whileTrue(new DriveToTarget(m_swerveDrive, m_visionLocker).andThen(new ChaseTagCommand(m_swerveDrive, m_visionLocker)));
     }
 
 
     public Command getAutonomousCommand() {
         // An example command will be run in autonomous
-        return AutoFactory.getSquareAuto(m_swerveDrive);
+        return AutoFactory.getSmallSquare(m_swerveDrive);
+
     }
 
     private static double deadband(double value, double deadband) {
