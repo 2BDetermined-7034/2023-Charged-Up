@@ -17,7 +17,6 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import org.littletonrobotics.junction.Logger;
 
 public class SwerveModule {
     public final int moduleNumber;
@@ -72,8 +71,6 @@ public class SwerveModule {
         feedforward = new SimpleMotorFeedforward(cotsSwerveConstants.driveKS, cotsSwerveConstants.driveKV, cotsSwerveConstants.driveKA);
 
         lastAngle = getState().angle;
-
-        Logger.getInstance().recordOutput("TargetState", getTargetState());
     }
 
     private void configureDashboard() {
