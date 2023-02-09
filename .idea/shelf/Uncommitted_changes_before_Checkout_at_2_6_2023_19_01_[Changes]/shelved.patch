@@ -1,0 +1,102 @@
+Index: src/main/java/frc/robot/RobotContainer.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>// Copyright (c) FIRST and other WPILib contributors.\r\n// Open Source Software; you can modify and/or share it under the terms of\r\n// the WPILib BSD license file in the root directory of this project.\r\n\r\npackage frc.robot;\r\n\r\nimport frc.robot.constants.Constants.OperatorConstants;\r\nimport frc.robot.commands.Auto.AutoFactory;\r\nimport frc.robot.commands.Drive.DefaultDriveCommand;\r\nimport edu.wpi.first.wpilibj2.command.Command;\r\nimport edu.wpi.first.wpilibj2.command.button.CommandXboxController;\r\nimport frc.robot.subsystems.SwerveDrive;\r\n\r\n\r\npublic class RobotContainer {\r\n    private final SwerveDrive m_swerveDrive = new SwerveDrive();\r\n    private final CommandXboxController m_driverController = new CommandXboxController(OperatorConstants.kDriverControllerPort);\r\n\r\n    public RobotContainer() {\r\n\r\n        m_swerveDrive.setDefaultCommand(new DefaultDriveCommand(\r\n                m_swerveDrive,\r\n                () -> -square(modifyAxis(m_driverController.getLeftY()) * m_swerveDrive.getMaxSpeed()),\r\n                () -> -square(modifyAxis(m_driverController.getLeftX()) * m_swerveDrive.getMaxSpeed()),\r\n                () -> -square(modifyAxis(m_driverController.getRightX()) * m_swerveDrive.getMaxSpeed())\r\n        ));\r\n        configureBindings();\r\n    }\r\n\r\n    private void configureBindings() {\r\n\r\n        m_driverController.b().whileTrue(m_swerveDrive.runOnce(m_swerveDrive::zeroGyroscope));\r\n    }\r\n\r\n\r\n    public Command getAutonomousCommand() {\r\n        // An example command will be run in autonomous\r\n        return AutoFactory.getSquareAuto(m_swerveDrive);\r\n    }\r\n\r\n    private static double deadband(double value, double deadband) {\r\n        if (Math.abs(value) > deadband) {\r\n            if (value > 0.0) {\r\n                return (value - deadband) / (1.0 - deadband);\r\n            } else {\r\n                return (value + deadband) / (1.0 - deadband);\r\n            }\r\n        } else {\r\n            return 0.0;\r\n        }\r\n    }\r\n\r\n    private static double modifyAxis(double value) {\r\n        // Deadband\r\n        value = deadband(value, 0.075);\r\n        // Square the axis\r\n        value = Math.copySign(value * value, value);\r\n        return value;\r\n    }\r\n\r\n    private static double square(double value) {\r\n        return Math.copySign(value * value, value);\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/frc/robot/RobotContainer.java b/src/main/java/frc/robot/RobotContainer.java
+--- a/src/main/java/frc/robot/RobotContainer.java	(revision d6f3edc510cee3b7d1ab1a155d633a06d04e1f98)
++++ b/src/main/java/frc/robot/RobotContainer.java	(date 1675738861219)
+@@ -30,6 +30,7 @@
+     private void configureBindings() {
+ 
+         m_driverController.b().whileTrue(m_swerveDrive.runOnce(m_swerveDrive::zeroGyroscope));
++
+     }
+ 
+ 
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"AutoImportSettings\">\r\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\r\n  </component>\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"8be0e9b2-7bbf-401b-9710-29a56a36eb81\" name=\"Changes\" comment=\"Setup to tune gains tonight\">\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/workspace.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/workspace.xml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/main/java/frc/robot/subsystems/VisionLocking.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/main/java/frc/robot/subsystems/VisionLocking.java\" afterDir=\"false\" />\r\n    </list>\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"ExternalProjectsData\">\r\n    <projectState path=\"$PROJECT_DIR$\">\r\n      <ProjectState />\r\n    </projectState>\r\n    <projectState path=\"$PROJECT_DIR$/2022-Charged-up\">\r\n      <ProjectState />\r\n    </projectState>\r\n  </component>\r\n  <component name=\"ExternalProjectsManager\">\r\n    <system id=\"GRADLE\">\r\n      <state>\r\n        <task path=\"$PROJECT_DIR$\">\r\n          <activation />\r\n        </task>\r\n        <projects_view>\r\n          <tree_state>\r\n            <expand>\r\n              <path>\r\n                <item name=\"\" type=\"6a2764b6:ExternalProjectsStructure$RootNode\" />\r\n                <item name=\"2022-Charged-Up\" type=\"f1a62948:ProjectNode\" />\r\n              </path>\r\n            </expand>\r\n            <select />\r\n          </tree_state>\r\n        </projects_view>\r\n      </state>\r\n    </system>\r\n  </component>\r\n  <component name=\"FileTemplateManagerImpl\">\r\n    <option name=\"RECENT_TEMPLATES\">\r\n      <list>\r\n        <option value=\"FRC v2 Command\" />\r\n        <option value=\"Class\" />\r\n      </list>\r\n    </option>\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <option name=\"RECENT_BRANCH_BY_REPOSITORY\">\r\n      <map>\r\n        <entry key=\"$PROJECT_DIR$\" value=\"VisionLocking\" />\r\n      </map>\r\n    </option>\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\r\n  </component>\r\n  <component name=\"MarkdownSettingsMigration\">\r\n    <option name=\"stateVersion\" value=\"1\" />\r\n  </component>\r\n  <component name=\"ProjectId\" id=\"2K4AYUozbpCqwUC0ZnbOvM7li9X\" />\r\n  <component name=\"ProjectLevelVcsManager\">\r\n    <ConfirmationsSetting value=\"2\" id=\"Add\" />\r\n  </component>\r\n  <component name=\"ProjectViewState\">\r\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\r\n    <option name=\"showLibraryContents\" value=\"true\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\">{\r\n  &quot;keyToString&quot;: {\r\n    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,\r\n    &quot;ASKED_MARK_IGNORED_FILES_AS_EXCLUDED&quot;: &quot;true&quot;,\r\n    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,\r\n    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,\r\n    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,\r\n    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,\r\n    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,\r\n    &quot;last_opened_file_path&quot;: &quot;C:/Users/npspy/OneDrive/Documents/GitHub/2023-Charged-Up&quot;,\r\n    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,\r\n    &quot;node.js.detected.package.standard&quot;: &quot;true&quot;,\r\n    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,\r\n    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,\r\n    &quot;node.js.selected.package.standard&quot;: &quot;&quot;,\r\n    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,\r\n    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,\r\n    &quot;project.structure.last.edited&quot;: &quot;SDKs&quot;,\r\n    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,\r\n    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,\r\n    &quot;settings.editor.selected.configurable&quot;: &quot;Errors&quot;,\r\n    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;\r\n  }\r\n}</component>\r\n  <component name=\"RecentsManager\">\r\n    <key name=\"MoveFile.RECENT_KEYS\">\r\n      <recent name=\"C:\\Users\\npspy\\OneDrive\\Documents\\GitHub\\2023-Charged-Up\" />\r\n    </key>\r\n  </component>\r\n  <component name=\"RunManager\" selected=\"Gradle.2023-Charged-Up [deploy]\">\r\n    <configuration name=\"2023-Charged-Up [deploy]\" type=\"GradleRunConfiguration\" factoryName=\"Gradle\" nameIsGenerated=\"true\">\r\n      <ExternalSystemSettings>\r\n        <option name=\"executionName\" />\r\n        <option name=\"externalProjectPath\" value=\"$PROJECT_DIR$\" />\r\n        <option name=\"externalSystemIdString\" value=\"GRADLE\" />\r\n        <option name=\"scriptParameters\" value=\"\" />\r\n        <option name=\"taskDescriptions\">\r\n          <list />\r\n        </option>\r\n        <option name=\"taskNames\">\r\n          <list>\r\n            <option value=\"deploy\" />\r\n          </list>\r\n        </option>\r\n        <option name=\"vmOptions\" />\r\n      </ExternalSystemSettings>\r\n      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>\r\n      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>\r\n      <DebugAllEnabled>false</DebugAllEnabled>\r\n      <method v=\"2\" />\r\n    </configuration>\r\n    <configuration name=\"2023-Charged-Up [vendordep]\" type=\"GradleRunConfiguration\" factoryName=\"Gradle\" nameIsGenerated=\"true\">\r\n      <ExternalSystemSettings>\r\n        <option name=\"executionName\" />\r\n        <option name=\"externalProjectPath\" value=\"$PROJECT_DIR$\" />\r\n        <option name=\"externalSystemIdString\" value=\"GRADLE\" />\r\n        <option name=\"scriptParameters\" value=\"\" />\r\n        <option name=\"taskDescriptions\">\r\n          <list />\r\n        </option>\r\n        <option name=\"taskNames\">\r\n          <list>\r\n            <option value=\"vendordep\" />\r\n          </list>\r\n        </option>\r\n        <option name=\"vmOptions\" />\r\n      </ExternalSystemSettings>\r\n      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>\r\n      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>\r\n      <DebugAllEnabled>false</DebugAllEnabled>\r\n      <method v=\"2\" />\r\n    </configuration>\r\n    <list>\r\n      <item itemvalue=\"Gradle.2023-Charged-Up [vendordep]\" />\r\n      <item itemvalue=\"Gradle.2023-Charged-Up [deploy]\" />\r\n    </list>\r\n  </component>\r\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"application-level\" UseSingleDictionary=\"true\" transferred=\"true\" />\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\r\n      <changelist id=\"8be0e9b2-7bbf-401b-9710-29a56a36eb81\" name=\"Changes\" comment=\"\" />\r\n      <created>1673223532025</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1673223532025</updated>\r\n      <workItem from=\"1673223533042\" duration=\"1191000\" />\r\n      <workItem from=\"1673233011560\" duration=\"223000\" />\r\n      <workItem from=\"1673233258336\" duration=\"512000\" />\r\n      <workItem from=\"1673233801466\" duration=\"417000\" />\r\n      <workItem from=\"1673234298691\" duration=\"1201000\" />\r\n      <workItem from=\"1673282259274\" duration=\"51000\" />\r\n      <workItem from=\"1673317723022\" duration=\"134000\" />\r\n      <workItem from=\"1673371135324\" duration=\"212000\" />\r\n      <workItem from=\"1673371366495\" duration=\"525000\" />\r\n      <workItem from=\"1673371902826\" duration=\"13298000\" />\r\n      <workItem from=\"1673403264848\" duration=\"6082000\" />\r\n      <workItem from=\"1674011655388\" duration=\"4122000\" />\r\n    </task>\r\n    <task id=\"LOCAL-00001\" summary=\"askdnasl\">\r\n      <created>1673225455965</created>\r\n      <option name=\"number\" value=\"00001\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00001\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1673225455965</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00002\" summary=\"askdnasl\">\r\n      <created>1673225482502</created>\r\n      <option name=\"number\" value=\"00002\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00002\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1673225482502</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00003\" summary=\"updated swerve to 2023\">\r\n      <created>1673400728493</created>\r\n      <option name=\"number\" value=\"00003\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00003\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1673400728493</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00004\" summary=\"Setup to tune gains tonight\">\r\n      <created>1673456436953</created>\r\n      <option name=\"number\" value=\"00004\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00004\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1673456436953</updated>\r\n    </task>\r\n    <option name=\"localTasksCounter\" value=\"5\" />\r\n    <servers />\r\n  </component>\r\n  <component name=\"TypeScriptGeneratedFilesManager\">\r\n    <option name=\"version\" value=\"3\" />\r\n  </component>\r\n  <component name=\"VcsManagerConfiguration\">\r\n    <option name=\"ADD_EXTERNAL_FILES_SILENTLY\" value=\"true\" />\r\n    <MESSAGE value=\"askdnasl\" />\r\n    <MESSAGE value=\"updated swerve to 2023\" />\r\n    <MESSAGE value=\"Setup to tune gains tonight\" />\r\n    <option name=\"LAST_COMMIT_MESSAGE\" value=\"Setup to tune gains tonight\" />\r\n  </component>\r\n  <component name=\"WpiLibVersionService\">\r\n    <option name=\"lastChecked\" value=\"20230117191425\" />\r\n  </component>\r\n  <component name=\"XSLT-Support.FileAssociations.UIState\">\r\n    <expand />\r\n    <select />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision d6f3edc510cee3b7d1ab1a155d633a06d04e1f98)
++++ b/.idea/workspace.xml	(date 1675738861376)
+@@ -4,9 +4,16 @@
+     <option name="autoReloadType" value="SELECTIVE" />
+   </component>
+   <component name="ChangeListManager">
++<<<<<<< Updated upstream
+     <list default="true" id="8be0e9b2-7bbf-401b-9710-29a56a36eb81" name="Changes" comment="Setup to tune gains tonight">
+       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/subsystems/VisionLocking.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/subsystems/VisionLocking.java" afterDir="false" />
++=======
++    <list default="true" id="e23114d8-8a5a-4e82-81c6-47d5ee3ae288" name="Changes" comment="pathplannertrajectory thing">
++      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_1_17_2023_7_05_PM_[Changes]/shelved.patch" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_1_17_2023_7_05_PM__Changes_.xml" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
++>>>>>>> Stashed changes
+     </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+@@ -61,7 +68,7 @@
+     <option name="stateVersion" value="1" />
+   </component>
+   <component name="ProjectId" id="2K4AYUozbpCqwUC0ZnbOvM7li9X" />
+-  <component name="ProjectLevelVcsManager">
++  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+     <ConfirmationsSetting value="2" id="Add" />
+   </component>
+   <component name="ProjectViewState">
+@@ -88,7 +95,11 @@
+     &quot;project.structure.last.edited&quot;: &quot;SDKs&quot;,
+     &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+     &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
++<<<<<<< Updated upstream
+     &quot;settings.editor.selected.configurable&quot;: &quot;Errors&quot;,
++=======
++    &quot;settings.editor.selected.configurable&quot;: &quot;0d570cb2-96df-43cc-80da-7f777e6d0afe&quot;,
++>>>>>>> Stashed changes
+     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+   }
+ }</component>
+@@ -148,7 +159,7 @@
+   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+   <component name="TaskManager">
+     <task active="true" id="Default" summary="Default task">
+-      <changelist id="8be0e9b2-7bbf-401b-9710-29a56a36eb81" name="Changes" comment="" />
++      <changelist id="e23114d8-8a5a-4e82-81c6-47d5ee3ae288" name="Changes" comment="pathplannertrajectory thing" />
+       <created>1673223532025</created>
+       <option name="number" value="Default" />
+       <option name="presentableId" value="Default" />
+@@ -164,7 +175,14 @@
+       <workItem from="1673371366495" duration="525000" />
+       <workItem from="1673371902826" duration="13298000" />
+       <workItem from="1673403264848" duration="6082000" />
++<<<<<<< Updated upstream
+       <workItem from="1674011655388" duration="4122000" />
++=======
++      <workItem from="1674085459703" duration="16010000" />
++      <workItem from="1675395669154" duration="453000" />
++      <workItem from="1675396525830" duration="1034000" />
++      <workItem from="1675738567597" duration="54000" />
++>>>>>>> Stashed changes
+     </task>
+     <task id="LOCAL-00001" summary="askdnasl">
+       <created>1673225455965</created>
+@@ -208,7 +226,11 @@
+     <option name="LAST_COMMIT_MESSAGE" value="Setup to tune gains tonight" />
+   </component>
+   <component name="WpiLibVersionService">
++<<<<<<< Updated upstream
+     <option name="lastChecked" value="20230117191425" />
++=======
++    <option name="lastChecked" value="20230202195738" />
++>>>>>>> Stashed changes
+   </component>
+   <component name="XSLT-Support.FileAssociations.UIState">
+     <expand />

@@ -5,13 +5,20 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.math.geometry.*;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.FieldConstants;
 import edu.wpi.first.math.util.Units;
 
+import java.util.Arrays;
+import java.util.Map;
+
 public class VisionLocking extends SubsystemBase {
 
-    public enum Team{
+    public enum Team {
         RED, BLUE
     }
     public enum Level {
@@ -31,12 +38,12 @@ public class VisionLocking extends SubsystemBase {
     private PieceType m_pieceType;
     private final int[] blueTags = {8,7,6};
     private final int[] redTags = {3,2,1};
-
-
-
-
-
-
+    private final ShuffleboardTab driverTab;
+    private final ShuffleboardLayout gridLocationLayout;
+    private final ShuffleboardLayout gridSelectionLayout;
+    private boolean[][] gridLocation;
+    private boolean[] gridSelection;
+    private boolean coneCube;
 
     /** Creates a new VisionLocking. */
     public VisionLocking() {
@@ -46,7 +53,46 @@ public class VisionLocking extends SubsystemBase {
         m_side = Side.LEFT;
         m_level = Level.HIGH;
 
+        // Shuffleboard Initialization
+        driverTab = Shuffleboard.getTab("DriverView");
+        gridLocationLayout = driverTab.getLayout("Location in Grid", BuiltInLayouts.kGrid).withSize(3, 3).withPosition(0, 0);
+        gridSelectionLayout = driverTab.getLayout("Grid Selection", BuiltInLayouts.kGrid).withSize(3, 1).withPosition(0, 3);
+        gridLocation = new boolean[3][3];
+        gridSelection = new boolean[3];
+        coneCube = false;
 
+        configureDashboard();
+    }
+
+    public void configureDashboard(){
+        // Grid selection layout config
+        Map selecProperties = Map.of("colorWhenFalse", "#000000", "colorWhenTrue", "#7cfc00");
+        gridSelectionLayout.addBoolean("Left", () -> gridSelection[0]).withProperties(selecProperties).withPosition(0, 0);
+        gridSelectionLayout.addBoolean("Center", () -> gridSelection[1]).withProperties(selecProperties).withPosition(1, 0);
+        gridSelectionLayout.addBoolean("Right", () -> gridSelection[2]).withProperties(selecProperties).withPosition(2, 0);
+
+        // Grid location layout config
+        Map coneSlotProperties = Map.of("colorWhenFalse", "#000000", "colorWhenTrue", "#FDDA0D");
+        Map cubeSlotProperties = Map.of("colorWhenFalse", "#000000", "colorWhenTrue", "#5D3FD3");
+        // Cube slots
+        gridLocationLayout.addBoolean("TL", () -> gridLocation[0][0]).withProperties(cubeSlotProperties).withPosition(0, 0);
+        gridLocationLayout.addBoolean("ML", () -> gridLocation[0][1]).withProperties(cubeSlotProperties).withPosition(0, 1);
+        gridLocationLayout.addBoolean("BL", () -> gridLocation[0][2]).withProperties(cubeSlotProperties).withPosition(0, 2);
+
+        gridLocationLayout.addBoolean("TR", () -> gridLocation[2][0]).withProperties(cubeSlotProperties).withPosition(2, 0);
+        gridLocationLayout.addBoolean("MR", () -> gridLocation[2][1]).withProperties(cubeSlotProperties).withPosition(2, 1);
+        gridLocationLayout.addBoolean("BR", () -> gridLocation[2][2]).withProperties(cubeSlotProperties).withPosition(2, 2);
+        // Cone slots
+        gridLocationLayout.addBoolean("TM", () -> gridLocation[1][0]).withProperties(coneSlotProperties).withPosition(1, 0);
+        gridLocationLayout.addBoolean("MM", () -> gridLocation[1][1]).withProperties(coneSlotProperties).withPosition(1, 1);
+        gridLocationLayout.addBoolean("BM", () -> gridLocation[1][2]).withProperties(coneSlotProperties).withPosition(1, 2);
+
+        // Cone/cube selector
+        driverTab.addBoolean("Cone-Cube", () -> coneCube).withProperties(Map.of("colorWhenFalse", "#FDDA0D", "colorWhenTrue", "#5D3FD3")).withPosition(3, 0);
+
+        // Initialize the two boolean arrays to have base values.
+        updateGridArray();
+        updateLocationArray();
     }
 
     public void setTeam(Team setTo){
@@ -57,6 +103,7 @@ public class VisionLocking extends SubsystemBase {
     }
     public void setSide(Side setTo){
         m_side = setTo;
+        updateLocationArray();
     }
     public void setGrid(int setTo){
         m_grid = setTo;
@@ -80,23 +127,35 @@ public class VisionLocking extends SubsystemBase {
     public Level getLevel(){
         return m_level;
     }
-    public void toggleGrid(){
-        if (m_grid < 3) {
+    public void gridRight(){
+        if (m_grid < 2) {
             m_grid += 1;
-        }else {
-            m_grid = 1;
         }
+        updateGridArray();
+    }
+    public void gridLeft(){
+        if (m_grid > 0) {
+            m_grid -= 1;
+        }
+        updateGridArray();
     }
 
-
-    public void toggleLevel(){
+    public void levelUp(){
         if (m_level.equals(Level.LOW)){
-                m_level = Level.MID;
-            } else if(m_level.equals(Level.MID)){
-                m_level = Level.HIGH;
-            } else {
-                m_level = Level.LOW;
+            m_level = Level.MID;
+        } else if(m_level.equals(Level.MID)) {
+            m_level = Level.HIGH;
         }
+        updateLocationArray();
+    }
+
+    public void levelDown(){
+        if (m_level.equals(Level.HIGH)){
+            m_level = Level.MID;
+        } else if(m_level.equals(Level.MID)) {
+            m_level = Level.LOW;
+        }
+        updateLocationArray();
     }
 
     public void toggleSide(){
@@ -105,6 +164,7 @@ public class VisionLocking extends SubsystemBase {
         } else {
             m_side = Side.LEFT;
         }
+        updateLocationArray();
     }
     public void togglePiece(){
         if (m_pieceType.equals(PieceType.CONES)) {
@@ -112,6 +172,8 @@ public class VisionLocking extends SubsystemBase {
         } else {
             m_pieceType = PieceType.CONES;
         }
+        updatePieceType();
+        updateLocationArray();
     }
 
     /**
@@ -139,6 +201,32 @@ public class VisionLocking extends SubsystemBase {
         return position;
     }
 
+    public void updateLocationArray(){
+        gridLocation = new boolean[3][3];
+        int x = 0;
+        if(m_pieceType.equals(PieceType.CUBES)){
+            x = 1;
+        } else if(m_side.equals(Side.RIGHT)){
+            x = 2;
+        }
+        gridLocation[x][m_level.ordinal()] = true;
+    }
+
+    public void updateGridArray(){
+        Arrays.fill(gridSelection, false);
+        gridSelection[m_grid] = true;
+    }
+
+    public void updatePieceType(){
+        switch(m_pieceType){
+            case CONES:
+                coneCube = false;
+                break;
+            case CUBES:
+                coneCube = true;
+                break;
+        }
+    }
 
     @Override
     public void periodic() {
