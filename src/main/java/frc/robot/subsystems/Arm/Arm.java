@@ -19,33 +19,15 @@ import frc.robot.util.ArmState;
 import static frc.robot.constants.Constants.ArmConstants.*;
 
 public class Arm extends SubsystemBase {
-    private final CANSparkMax m_motor1;
-    private final CANSparkMax m_motor2;
-    private final RelativeEncoder m_motor1Encoder;
-    private final RelativeEncoder m_motor2Encoder;
+    private final CANSparkMax m_motor1, m_motor2;
+    private final RelativeEncoder m_motor1Encoder, m_motor2Encoder;
     private ArmState goalState;
-    private double input1;
-    private double input2;
-    private double last_velocity1;
-    private double last_velocity2;
-    private DoublePublisher currentTheta1;
-    private DoublePublisher currentTheta2;
-    private  DoublePublisher omega1;
-    private  DoublePublisher omega2;
-    private  DoublePublisher alpha1;
-    private  DoublePublisher alpha2;
-    private  DoublePublisher targetTheta1;
-    private  DoublePublisher targetTheta2;
-    private DoublePublisher error2;
-    private  DoublePublisher appliedOutput1;
-    private  DoublePublisher appliedOutput2;
-    private DoublePublisher feedForwardOutput1;
-    private DoublePublisher feedForwardOutput2;
+    private double input1, input2;
+    private double last_velocity1, last_velocity2;
+    private DoublePublisher currentTheta1, currentTheta2, omega1, omega2, alpha1, alpha2, targetTheta1, targetTheta2, error2, appliedOutput1, appliedOutput2, feedForwardOutput1, feedForwardOutput2;
     private final NetworkTable networkTable = NetworkTableInstance.getDefault().getTable("Arm");
-    private final ProfiledPIDController controller2;
-    private final ProfiledPIDController controller1;
-    private final ArmFeedforward armFeedForward2;
-    private final ArmFeedforward armFeedForward1;
+    private final ProfiledPIDController controller1, controller2;
+    private final ArmFeedforward armFeedForward1, armFeedForward2;
     private boolean isOpenLoop;
 
     /** Creates a new Arm. */
