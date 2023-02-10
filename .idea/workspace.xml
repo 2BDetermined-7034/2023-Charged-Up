@@ -4,11 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e23114d8-8a5a-4e82-81c6-47d5ee3ae288" name="Changes" comment="I was wrong, something did break">
-      <change afterPath="$PROJECT_DIR$/src/main/java/frc/robot/commands/AutoBalance.java" afterDir="false" />
+    <list default="true" id="e23114d8-8a5a-4e82-81c6-47d5ee3ae288" name="Changes" comment="Refactored again&#10;ඞ&#10;ඞඞ&#10;ඞඞඞ&#10;ඞඞඞඞ&#10;ඞඞඞඞඞ&#10;ඞඞඞඞඞඞ">
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/RobotContainer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/RobotContainer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/subsystems/SwerveDrive.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/subsystems/SwerveDrive.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/subsystems/Arm/Arm.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/subsystems/Arm/Arm.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -56,8 +56,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="FRC v2 Command" />
         <option value="Class" />
+        <option value="FRC v2 Command" />
       </list>
     </option>
   </component>
@@ -85,6 +85,7 @@
     &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
     &quot;ASKED_MARK_IGNORED_FILES_AS_EXCLUDED&quot;: &quot;true&quot;,
     &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;Git.Branch.Popup.ShowAllRemotes&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
@@ -160,7 +161,7 @@
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="e23114d8-8a5a-4e82-81c6-47d5ee3ae288" name="Changes" comment="I was wrong, something did break" />
+      <changelist id="e23114d8-8a5a-4e82-81c6-47d5ee3ae288" name="Changes" comment="Update vendors and gitignore &#10;ඞ&#10;ඞඞ&#10;ඞඞඞ&#10;ඞඞඞඞ&#10;ඞඞඞඞඞ&#10;ඞඞඞඞඞඞ" />
       <created>1673223532025</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
@@ -177,7 +178,7 @@
       <workItem from="1673371902826" duration="13298000" />
       <workItem from="1673403264848" duration="6082000" />
       <workItem from="1674085459703" duration="16010000" />
-      <workItem from="1675995482905" duration="2124000" />
+      <workItem from="1676014227916" duration="329000" />
     </task>
     <task id="LOCAL-00001" summary="askdnasl">
       <created>1673225455965</created>
@@ -235,14 +236,21 @@
       <option name="project" value="LOCAL" />
       <updated>1674013033880</updated>
     </task>
-    <task id="LOCAL-00009" summary="I was wrong, something did break">
-      <created>1675907785121</created>
+    <task id="LOCAL-00009" summary="Refactored&#10;ඞ&#10;ඞඞ&#10;ඞඞඞ&#10;ඞඞඞඞ&#10;ඞඞඞඞඞ&#10;ඞඞඞඞඞඞ">
+      <created>1676014529690</created>
       <option name="number" value="00009" />
       <option name="presentableId" value="LOCAL-00009" />
       <option name="project" value="LOCAL" />
-      <updated>1675907785121</updated>
+      <updated>1676014529690</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Refactored again&#10;ඞ&#10;ඞඞ&#10;ඞඞඞ&#10;ඞඞඞඞ&#10;ඞඞඞඞඞ&#10;ඞඞඞඞඞඞ">
+      <created>1676014555295</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1676014555295</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -259,7 +267,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="origin/VisionLocking" />
+                        <option value="master" />
                       </list>
                     </value>
                   </entry>
@@ -279,11 +287,12 @@
     <MESSAGE value="no auto" />
     <MESSAGE value="aaaaaaaaaa" />
     <MESSAGE value="pathplannertrajectory thing" />
-    <MESSAGE value="I was wrong, something did break" />
-    <option name="LAST_COMMIT_MESSAGE" value="I was wrong, something did break" />
+    <MESSAGE value="Refactored&#10;ඞ&#10;ඞඞ&#10;ඞඞඞ&#10;ඞඞඞඞ&#10;ඞඞඞඞඞ&#10;ඞඞඞඞඞඞ" />
+    <MESSAGE value="Refactored again&#10;ඞ&#10;ඞඞ&#10;ඞඞඞ&#10;ඞඞඞඞ&#10;ඞඞඞඞඞ&#10;ඞඞඞඞඞඞ" />
+    <option name="LAST_COMMIT_MESSAGE" value="Refactored again&#10;ඞ&#10;ඞඞ&#10;ඞඞඞ&#10;ඞඞඞඞ&#10;ඞඞඞඞඞ&#10;ඞඞඞඞඞඞ" />
   </component>
   <component name="WpiLibVersionService">
-    <option name="lastChecked" value="20230209181814" />
+    <option name="lastChecked" value="20230121141902" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

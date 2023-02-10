@@ -13,8 +13,10 @@ public class SetArmCommand extends CommandBase {
     private final double theta2;
     private final Arm arm;
 
-    /** Creates a new ArmCommand. */
-    public SetArmCommand(Arm arm, double theta1, double theta2 ) {
+    /**
+     * Creates a new ArmCommand.
+     */
+    public SetArmCommand(Arm arm, double theta1, double theta2) {
         this.theta1 = theta1;
         this.theta2 = theta2;
         this.arm = arm;
@@ -33,11 +35,13 @@ public class SetArmCommand extends CommandBase {
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
-    public void execute() {}
+    public void execute() {
+    }
 
     // Called once the command ends or is interrupted.
     @Override
-    public void end(boolean interrupted) {}
+    public void end(boolean interrupted) {
+    }
 
     // Returns true when the command should end.
     @Override

@@ -1,24 +1,22 @@
 package frc.robot.commands;
 
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.SwerveDrive;
-import com.kauailabs.navx.frc.AHRS;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import frc.robot.constants.Constants;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class AutoBalance extends CommandBase {
 
     private final SwerveDrive m_swerveDrive;
+    ShuffleboardTab tab = Shuffleboard.getTab("AutoBalance");
     private double finalSpeed;
-
     private double pitch;
     private double roll;
 
-    ShuffleboardTab tab = Shuffleboard.getTab("AutoBalance");    /** Creates a new AutoBalance. */
+    /**
+     * Creates a new AutoBalance.
+     */
     public AutoBalance(SwerveDrive swerveDrive) {
         m_swerveDrive = swerveDrive;
         // Use addRequirements() here to declare subsystem dependencies.
@@ -28,7 +26,8 @@ public class AutoBalance extends CommandBase {
 
     // Called when the command is initially scheduled.
     @Override
-    public void initialize() {}
+    public void initialize() {
+    }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
@@ -50,7 +49,7 @@ public class AutoBalance extends CommandBase {
                 -Math.sin(roll) * Math.cos(pitch),
                 Math.cos(pitch) * Math.cos(roll)
         };
-        if(normalVector[0] > 0){
+        if (normalVector[0] > 0) {
             mult = -1;
         }
 
@@ -67,14 +66,15 @@ public class AutoBalance extends CommandBase {
                 SwerveDrive.getGyroscopeRotation()
         ));
 
-        tab.addNumber("Balance Speed", ()->finalSpeed);
+        tab.addNumber("Balance Speed", () -> finalSpeed);
         tab.addNumber("Pitch", () -> m_swerveDrive.getPitch());
         tab.addNumber("Roll", () -> m_swerveDrive.getRoll());
     }
 
     // Called once the command ends or is interrupted.
     @Override
-    public void end(boolean interrupted) {}
+    public void end(boolean interrupted) {
+    }
 
     // Returns true when the command should end.
     @Override

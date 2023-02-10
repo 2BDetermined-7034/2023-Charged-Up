@@ -5,22 +5,18 @@
 package frc.robot.constants;
 
 import com.revrobotics.CANSparkMax;
-
 import edu.wpi.first.math.MatBuilder;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.numbers.N2;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.RobotBase;
-import frc.robot.util.Alert;
-
-import java.util.Map;
 
 public final class Constants {
     public static class OperatorConstants {
         public static final int kDriverControllerPort = 0;
     }
+
     public static class Drivebase {
 
         public static class Measurements {
@@ -29,17 +25,18 @@ public final class Constants {
             public static final double driveRatio = COTSSwerveConstants.driveGearRatios.SDSMK4i_L2;
 
         }
+
         public static class MotorIDs {
             public static final int flDrive = 3;
             public static final int flSteer = 13;
             public static final int flEncoder = 1;
-//            public static final Rotation2d flOffset = Rotation2d.fromDegrees(173.1);
+            //            public static final Rotation2d flOffset = Rotation2d.fromDegrees(173.1);
             public static final Rotation2d flOffset = Rotation2d.fromDegrees(263.1 + 0); //266.6
 
             public static final int frDrive = 12;
             public static final int frSteer = 11;
             public static final int frEncoder = 2;
-//            public static final Rotation2d frOffset = Rotation2d.fromDegrees(252.8 + 0);
+            //            public static final Rotation2d frOffset = Rotation2d.fromDegrees(252.8 + 0);
             public static final Rotation2d frOffset = Rotation2d.fromDegrees(68.7 - 2);
 
             public static final int blDrive = 5;
@@ -52,19 +49,19 @@ public final class Constants {
             public static final int brDrive = 2;
             public static final int brSteer = 6;
             public static final int brEncoder = 3;
-//            public static final Rotation2d brOffset = Rotation2d.fromDegrees(155.4 + 0);
+            //            public static final Rotation2d brOffset = Rotation2d.fromDegrees(155.4 + 0);
             public static final Rotation2d brOffset = Rotation2d.fromDegrees(266.5 + 0);
         }
+
         public static class MotorConfig {
+            public static final double openLoopRamp = 0.25;
+            public static final double closedLoopRamp = 0.0;
             public static int angleSmartCurrentLimit = 25;
             public static int angleSecondaryCurrentLimit = 60;
             public static CANSparkMax.IdleMode angleNeutralMode = CANSparkMax.IdleMode.kBrake;
             public static int driveSmartCurrentLimit = 25;
             public static int driveSecondaryCurrentLimit = 60;
             public static CANSparkMax.IdleMode driveNeutralMode = CANSparkMax.IdleMode.kBrake;
-
-            public static final double openLoopRamp = 0.25;
-            public static final double closedLoopRamp = 0.0;
 
         }
 
@@ -100,8 +97,8 @@ public final class Constants {
         public static final double G1 = 80.;
         public static final double G2 = 112.5;
 
-        public static final double S1 = 2 * Math.PI * (1/G1);
-        public static final double S2 = 2 * Math.PI * (1/G2);
+        public static final double S1 = 2 * Math.PI * (1 / G1);
+        public static final double S2 = 2 * Math.PI * (1 / G2);
 
         //Number of motors in each gearbox
         public static final int N1 = 1;
@@ -134,7 +131,7 @@ public final class Constants {
                 G2 * G2 * N2
         ).times(Kt / Kv / Rm);
 
-        final static double B1 = G1 * N1  *Kt / Rm;
+        final static double B1 = G1 * N1 * Kt / Rm;
         final static double B4 = G2 * N2 * Kt / Rm;
         public static final Matrix<N2, N2> B = new MatBuilder<>(Nat.N2(), Nat.N2()).fill(
                 B1,

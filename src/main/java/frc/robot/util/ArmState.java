@@ -1,7 +1,9 @@
 package frc.robot.util;
 
 import edu.wpi.first.math.geometry.Rotation2d;
-import static frc.robot.constants.Constants.ArmConstants.*;
+
+import static frc.robot.constants.Constants.ArmConstants.l1;
+import static frc.robot.constants.Constants.ArmConstants.l2;
 
 
 public class ArmState {
@@ -21,14 +23,18 @@ public class ArmState {
         this.accel1 = accel1;
         this.accel2 = accel2;
     }
+
     public ArmState(Rotation2d theta1, Rotation2d theta2, double omega1, double omega2) {
         this(theta1, theta2, omega1, omega2, 0, 0);
     }
 
-    public ArmState(double theta1, double theta2) {this(Rotation2d.fromRadians(theta1), Rotation2d.fromRadians(theta2), 0, 0);}
+    public ArmState(double theta1, double theta2) {
+        this(Rotation2d.fromRadians(theta1), Rotation2d.fromRadians(theta2), 0, 0);
+    }
 
     /**
      * Checks if an inverse-kinematics solution exists for the given point in space
+     *
      * @param x position in space of end effector
      * @param y position in space of end effector
      * @return whether the solution exists
@@ -38,7 +44,9 @@ public class ArmState {
         return !(l1 + l2 < sqrt || Math.abs(l1 - l2) > sqrt);
     }
 
-    /** Getter Methods */
+    /**
+     * Getter Methods
+     */
     public double getTheta1() {
         return this.theta1.getRadians();
     }
@@ -50,15 +58,19 @@ public class ArmState {
     public double getOmega1() {
         return this.omega1;
     }
+
     public double getOmega2() {
         return this.omega2;
     }
+
     public double getAlpha1() {
         return this.accel1;
     }
+
     public double getAlpha2() {
         return this.accel2;
     }
+
     public ArmState clear() {
         this.omega1 = 0;
         this.omega2 = 0;
