@@ -15,6 +15,8 @@ import edu.wpi.first.networktables.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import static frc.robot.constants.Constants.Vision;
 
+import java.util.Optional;
+
 public class LimeLight extends SubsystemBase {
 
   private final NetworkTable limeLightTable;
@@ -95,7 +97,7 @@ public class LimeLight extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    distance.set(getTapeDistance());
+    distance.set(getTapeDistance().get());
   }
 
   /**
@@ -142,14 +144,18 @@ public class LimeLight extends SubsystemBase {
     return ta.get(0.0);
   }
   
-public double getTapeDistance()
+public Optional<Double> getTapeDistance()
 {
   //double a = getTargetArea();
   //return Units.inchesToMeters(113 + -27.8*a + Math.pow(3.36*a, 2) + Math.pow(-0.138*a, 3));
   double targetoffsetAngle = ty.get(-1);
 
   double angleToGoalRadians = Units.degreesToRadians(Vision.limeLightMountAngleDegrees + targetoffsetAngle);
-  return (Vision.goalHeighInches - Vision.limeligtLensHeighInches)/Math.tan(angleToGoalRadians);
+  if(isTargetAvailable()) {
+    return Optional.ofNullable(Vision.goalHeighInches - Vision.limeligtLensHeighInches/(Math.tan(angleToGoalRadians)));
+
+  }
+  return Optional.ofNullable(null);
 
 }
 
