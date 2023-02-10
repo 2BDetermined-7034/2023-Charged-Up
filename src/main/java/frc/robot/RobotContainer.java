@@ -8,6 +8,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 import frc.robot.commands.Arm.ArmOverride;
 import frc.robot.commands.Arm.SetArmCommand;
+import frc.robot.commands.AutoBalance;
 import frc.robot.commands.Drive.*;
 import frc.robot.constants.Constants.OperatorConstants;
 import frc.robot.commands.Auto.AutoFactory;
@@ -22,6 +23,8 @@ public class RobotContainer {
     private final Arm m_Arm = new Arm();
     private final CommandPS4Controller m_driverController = new CommandPS4Controller(OperatorConstants.kDriverControllerPort);
     private final VisionLocking m_visionLocker = new VisionLocking();
+
+    private final AutoBalance balls = new AutoBalance(m_swerveDrive);
 
 
     public RobotContainer() {
@@ -43,6 +46,8 @@ public class RobotContainer {
 
         m_driverController.triangle().whileTrue(m_swerveDrive.runOnce(m_swerveDrive::setLimeLightVision));
         m_driverController.circle().whileTrue(new DriveToTarget(m_swerveDrive, m_visionLocker).andThen(new ChaseTagCommand(m_swerveDrive, m_visionLocker)));
+
+        m_driverController.square().whileTrue(balls);
 
 //        m_driverController.triangle().onTrue(new SetArmCommand(m_Arm, Units.degreesToRadians(90), Units.degreesToRadians(90)));
 //        m_driverController.square().onTrue(new SetArmCommand(m_Arm, Units.degreesToRadians(90), Units.degreesToRadians(309)));

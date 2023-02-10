@@ -4,10 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e23114d8-8a5a-4e82-81c6-47d5ee3ae288" name="Changes" comment="Update vendors and gitignore &#10;ඞ&#10;ඞඞ&#10;ඞඞඞ&#10;ඞඞඞඞ&#10;ඞඞඞඞඞ&#10;ඞඞඞඞඞඞ">
+    <list default="true" id="e23114d8-8a5a-4e82-81c6-47d5ee3ae288" name="Changes" comment="I was wrong, something did break">
+      <change afterPath="$PROJECT_DIR$/src/main/java/frc/robot/commands/AutoBalance.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/Robot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/Robot.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vendordeps/AdvantageKit.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/RobotContainer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/RobotContainer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/subsystems/SwerveDrive.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/subsystems/SwerveDrive.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -55,15 +56,15 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Class" />
         <option value="FRC v2 Command" />
+        <option value="Class" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="LIghtDrive" />
+        <entry key="$PROJECT_DIR$" value="master" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -159,7 +160,7 @@
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="8be0e9b2-7bbf-401b-9710-29a56a36eb81" name="Changes" comment="" />
+      <changelist id="e23114d8-8a5a-4e82-81c6-47d5ee3ae288" name="Changes" comment="I was wrong, something did break" />
       <created>1673223532025</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
@@ -176,6 +177,7 @@
       <workItem from="1673371902826" duration="13298000" />
       <workItem from="1673403264848" duration="6082000" />
       <workItem from="1674085459703" duration="16010000" />
+      <workItem from="1675995482905" duration="2124000" />
     </task>
     <task id="LOCAL-00001" summary="askdnasl">
       <created>1673225455965</created>
@@ -233,7 +235,14 @@
       <option name="project" value="LOCAL" />
       <updated>1674013033880</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="I was wrong, something did break">
+      <created>1675907785121</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1675907785121</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -250,7 +259,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="master" />
+                        <option value="origin/VisionLocking" />
                       </list>
                     </value>
                   </entry>
@@ -270,10 +279,11 @@
     <MESSAGE value="no auto" />
     <MESSAGE value="aaaaaaaaaa" />
     <MESSAGE value="pathplannertrajectory thing" />
-    <option name="LAST_COMMIT_MESSAGE" value="pathplannertrajectory thing" />
+    <MESSAGE value="I was wrong, something did break" />
+    <option name="LAST_COMMIT_MESSAGE" value="I was wrong, something did break" />
   </component>
   <component name="WpiLibVersionService">
-    <option name="lastChecked" value="20230121141902" />
+    <option name="lastChecked" value="20230209181814" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

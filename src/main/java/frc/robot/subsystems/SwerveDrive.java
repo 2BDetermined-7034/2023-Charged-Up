@@ -34,7 +34,7 @@ public class SwerveDrive extends SubsystemBase {
             new Translation2d(-Constants.Drivebase.Measurements.width / 2.0, -Constants.Drivebase.Measurements.length / 2.0)
     );
 
-    private static final AHRS m_navx = new AHRS(SPI.Port.kMXP, (byte) 200);
+    public static final AHRS m_navx = new AHRS(SPI.Port.kMXP, (byte) 200);
 
     private final SwerveModule m_frontLeftModule;
     private final SwerveModule m_frontRightModule;
@@ -138,6 +138,13 @@ public class SwerveDrive extends SubsystemBase {
         m_estimator.addVisionMeasurement(m_observed, time);
     }
 
+    public float getRoll() {
+        return m_navx.getRoll();
+    }
+
+    public float getPitch() {
+        return m_navx.getPitch();
+    }
     public double getMaxSpeed() {
         return m_frontLeftModule.cotsSwerveConstants.maxSpeed;
     }
