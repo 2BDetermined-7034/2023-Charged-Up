@@ -74,6 +74,9 @@ public final class Constants {
     }
 
     public static class Vision {
-        public static final Transform2d camToRobot = new Transform2d();
+        public static final Transform2d camToRobot = new Transform2d(); //Irrelevent
+        public static final double goalHeighInches = 30;
+        public static final double limeligtLensHeighInches = 20;
+        public static final double limeLightMountAngleDegrees = 0;
     }
 }
