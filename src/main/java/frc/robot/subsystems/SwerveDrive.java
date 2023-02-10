@@ -107,7 +107,7 @@ public class SwerveDrive extends SubsystemBase {
                 getModulePosition(),
                 new Pose2d(),
                 VecBuilder.fill(0.1, 0.1, 0.1), // estimator values (x, y, rotation) std-devs
-                VecBuilder.fill(0.5, 0.5, 0.5)
+                VecBuilder.fill(0.9, 0.9, 0.9)
         );
 
 
