@@ -29,7 +29,7 @@ public class ArmOverride extends CommandBase {
     @Override
     public void execute() {
         arm.setGoalState(arm.getCurrentState());
-        arm.setInput(getx1.getAsDouble() * 6 * mult1.getAsDouble(), gety1.getAsDouble() * 6 * mult1.getAsDouble());
+        arm.setInput(getx1.getAsDouble(), gety1.getAsDouble());
     }
 
     // Called once the command ends or is interrupted.
