@@ -116,6 +116,7 @@ public class SwerveDrive extends SubsystemBase {
         tab.addNumber("Odometry Y", () -> getPosition().getY()).withPosition(1, 4);
         tab.addNumber("Odometry Angle", () -> getPosition().getRotation().getDegrees()).withPosition(2, 4);
         tab.addNumber("Gyroscope Angle", () -> getGyroscopeRotation().getDegrees()).withPosition(3, 4);
+        tab.addNumber("Gyro Roll", () -> getRoll().getRadians()).withPosition(3, 4);
         tab.addBoolean("Tag", () -> limeLight.isTargetAvailable()).withPosition(4, 5);
     }
 
@@ -127,12 +128,8 @@ public class SwerveDrive extends SubsystemBase {
         m_estimator.addVisionMeasurement(m_observed, time);
     }
 
-    public float getRoll() {
-        return m_navx.getRoll();
-    }
-
-    public float getPitch() {
-        return m_navx.getPitch();
+    public Rotation2d getRoll() {
+        return Rotation2d.fromDegrees(m_navx.getRoll());
     }
 
     public double getMaxSpeed() {

@@ -105,53 +105,6 @@ public final class FieldConstants {
     }
 
     // Dimensions for community and charging station, including the tape.
-    public static final class Community {
-        // Region dimensions
-        public static final double innerX = 0.0;
-        public static final double midX =
-                Units.inchesToMeters(132.375); // Tape to the left of charging station
-        public static final double outerX =
-                Units.inchesToMeters(193.25); // Tape to the right of charging station
-        public static final double leftY = Units.feetToMeters(18.0);
-        public static final double midY = leftY - Units.inchesToMeters(59.39) + tapeWidth;
-        public static final Translation2d[] regionCorners =
-                new Translation2d[]{
-                        new Translation2d(innerX, rightY),
-                        new Translation2d(innerX, leftY),
-                        new Translation2d(midX, leftY),
-                        new Translation2d(midX, midY),
-                        new Translation2d(outerX, midY),
-                        new Translation2d(outerX, rightY),
-                };
-        public static final double chargingStationLeftY = midY - tapeWidth;
-        public static final double chargingStationRightY = chargingStationLeftY - chargingStationWidth;
-        public static final double rightY = 0.0;
-        // Charging station dimensions
-        public static final double chargingStationLength = Units.inchesToMeters(76.125);
-        public static final double chargingStationWidth = Units.inchesToMeters(97.25);
-        public static final double chargingStationOuterX = outerX - tapeWidth;
-        public static final double chargingStationInnerX =
-                chargingStationOuterX - chargingStationLength;
-        public static final Translation2d[] chargingStationCorners =
-                new Translation2d[]{
-                        new Translation2d(chargingStationInnerX, chargingStationRightY),
-                        new Translation2d(chargingStationInnerX, chargingStationLeftY),
-                        new Translation2d(chargingStationOuterX, chargingStationRightY),
-                        new Translation2d(chargingStationOuterX, chargingStationLeftY)
-                };
-
-        // Cable bump
-        public static final double cableBumpInnerX =
-                innerX + Grids.outerX + Units.inchesToMeters(95.25);
-        public static final double cableBumpOuterX = cableBumpInnerX + Units.inchesToMeters(7);
-        public static final Translation2d[] cableBumpCorners =
-                new Translation2d[]{
-                        new Translation2d(cableBumpInnerX, 0.0),
-                        new Translation2d(cableBumpInnerX, chargingStationRightY),
-                        new Translation2d(cableBumpOuterX, 0.0),
-                        new Translation2d(cableBumpOuterX, chargingStationRightY)
-                };
-    }
 
     // Dimensions for grids and nodes
     public static final class Grids {

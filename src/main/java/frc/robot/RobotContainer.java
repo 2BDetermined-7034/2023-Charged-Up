@@ -12,7 +12,6 @@ import frc.robot.commands.Drive.ChaseTagCommand;
 import frc.robot.commands.Drive.DefaultDriveCommand;
 import frc.robot.commands.Drive.DriveToTarget;
 import frc.robot.constants.Constants.OperatorConstants;
-import frc.robot.subsystems.Arm.Arm;
 import frc.robot.subsystems.SwerveDrive;
 import frc.robot.subsystems.VisionLocking;
 
@@ -23,7 +22,7 @@ public class RobotContainer {
     private final CommandPS4Controller m_driverController = new CommandPS4Controller(OperatorConstants.kDriverControllerPort);
     private final VisionLocking m_visionLocker = new VisionLocking();
 
-    private final AutoBalance balls = new AutoBalance(m_swerveDrive);
+    private final AutoBalance auto = new AutoBalance(m_swerveDrive);
 
 
     public RobotContainer() {
@@ -66,11 +65,10 @@ public class RobotContainer {
 
         m_driverController.share().whileTrue(m_swerveDrive.runOnce(m_swerveDrive::zeroGyroscope));
 
-
         m_driverController.triangle().whileTrue(m_swerveDrive.runOnce(m_swerveDrive::setLimeLightVision));
         m_driverController.circle().whileTrue(new DriveToTarget(m_swerveDrive, m_visionLocker).andThen(new ChaseTagCommand(m_swerveDrive, m_visionLocker)));
 
-        m_driverController.square().whileTrue(balls);
+        m_driverController.square().whileTrue(auto);
 
 //        m_driverController.triangle().onTrue(new SetArmCommand(m_Arm, Units.degreesToRadians(90), Units.degreesToRadians(90)));
 //        m_driverController.square().onTrue(new SetArmCommand(m_Arm, Units.degreesToRadians(90), Units.degreesToRadians(309)));
@@ -80,7 +78,7 @@ public class RobotContainer {
 
     public Command getAutonomousCommand() {
         // An example command will be run in autonomous
-        return AutoFactory.getSmallSquare(m_swerveDrive);
+        return AutoFactory.getDriveOn(m_swerveDrive);
 
     }
 }
