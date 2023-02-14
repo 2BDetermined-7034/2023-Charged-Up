@@ -19,7 +19,7 @@ import frc.robot.subsystems.VisionLocking;
 
 public class RobotContainer {
     private final SwerveDrive m_swerveDrive = new SwerveDrive();
-    private final Arm m_Arm = new Arm();
+    //private final Arm m_Arm = new Arm();
     private final CommandPS4Controller m_driverController = new CommandPS4Controller(OperatorConstants.kDriverControllerPort);
     private final VisionLocking m_visionLocker = new VisionLocking();
 
@@ -51,7 +51,7 @@ public class RobotContainer {
 
     private static double modifyAxis(double value) {
         // Deadband
-        value = deadband(value, 0.075);
+        value = deadband(value, 0.1);
         // Square the axis
         value = Math.copySign(value * value, value);
         return value;
