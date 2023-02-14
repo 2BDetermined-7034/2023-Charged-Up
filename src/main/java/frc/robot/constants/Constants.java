@@ -76,6 +76,7 @@ public final class Constants {
         public static final double goalHeighInches = 30;
         public static final double limeligtLensHeighInches = 20;
         public static final double limeLightMountAngleDegrees = 0;
+    }
     public static class ArmConstants {
 
         public static final int motor1ID = 15;
@@ -143,5 +144,4 @@ public final class Constants {
                 B4
         );
     }
-}
 }
