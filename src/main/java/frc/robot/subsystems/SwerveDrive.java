@@ -192,6 +192,13 @@ public class SwerveDrive extends SubsystemBase {
         m_states = m_kinematics.toSwerveModuleStates(chassisSpeeds);
     }
 
+    public void lockDrive() {
+        m_frontLeftModule.setDesiredState(new SwerveModuleState(0, new Rotation2d(135)), false);
+        m_frontRightModule.setDesiredState(new SwerveModuleState(0, new Rotation2d(225)), false);
+        m_backLeftModule.setDesiredState(new SwerveModuleState(0, new Rotation2d(45)), false);
+        m_backRightModule.setDesiredState(new SwerveModuleState(0, new Rotation2d(-45)), false);
+    }
+
     public void stop() {
         m_speeds = new ChassisSpeeds(0, 0, 0);
         m_states = m_kinematics.toSwerveModuleStates(m_speeds);

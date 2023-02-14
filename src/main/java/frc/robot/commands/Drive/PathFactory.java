@@ -27,6 +27,7 @@ public class PathFactory {
         m_swerveDrive = drive;
         m_swerveDrive.addTrajectory(path);
 
+
         SwerveAutoBuilder autoBuilder = new SwerveAutoBuilder(
                 m_swerveDrive::getPosition, // Pose supplier
                 m_swerveDrive::resetOdometry,

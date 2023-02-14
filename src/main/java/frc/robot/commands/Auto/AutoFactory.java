@@ -27,7 +27,7 @@ public class AutoFactory {
     public static Command getDriveOn(SwerveDrive drive) {
         PathPlannerTrajectory path = PathPlanner.loadPath("driveOn", new PathConstraints(Constants.Drivebase.Auto.maxVelocity, Constants.Drivebase.Auto.maxAcceleration));
 
-        return new PathFactory(drive, path,true, eventMap).getCommand().andThen(new AutoBalance(drive));
+        return new PathFactory(drive, path,true, eventMap).getCommand().andThen(new AutoBalance(drive)).andThen(drive.run(drive::lockDrive));
     }
 
     public static Command getSquareAuto(SwerveDrive drive) {

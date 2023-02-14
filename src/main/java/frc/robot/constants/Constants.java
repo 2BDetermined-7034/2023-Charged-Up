@@ -75,6 +75,12 @@ public final class Constants {
 
     public static class ArmConstants {
 
+        public static class ArmSetPoints {
+            public static double[] low = {0,0};
+            public static double[] medium = {0,0};
+            public static double[] high = {0,0};
+        }
+
         public static final int motor1ID = 15;
         public static final int motor2ID = 9;
         //Length of Segments

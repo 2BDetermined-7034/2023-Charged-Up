@@ -22,7 +22,7 @@ public class AutoBalance extends CommandBase {
 
     public AutoBalance(SwerveDrive swerveDrive) {
         m_swerveDrive = swerveDrive;
-        pid.setTolerance(0.01);
+        pid.setTolerance(0.05);
         pid.setIntegratorRange(-3, 3);
         // Use addRequirements() here to declare subsystem dependencies.
         addRequirements(m_swerveDrive);
@@ -60,6 +60,6 @@ public class AutoBalance extends CommandBase {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return pid.atSetpoint();
+        return Math.abs(m_swerveDrive.getRoll().getDegrees()) <= 2;
     }
 }
