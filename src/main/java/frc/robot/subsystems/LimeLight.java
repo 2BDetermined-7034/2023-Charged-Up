@@ -13,6 +13,9 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import static frc.robot.constants.Constants.Vision;
+
+import java.util.Optional;
 
 public class LimeLight extends SubsystemBase {
 
@@ -33,6 +36,8 @@ public class LimeLight extends SubsystemBase {
   private static IntegerSubscriber camModeSub;
   private static IntegerPublisher ledModePub;
   private static IntegerSubscriber ledModeSub;
+
+  private static DoublePublisher distance;
 
   private static long[] legalTags = new long[] {1,2,3,4,5,6,7,8};
 
@@ -84,11 +89,15 @@ public class LimeLight extends SubsystemBase {
     ledModePub = limeLightTable.getIntegerTopic("ledMode").publish();
     camModePub = limeLightTable.getIntegerTopic("camMode").publish();
     getpipePub = limeLightTable.getIntegerTopic("getpipe").publish();
+    distance = limeLightTable.getDoubleTopic("distance").publish();
+
+
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    distance.set(getTapeDistance().get());
   }
 
   /**
@@ -135,6 +144,22 @@ public class LimeLight extends SubsystemBase {
     return ta.get(0.0);
   }
   
+public Optional<Double> getTapeDistance()
+{
+  //double a = getTargetArea();
+  //return Units.inchesToMeters(113 + -27.8*a + Math.pow(3.36*a, 2) + Math.pow(-0.138*a, 3));
+  double targetoffsetAngle = ty.get(-1);
+
+  double angleToGoalRadians = Units.degreesToRadians(Vision.limeLightMountAngleDegrees + targetoffsetAngle);
+  if(isTargetAvailable()) {
+    return Optional.ofNullable(Vision.goalHeighInches - Vision.limeligtLensHeighInches/(Math.tan(angleToGoalRadians)));
+
+  }
+  return Optional.ofNullable(null);
+
+}
+
+
   /**
    * Get ID of detected AprilTag
    * @return AprilTag Id from 1-8
