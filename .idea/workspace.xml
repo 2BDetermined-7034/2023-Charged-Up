@@ -55,8 +55,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Class" />
         <option value="FRC v2 Command" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -70,6 +70,9 @@
   </component>
   <component name="HighlightingSettingsPerFile">
     <setting file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/edu.wpi.first.wpimath/wpimath-java/2023.2.1/5b602eeb2438f87c9607e3faa9012c38ef815f06/wpimath-java-2023.2.1-sources.jar!/edu/wpi/first/math/estimator/SwerveDrivePoseEstimator.java" root0="SKIP_INSPECTION" />
+  </component>
+  <component name="GithubDefaultAccount">
+    <option name="defaultAccountId" value="01c943a7-eb8c-491a-8fef-c459fc5628e6" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />

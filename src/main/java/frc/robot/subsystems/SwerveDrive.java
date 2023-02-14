@@ -238,4 +238,8 @@ public class SwerveDrive extends SubsystemBase {
         return new Transform2d();
     }
 
+    public void resetOdometry(Pose2d pose) {
+        m_estimator.resetPosition(getGyroscopeRotation(), getModulePosition(), pose);
+    }
+
 }
