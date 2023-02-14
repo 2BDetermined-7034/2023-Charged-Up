@@ -4,13 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="452aa9b7-8048-422e-bff9-c7f331f820f3" name="Changes" comment="change">
-      <change afterPath="$PROJECT_DIR$/src/main/java/frc/robot/commands/Arm/ArmOverride.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/Robot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/Robot.java" afterDir="false" />
+    <list default="true" id="452aa9b7-8048-422e-bff9-c7f331f820f3" name="Changes" comment="Refactored again&#10;ඞ&#10;ඞඞ&#10;ඞඞඞ&#10;ඞඞඞඞ&#10;ඞඞඞඞඞ&#10;ඞඞඞඞඞඞ">
+      <change beforePath="$PROJECT_DIR$/.idea/jarRepositories.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/RobotContainer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/RobotContainer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/subsystems/Arm/Arm.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/subsystems/Arm/Arm.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/util/ArmState.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/util/ArmState.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/commands/AutoBalance.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/commands/AutoBalance.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,7 +30,22 @@
         </task>
         <projects_view>
           <tree_state>
-            <expand />
+            <expand>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="2023-Charged-Up" type="f1a62948:ProjectNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="2023-Charged-Up" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="2023-Charged-Up" type="f1a62948:ProjectNode" />
+                <item name="Dependencies" type="6de06a37:ExternalSystemViewDefaultContributor$MyDependenciesNode" />
+              </path>
+            </expand>
             <select />
           </tree_state>
         </projects_view>
@@ -51,11 +63,13 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="ArmForRealNoAdvantageKitPlease" />
+        <entry key="$PROJECT_DIR$" value="master" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
-    <option name="RESET_MODE" value="HARD" />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/edu.wpi.first.wpimath/wpimath-java/2023.2.1/5b602eeb2438f87c9607e3faa9012c38ef815f06/wpimath-java-2023.2.1-sources.jar!/edu/wpi/first/math/estimator/SwerveDrivePoseEstimator.java" root0="SKIP_INSPECTION" />
   </component>
   <component name="GithubDefaultAccount">
     <option name="defaultAccountId" value="01c943a7-eb8c-491a-8fef-c459fc5628e6" />
@@ -76,6 +90,7 @@
     &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
     &quot;ASKED_MARK_IGNORED_FILES_AS_EXCLUDED&quot;: &quot;true&quot;,
     &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;Git.Branch.Popup.ShowAllRemotes&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
@@ -151,7 +166,7 @@
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="452aa9b7-8048-422e-bff9-c7f331f820f3" name="Changes" comment="no more PID on SD" />
+      <changelist id="e23114d8-8a5a-4e82-81c6-47d5ee3ae288" name="Changes" comment="Update vendors and gitignore &#10;ඞ&#10;ඞඞ&#10;ඞඞඞ&#10;ඞඞඞඞ&#10;ඞඞඞඞඞ&#10;ඞඞඞඞඞඞ" />
       <created>1673223532025</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
@@ -168,8 +183,7 @@
       <workItem from="1673371902826" duration="13298000" />
       <workItem from="1673403264848" duration="6082000" />
       <workItem from="1674085459703" duration="16010000" />
-      <workItem from="1674851689538" duration="6717000" />
-      <workItem from="1674930376734" duration="8673000" />
+      <workItem from="1676014227916" duration="329000" />
     </task>
     <task id="LOCAL-00001" summary="askdnasl">
       <created>1673225455965</created>
@@ -227,35 +241,21 @@
       <option name="project" value="LOCAL" />
       <updated>1674013033880</updated>
     </task>
-    <task id="LOCAL-00009" summary="push">
-      <created>1674772692263</created>
+    <task id="LOCAL-00009" summary="Refactored&#10;ඞ&#10;ඞඞ&#10;ඞඞඞ&#10;ඞඞඞඞ&#10;ඞඞඞඞඞ&#10;ඞඞඞඞඞඞ">
+      <created>1676014529690</created>
       <option name="number" value="00009" />
       <option name="presentableId" value="LOCAL-00009" />
       <option name="project" value="LOCAL" />
-      <updated>1674772692263</updated>
+      <updated>1676014529690</updated>
     </task>
-    <task id="LOCAL-00010" summary="good locking">
-      <created>1674778805114</created>
+    <task id="LOCAL-00010" summary="Refactored again&#10;ඞ&#10;ඞඞ&#10;ඞඞඞ&#10;ඞඞඞඞ&#10;ඞඞඞඞඞ&#10;ඞඞඞඞඞඞ">
+      <created>1676014555295</created>
       <option name="number" value="00010" />
       <option name="presentableId" value="LOCAL-00010" />
       <option name="project" value="LOCAL" />
-      <updated>1674778805114</updated>
+      <updated>1676014555295</updated>
     </task>
-    <task id="LOCAL-00011" summary="TODO: tune for final">
-      <created>1674779843492</created>
-      <option name="number" value="00011" />
-      <option name="presentableId" value="LOCAL-00011" />
-      <option name="project" value="LOCAL" />
-      <updated>1674779843492</updated>
-    </task>
-    <task id="LOCAL-00012" summary="no more PID on SD">
-      <created>1674779867987</created>
-      <option name="number" value="00012" />
-      <option name="presentableId" value="LOCAL-00012" />
-      <option name="project" value="LOCAL" />
-      <updated>1674779867987</updated>
-    </task>
-    <option name="localTasksCounter" value="13" />
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -272,28 +272,13 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="origin/ArmForRealNoAdvantageKitPlease" />
+                        <option value="Vision-NT4-Update" />
                       </list>
                     </value>
                   </entry>
                 </map>
               </option>
             </State>
-          </value>
-        </entry>
-      </map>
-    </option>
-    <option name="RECENT_FILTERS">
-      <map>
-        <entry key="Branch">
-          <value>
-            <list>
-              <RecentGroup>
-                <option name="FILTER_VALUES">
-                  <option value="origin/ArmForRealNoAdvantageKitPlease" />
-                </option>
-              </RecentGroup>
-            </list>
           </value>
         </entry>
       </map>
@@ -307,15 +292,12 @@
     <MESSAGE value="no auto" />
     <MESSAGE value="aaaaaaaaaa" />
     <MESSAGE value="pathplannertrajectory thing" />
-    <MESSAGE value="push" />
-    <MESSAGE value="good locking" />
-    <MESSAGE value="TODO: tune for final" />
-    <MESSAGE value="no more PID on SD" />
-    <MESSAGE value="change" />
-    <option name="LAST_COMMIT_MESSAGE" value="change" />
+    <MESSAGE value="Refactored&#10;ඞ&#10;ඞඞ&#10;ඞඞඞ&#10;ඞඞඞඞ&#10;ඞඞඞඞඞ&#10;ඞඞඞඞඞඞ" />
+    <MESSAGE value="Refactored again&#10;ඞ&#10;ඞඞ&#10;ඞඞඞ&#10;ඞඞඞඞ&#10;ඞඞඞඞඞ&#10;ඞඞඞඞඞඞ" />
+    <option name="LAST_COMMIT_MESSAGE" value="Refactored again&#10;ඞ&#10;ඞඞ&#10;ඞඞඞ&#10;ඞඞඞඞ&#10;ඞඞඞඞඞ&#10;ඞඞඞඞඞඞ" />
   </component>
   <component name="WpiLibVersionService">
-    <option name="lastChecked" value="20230128102639" />
+    <option name="lastChecked" value="20230121141902" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

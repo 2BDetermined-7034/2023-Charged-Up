@@ -9,22 +9,18 @@ import com.pathplanner.lib.auto.SwerveAutoBuilder;
 import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.constants.Constants;
-import frc.robot.subsystems.LimeLight;
 import frc.robot.subsystems.SwerveDrive;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 public class PathFactory {
-    SwerveDrive m_swerveDrive;
     private final Command followTrajectoryCommand;
+    SwerveDrive m_swerveDrive;
 
     public PathFactory(SwerveDrive drive, PathPlannerTrajectory path, boolean isFirstPath, HashMap<String, Command> eventMap) {
 
@@ -65,18 +61,14 @@ public class PathFactory {
         );
     }
 
-    public Command getCommand() {
-        return followTrajectoryCommand.andThen(m_swerveDrive::stop);
-    }
-
-    public static PathPlannerTrajectory pathMaker(List<PathPoint> points){
+    public static PathPlannerTrajectory pathMaker(List<PathPoint> points) {
         return PathPlanner.generatePath(
-            new PathConstraints(Constants.Drivebase.Auto.maxVelocity, Constants.Drivebase.Auto.maxAcceleration),
-            points
+                new PathConstraints(Constants.Drivebase.Auto.maxVelocity, Constants.Drivebase.Auto.maxAcceleration),
+                points
         );
     }
 
-    public static PathPlannerTrajectory createTagPath(Pose2d startPos, Pose2d endPos){
+    public static PathPlannerTrajectory createTagPath(Pose2d startPos, Pose2d endPos) {
 
         return PathPlanner.generatePath(
                 new PathConstraints(1, 1),
@@ -90,8 +82,13 @@ public class PathFactory {
 
 
     }
-    public static PathPoint pose2dToPathpoint(Pose2d point){
-        return new PathPoint(point.getTranslation(),point.getRotation());
+
+    public static PathPoint pose2dToPathpoint(Pose2d point) {
+        return new PathPoint(point.getTranslation(), point.getRotation());
+    }
+
+    public Command getCommand() {
+        return followTrajectoryCommand.andThen(m_swerveDrive::stop);
     }
 
 

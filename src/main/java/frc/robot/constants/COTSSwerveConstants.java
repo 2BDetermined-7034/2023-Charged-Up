@@ -19,11 +19,10 @@ public class COTSSwerveConstants {
     public final double driveKF;
     public final double driveKS;
     public final double driveKV;
-    public double driveKA;
-
     public final boolean driveMotorInvert;
     public final boolean angleMotorInvert;
     public final boolean canCoderInvert;
+    public double driveKA;
 
     public COTSSwerveConstants(
             double maxSpeed,
@@ -65,7 +64,9 @@ public class COTSSwerveConstants {
         this.canCoderInvert = canCoderInvert;
     }
 
-    /** DriveSubsystem Drive Specialties - MK4i Module */
+    /**
+     * DriveSubsystem Drive Specialties - MK4i Module
+     */
     public static COTSSwerveConstants SDSMK4i(double driveGearRatio) {
         double wheelDiameter = Units.inchesToMeters(4.0);
 
@@ -113,11 +114,17 @@ public class COTSSwerveConstants {
 
     public static class driveGearRatios {
         /* SDS MK4i */
-        /** SDS MK4i - 8.14 : 1 */
+        /**
+         * SDS MK4i - 8.14 : 1
+         */
         public static final double SDSMK4i_L1 = (8.14);
-        /** SDS MK4i - 6.75 : 1 */
+        /**
+         * SDS MK4i - 6.75 : 1
+         */
         public static final double SDSMK4i_L2 = (6.75);
-        /** SDS MK4i - 6.12 : 1 */
+        /**
+         * SDS MK4i - 6.12 : 1
+         */
         public static final double SDSMK4i_L3 = (6.12);
     }
 }

@@ -13,42 +13,29 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.networktables.*;
+import edu.wpi.first.networktables.DoublePublisher;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.util.ArmState;
+
 import static frc.robot.constants.Constants.ArmConstants.*;
 
 public class Arm extends SubsystemBase {
-    private final CANSparkMax m_motor1;
-    private final CANSparkMax m_motor2;
-    private final RelativeEncoder m_motor1Encoder;
-    private final RelativeEncoder m_motor2Encoder;
-    private ArmState goalState;
-    private double input1;
-    private double input2;
-    private double last_velocity1;
-    private double last_velocity2;
-    private DoublePublisher currentTheta1;
-    private DoublePublisher currentTheta2;
-    private  DoublePublisher omega1;
-    private  DoublePublisher omega2;
-    private  DoublePublisher alpha1;
-    private  DoublePublisher alpha2;
-    private  DoublePublisher targetTheta1;
-    private  DoublePublisher targetTheta2;
-    private DoublePublisher error2;
-    private  DoublePublisher appliedOutput1;
-    private  DoublePublisher appliedOutput2;
-    private DoublePublisher feedForwardOutput1;
-    private DoublePublisher feedForwardOutput2;
+    private final CANSparkMax m_motor1, m_motor2;
+    private final RelativeEncoder m_motor1Encoder, m_motor2Encoder;
     private final NetworkTable networkTable = NetworkTableInstance.getDefault().getTable("Arm");
-    private final ProfiledPIDController controller2;
-    private final ProfiledPIDController controller1;
-    private final ArmFeedforward armFeedForward2;
-    private final ArmFeedforward armFeedForward1;
+    private final ProfiledPIDController controller1, controller2;
+    private final ArmFeedforward armFeedForward1, armFeedForward2;
+    private ArmState goalState;
+    private double input1, input2;
+    private double last_velocity1, last_velocity2;
+    private DoublePublisher currentTheta1, currentTheta2, omega1, omega2, alpha1, alpha2, targetTheta1, targetTheta2, error2, appliedOutput1, appliedOutput2, feedForwardOutput1, feedForwardOutput2;
     private boolean isOpenLoop;
 
-    /** Creates a new Arm. */
+    /**
+     * Creates a new Arm.
+     */
     public Arm() {
         controller2 = new ProfiledPIDController(10, 0, 0, new TrapezoidProfile.Constraints(4, 8));
         controller1 = new ProfiledPIDController(4, 0, 0, new TrapezoidProfile.Constraints(2.5, 3));
@@ -61,7 +48,7 @@ public class Arm extends SubsystemBase {
         m_motor1.setInverted(false);
         m_motor2.setInverted(false);
         m_motor1Encoder = m_motor1.getEncoder();
-        m_motor2Encoder= m_motor2.getEncoder();
+        m_motor2Encoder = m_motor2.getEncoder();
 
         m_motor1Encoder.setPositionConversionFactor(S1);
         m_motor2Encoder.setPositionConversionFactor(S2);
@@ -83,22 +70,22 @@ public class Arm extends SubsystemBase {
      * Configures NetworkTables Publishers and Subscribers
      */
     public void configureDashBoard() {
-        currentTheta1 =  networkTable.getDoubleTopic("Current theta1").publish();
-        currentTheta2 =  networkTable.getDoubleTopic("Current theta2").publish();
+        currentTheta1 = networkTable.getDoubleTopic("Current theta1").publish();
+        currentTheta2 = networkTable.getDoubleTopic("Current theta2").publish();
 
-        omega1 =  networkTable.getDoubleTopic("Current omega1").publish();
-        omega2 =  networkTable.getDoubleTopic("Current omega2").publish();
+        omega1 = networkTable.getDoubleTopic("Current omega1").publish();
+        omega2 = networkTable.getDoubleTopic("Current omega2").publish();
 
-        alpha1  =  networkTable.getDoubleTopic("Current alpha").publish();
-        alpha2 =  networkTable.getDoubleTopic("Current alpha2").publish();
+        alpha1 = networkTable.getDoubleTopic("Current alpha").publish();
+        alpha2 = networkTable.getDoubleTopic("Current alpha2").publish();
 
-        targetTheta1 =  networkTable.getDoubleTopic("targetTheta1").publish();
-        targetTheta2 =  networkTable.getDoubleTopic("Target Theta2").publish();
+        targetTheta1 = networkTable.getDoubleTopic("targetTheta1").publish();
+        targetTheta2 = networkTable.getDoubleTopic("Target Theta2").publish();
 
         error2 = networkTable.getDoubleTopic("Error 2").publish();
 
-        appliedOutput1 =  networkTable.getDoubleTopic("Current appliedOutput1").publish();
-        appliedOutput2 =  networkTable.getDoubleTopic("Current appliedOutput2").publish();
+        appliedOutput1 = networkTable.getDoubleTopic("Current appliedOutput1").publish();
+        appliedOutput2 = networkTable.getDoubleTopic("Current appliedOutput2").publish();
 
         feedForwardOutput1 = networkTable.getDoubleTopic("Feed Forward1").publish();
         feedForwardOutput2 = networkTable.getDoubleTopic("FeedForward2").publish();
@@ -132,6 +119,7 @@ public class Arm extends SubsystemBase {
 
     /**
      * Gets the current goal position of the arm
+     *
      * @return Goal ArmState
      */
     public ArmState getGoalState() {
@@ -140,6 +128,7 @@ public class Arm extends SubsystemBase {
 
     /**
      * Sets arm Goal State only called by Commands
+     *
      * @param goalState ArmState to which the arm will go to
      */
     public void setGoalState(ArmState goalState) {
@@ -156,6 +145,7 @@ public class Arm extends SubsystemBase {
      * TODO set state-space estimation
      * <p>
      * Gets the current state of the arm
+     *
      * @return Arm State
      */
     public ArmState getCurrentState() {
@@ -174,6 +164,7 @@ public class Arm extends SubsystemBase {
 
     /**
      * Sets Motor Voltages for the Arm
+     *
      * @param volt1 voltage for proximal motor
      * @param volt2 voltage for distal motor
      */
@@ -184,6 +175,7 @@ public class Arm extends SubsystemBase {
 
     /**
      * Sets inputs and then adds feedForwards to apply to the motors
+     *
      * @param i1 motor1
      * @param i2 motor2
      */
@@ -198,16 +190,16 @@ public class Arm extends SubsystemBase {
      */
     @Override
     public void periodic() {
-        if(!isOpenLoop) {
+        if (!isOpenLoop) {
             ArmState goalState = getGoalState();
             input1 = controller1.calculate(getCurrentState().getTheta1(), goalState.getTheta1());
             input2 = controller2.calculate(getCurrentState().getTheta2(), goalState.getTheta2());
         }
 
-            double betterFeedForward1 = armFeedForward1.calculate(controller1.getSetpoint().position, controller1.getSetpoint().velocity);
-            double betterFeedForward2 = armFeedForward2.calculate(controller2.getSetpoint().position, controller2.getSetpoint().velocity);
+        double betterFeedForward1 = armFeedForward1.calculate(controller1.getSetpoint().position, controller1.getSetpoint().velocity);
+        double betterFeedForward2 = armFeedForward2.calculate(controller2.getSetpoint().position, controller2.getSetpoint().velocity);
 
-            setVoltages(MathUtil.clamp(input1 + betterFeedForward1, -12, 12), MathUtil.clamp(input2 + betterFeedForward2, -12, 12));
+        setVoltages(MathUtil.clamp(input1 + betterFeedForward1, -12, 12), MathUtil.clamp(input2 + betterFeedForward2, -12, 12));
 
         updateDashBoard();
     }

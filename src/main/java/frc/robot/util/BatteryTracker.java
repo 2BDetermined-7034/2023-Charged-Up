@@ -1,19 +1,19 @@
 package frc.robot.util;
 
 import edu.wpi.first.wpilibj.SerialPort;
-import java.util.Arrays;
-import java.util.List;
 import frc.robot.constants.AdvantageKitConstants;
 
-public class BatteryTracker {
-    private static final List<AdvantageKitConstants.RobotType> supportedRobots = List.of();
-    public static final String defaultName = "BAT-0000-000";
+import java.util.Arrays;
+import java.util.List;
 
+public class BatteryTracker {
+    public static final String defaultName = "BAT-0000-000";
+    private static final List<AdvantageKitConstants.RobotType> supportedRobots = List.of();
     private static final int nameLength = 12;
     private static final byte[] scanCommand =
-            new byte[] {0x7e, 0x00, 0x08, 0x01, 0x00, 0x02, 0x01, (byte) 0xab, (byte) 0xcd};
+            new byte[]{0x7e, 0x00, 0x08, 0x01, 0x00, 0x02, 0x01, (byte) 0xab, (byte) 0xcd};
     private static final byte[] responsePrefix =
-            new byte[] {0x02, 0x00, 0x00, 0x01, 0x00, 0x33, 0x31};
+            new byte[]{0x02, 0x00, 0x00, 0x01, 0x00, 0x33, 0x31};
     private static final byte endMark = 0x0d; // CR
     private static final int fullResponseLength = responsePrefix.length + nameLength + 1;
 
@@ -79,7 +79,9 @@ public class BatteryTracker {
         return name;
     }
 
-    /** Returns the name of the last scanned battery. */
+    /**
+     * Returns the name of the last scanned battery.
+     */
     public static String getName() {
         return name;
     }
