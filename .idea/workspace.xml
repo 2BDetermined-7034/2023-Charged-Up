@@ -57,6 +57,9 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="RESET_MODE" value="HARD" />
   </component>
+  <component name="GithubDefaultAccount">
+    <option name="defaultAccountId" value="01c943a7-eb8c-491a-8fef-c459fc5628e6" />
+  </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>

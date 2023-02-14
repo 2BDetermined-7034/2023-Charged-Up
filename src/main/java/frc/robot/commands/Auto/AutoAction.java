@@ -1,4 +1,4 @@
-package frc.robot.subsystems;
+package frc.robot.commands.Auto;
 
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
@@ -25,7 +25,7 @@ public class AutoAction {
         actionChooser.addOption("Engage", "EN");
 
         SendableChooser<CommandBase> heightChooser = new SendableChooser<CommandBase>();
-        actionChooser.addOption("L1", );
+        //actionChooser.addOption("L1", );
     }
 
 }
