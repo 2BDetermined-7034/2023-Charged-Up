@@ -97,7 +97,7 @@ public class LimeLight extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    distance.set(getTapeDistance().get());
+    getTapeDistance().ifPresent((dist) -> distance.set(dist));
   }
 
   /**
