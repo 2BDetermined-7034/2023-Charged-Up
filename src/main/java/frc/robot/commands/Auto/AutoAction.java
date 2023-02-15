@@ -44,16 +44,16 @@ public class AutoAction {
         heightChooser.addOption("L3", new SetArmCommand(arm, high[0], high[1]));
     }
 
-    public CommandBase getSelected(Pose2d start, int grid){
-        String action = actionChooser.getSelected();
-
-        if(action.equals("CL")){
-            VisionLocking.
-        }
-
-
-
-
-
-    }
+//    public CommandBase getSelected(Pose2d start, int grid){
+//        String action = actionChooser.getSelected();
+//
+//        if(action.equals("CL")){
+//            VisionLocking.
+//        }
+//
+//
+//
+//
+//
+//    }
 }
