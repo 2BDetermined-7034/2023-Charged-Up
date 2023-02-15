@@ -71,6 +71,17 @@ public final class Constants {
         }
 
     }
+
+
+    public static class Intake {
+        public static final int intakeMotor1 = 10;
+        public static final int intakeMotor2 = 11;
+        public static final int indexerMotor = 12;
+
+        public static final double indexerSpeed = 6.0;
+        public static final double intakeSpeed = 6.0;
+    }
+
     public static class Vision {
         public static final Transform2d camToRobot = new Transform2d(); //Irrelevent
         public static final double goalHeighInches = 30;

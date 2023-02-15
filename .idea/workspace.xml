@@ -58,6 +58,8 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Class" />
+        <option value="FRC v2 Subsystem" />
+        <option value="package-info" />
         <option value="FRC v2 Command" />
       </list>
     </option>
@@ -161,7 +163,7 @@
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="8be0e9b2-7bbf-401b-9710-29a56a36eb81" name="Changes" comment="" />
+      <changelist id="452aa9b7-8048-422e-bff9-c7f331f820f3" name="Changes" comment="New FeedForward Implementation" />
       <created>1673223532025</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
@@ -178,6 +180,7 @@
       <workItem from="1673371902826" duration="13298000" />
       <workItem from="1673403264848" duration="6082000" />
       <workItem from="1674085459703" duration="16010000" />
+      <workItem from="1675225086960" duration="3692000" />
     </task>
     <task id="LOCAL-00001" summary="askdnasl">
       <created>1673225455965</created>
