@@ -17,7 +17,6 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
 public class SwerveModule {
     public final int moduleNumber;
     private final ShuffleboardLayout dashboard;
@@ -109,8 +108,7 @@ public class SwerveModule {
     }
 
     private Rotation2d getAngle(){
-        if (Robot.isReal()) return Rotation2d.fromDegrees(mAngleEncoder.getPosition());
-        return simAngleCache;
+        return Rotation2d.fromDegrees(mAngleEncoder.getPosition());
     }
 
     public Rotation2d getAbsoluteAngle(){
@@ -173,8 +171,6 @@ public class SwerveModule {
 
     public SwerveModuleState getState(){
         return new SwerveModuleState(
-                Robot.isReal() ? mDriveEncoder.getVelocity() : simSpeedCache,
-                getAngle()
         );
     }
     public SwerveModulePosition getPosition() {

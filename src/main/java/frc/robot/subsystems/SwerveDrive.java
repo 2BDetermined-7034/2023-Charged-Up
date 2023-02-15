@@ -13,6 +13,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -23,7 +24,6 @@ import frc.robot.constants.Constants;
 import frc.robot.util.SwerveModule;
 import frc.robot.constants.COTSSwerveConstants;
 import frc.robot.constants.SwerveModuleConstants;
-
 public class SwerveDrive extends SubsystemBase {
 
     //FL, FR, BL, BR
@@ -116,12 +116,14 @@ public class SwerveDrive extends SubsystemBase {
         limeLight.setModeVision();
 
 
-        tab.add(m_field);
+        tab.add(m_field).withPosition(4,0).withSize(5,4);
         tab.addNumber("Odometry X", () -> getPosition().getX()).withPosition(0, 4);
         tab.addNumber("Odometry Y", () -> getPosition().getY()).withPosition(1, 4);
         tab.addNumber("Odometry Angle", () -> getPosition().getRotation().getDegrees()).withPosition(2, 4);
         tab.addNumber("Gyroscope Angle", () -> getGyroscopeRotation().getDegrees()).withPosition(3, 4);
+        tab.addBoolean("Tag", () -> limeLight.isTargetAvailable()).withPosition(4,5);
     }
+
 
     public void setPosition(Pose2d m_position) {
         zeroGyroscope();
@@ -140,6 +142,7 @@ public class SwerveDrive extends SubsystemBase {
         return m_frontLeftModule.cotsSwerveConstants.maxSpeed;
     }
     public Pose2d getPosition() {
+        //Logger.getInstance().recordOutput("Position", m_estimator.getEstimatedPosition());
         return m_estimator.getEstimatedPosition();
     }
 
@@ -212,12 +215,17 @@ public class SwerveDrive extends SubsystemBase {
 
     private void updateOdometry() {
         if(limeLight.isTargetAvailable()) {
-            addVisionMeasurement(limeLight.getBotPose().toPose2d(), limeLight.getLatency());
+            addVisionMeasurement(limeLight.getBotPose().toPose2d(), Timer.getFPGATimestamp());
         } else return;
     }
 
     public void addTrajectory(PathPlannerTrajectory m_trajectory) {
         m_field.getObject("traj").setTrajectory(m_trajectory);
+    }
+
+    public Transform2d getCamTransform() {
+        if(limeLight.isTargetAvailable()) return limeLight.getCamTransform2d();
+        return new Transform2d();
     }
 
 }

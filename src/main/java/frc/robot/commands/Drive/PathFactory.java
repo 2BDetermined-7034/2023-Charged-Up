@@ -70,7 +70,6 @@ public class PathFactory {
         );
 
 
-
         //TrajectoryGenerator.generateTrajectory(startPos, endPos, new);
 
 
