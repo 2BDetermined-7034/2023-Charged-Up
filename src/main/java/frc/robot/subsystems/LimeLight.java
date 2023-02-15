@@ -83,7 +83,7 @@ public class LimeLight extends SubsystemBase {
     camTran = limeLightTable.getDoubleArrayTopic("camTran").subscribe(new double[] {});
     ledModeSub = limeLightTable.getIntegerTopic("ledMode").subscribe(0); // limelight's LED state (0-3).
     camModeSub = limeLightTable.getIntegerTopic("camMode").subscribe(0); // limelight's operation mode (0-1).
-    botpose = limeLightTable.getDoubleArrayTopic("botpose_wpired").subscribe(new double[] {});
+    botpose = limeLightTable.getDoubleArrayTopic("botpose").subscribe(new double[] {});
 
 
     ledModePub = limeLightTable.getIntegerTopic("ledMode").publish();
@@ -97,7 +97,7 @@ public class LimeLight extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    distance.set(getTapeDistance().get());
+    //distance.set(getTapeDistance().get());
   }
 
   /**
@@ -222,7 +222,7 @@ public Optional<Double> getTapeDistance()
       new Translation3d(poseVals[0], poseVals[1], poseVals[2]),
       new Rotation3d(Units.degreesToRadians(poseVals[3]), Units.degreesToRadians(poseVals[4]), Units.degreesToRadians(poseVals[5])));
     }
-    return new Pose3d();
+    return null;
   }
 
 
