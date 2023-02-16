@@ -46,35 +46,4 @@ public class AutoFactory {
 
         return first;
     }
-
-    public static Command getSpinAuto(SwerveDrive drive) {
-        PathPlannerTrajectory path = PathPlanner.loadPath("Spin", new PathConstraints(Constants.Drivebase.Auto.maxVelocity, Constants.Drivebase.Auto.maxAcceleration));
-
-        return new PathFactory(drive, path,true,true, eventMap).getCommand();
-    }
-
-    public static Command getDriveOn(SwerveDrive drive) {
-        PathPlannerTrajectory path = PathPlanner.loadPath("driveOn", new PathConstraints(Constants.Drivebase.Auto.maxVelocity, Constants.Drivebase.Auto.maxAcceleration));
-
-        return new PathFactory(drive, path, true,true, eventMap).getCommand().andThen(new AutoBalance(drive));
-    }
-
-    public static Command getSquareAuto(SwerveDrive drive) {
-        PathPlannerTrajectory path = PathPlanner.loadPath("square", new PathConstraints(Constants.Drivebase.Auto.maxVelocity, Constants.Drivebase.Auto.maxAcceleration));
-
-        return new PathFactory(drive, path, true,true, eventMap).getCommand();
-    }
-
-    public static Command getSmallSquare(SwerveDrive drive) {
-        PathPlannerTrajectory path = PathPlanner.loadPath("smallSquare", new PathConstraints(Constants.Drivebase.Auto.maxVelocity, Constants.Drivebase.Auto.maxAcceleration));
-
-        return new PathFactory(drive, path, true,true, eventMap).getCommand();
-    }
-
-    public static Command getSmallSquareSpin(SwerveDrive drive) {
-        PathPlannerTrajectory path = PathPlanner.loadPath("smallSquareSpin", new PathConstraints(Constants.Drivebase.Auto.maxVelocity, Constants.Drivebase.Auto.maxAcceleration));
-
-        return new PathFactory(drive, path, true,true, eventMap).getCommand();
-    }
-
 }
