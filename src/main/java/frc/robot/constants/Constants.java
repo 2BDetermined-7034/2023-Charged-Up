@@ -16,7 +16,12 @@ import edu.wpi.first.math.util.Units;
 public final class Constants {
     public static class OperatorConstants {
         public static final int kDriverControllerPort = 0;
-        public static final int kGunnerControllerPort = 2;
+
+        public static final int kOperatorControllerPort = 1;
+    }
+    public static class GravityClaw{
+        public static final int forwardChannel = 0;
+        public static final int reverseChannel = 1;
     }
     public static class Drivebase {
 
