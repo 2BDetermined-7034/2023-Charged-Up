@@ -40,6 +40,10 @@ public class Arm extends SubsystemBase {
         controller2 = new ProfiledPIDController(10, 0, 0, new TrapezoidProfile.Constraints(4, 8));
         controller1 = new ProfiledPIDController(4, 0, 0, new TrapezoidProfile.Constraints(2.5, 3));
 
+        controller2.setTolerance(Math.toRadians(1), 1);
+        controller1.setTolerance(Math.toRadians(1), 1);
+
+
         armFeedForward2 = new ArmFeedforward(0.05, 0.25, 0.19, 0.01);
         armFeedForward1 = new ArmFeedforward(0.0, .36, 3.9, .03);
 
@@ -139,6 +143,10 @@ public class Arm extends SubsystemBase {
         this.isOpenLoop = condition;
         controller1.reset(new TrapezoidProfile.State(getCurrentState().getTheta1(), getCurrentState().getOmega1()));
         controller2.reset(new TrapezoidProfile.State(getCurrentState().getTheta2(), getCurrentState().getOmega2()));
+    }
+
+    public boolean atSetPoint(){
+        return controller1.atGoal() && controller2.atGoal();
     }
 
     /**

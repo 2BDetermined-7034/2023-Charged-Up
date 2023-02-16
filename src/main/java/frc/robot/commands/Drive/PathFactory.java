@@ -22,7 +22,7 @@ public class PathFactory {
     private final Command followTrajectoryCommand;
     SwerveDrive m_swerveDrive;
 
-    public PathFactory(SwerveDrive drive, PathPlannerTrajectory path, boolean isFirstPath, HashMap<String, Command> eventMap) {
+    public PathFactory(SwerveDrive drive, PathPlannerTrajectory path, boolean useAlliance, boolean isFirstPath, HashMap<String, Command> eventMap) {
 
         m_swerveDrive = drive;
         m_swerveDrive.addTrajectory(path);
@@ -36,7 +36,7 @@ public class PathFactory {
                 new PIDConstants(Constants.Drivebase.Auto.kP, 0, 0), // Y controller (usually the same values as X controller)
                 m_swerveDrive::setModuleStates, // Module states consumer
                 eventMap,
-                true, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true
+                useAlliance, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true
                 m_swerveDrive // Module states consumer // The drive subsystem. Used to properly set the requirements of path following commands
         );
         Command fullAuto = autoBuilder.fullAuto(path);
@@ -49,17 +49,11 @@ public class PathFactory {
                     }
                 }),
                 fullAuto
-                /*new PPSwerveControllerCommand(
-                        path,
-                        m_swerveDrive::getPosition, // Pose supplier
-                        m_swerveDrive.getKinematics(), // SwerveDriveKinematics
-                        new PIDController(Constants.Drivebase.Auto.kP, 0, 0), // X controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
-                        new PIDController(Constants.Drivebase.Auto.kP, 0, 0), // Y controller (usually the same values as X controller)
-                        new PIDController(Constants.Drivebase.Auto.kP, 0, 0), // Rotation controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
-                        m_swerveDrive::setModuleStates, // Module states consumer
-                        m_swerveDrive // Requires this drive subsystem
-                )*/
         );
+    }
+
+    public PathFactory(SwerveDrive drive, PathPlannerTrajectory path, boolean useAlliance, boolean isFirstPath){
+        this(drive, path, useAlliance, isFirstPath, new HashMap<String, Command>());
     }
 
     public static PathPlannerTrajectory pathMaker(List<PathPoint> points) {
@@ -77,10 +71,6 @@ public class PathFactory {
                 pose2dToPathpoint(endPos)
 
         );
-
-
-        //TrajectoryGenerator.generateTrajectory(startPos, endPos, new);
-
 
     }
 

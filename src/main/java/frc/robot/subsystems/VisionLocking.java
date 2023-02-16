@@ -9,13 +9,14 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.FieldConstants;
 
 public class VisionLocking extends SubsystemBase {
 
-    private final int[] blueTags = {8, 7, 6};
-    private final int[] redTags = {3, 2, 1};
+    private static final int[] blueTags = {8, 7, 6};
+    private static final int[] redTags = {3, 2, 1};
     private Team m_team;
     private Level m_level;
     private Side m_side;
@@ -30,8 +31,6 @@ public class VisionLocking extends SubsystemBase {
         m_grid = 1;
         m_side = Side.LEFT;
         m_level = Level.HIGH;
-
-
     }
 
     public void setSide(Side setTo) {
@@ -108,33 +107,62 @@ public class VisionLocking extends SubsystemBase {
         }
     }
 
+    public static Pose2d exit(Team team, int grid){
+        Pose2d position;
+        if (team.equals(Team.BLUE)){
+            position = FieldConstants.aprilTags.get(blueTags[grid - 1]).toPose2d();
+            position.transformBy(new Transform2d(new Translation2d(2.52, 0), new Rotation2d())); //.28
+        } else {
+            position = FieldConstants.aprilTags.get(redTags[grid - 1]).toPose2d();
+            position.transformBy(new Transform2d(new Translation2d(-2.52, 0), new Rotation2d()));
+        }
+
+        return position;
+    }
+
+
+    public static Pose2d getPosition(Team team, int grid, PieceType piece, Side side){
+        Pose2d position;
+
+        if (team.equals(Team.BLUE)) {
+            position = FieldConstants.aprilTags.get(blueTags[grid - 1]).toPose2d();
+            if (piece.equals(PieceType.CUBES)){
+                position.transformBy(new Transform2d(new Translation2d(1.1, 0), new Rotation2d()));
+            } else if (piece.equals(PieceType.CONES)&&side.equals(Side.LEFT)) {
+                position.transformBy(new Transform2d(new Translation2d(1.1 , -.6), new Rotation2d()));
+            } else {
+                position.transformBy(new Transform2d(new Translation2d(1.1 , .6), new Rotation2d()));
+            }
+
+        } else {
+            position = FieldConstants.aprilTags.get(redTags[grid - 1]).toPose2d();
+            if (piece.equals(PieceType.CUBES)){
+                position.transformBy(new Transform2d(new Translation2d(-1.1, 0), new Rotation2d()));
+            } else if (piece.equals(PieceType.CONES)&&side.equals(Side.LEFT)) {
+                position.transformBy(new Transform2d(new Translation2d(-1.1 , -.6), new Rotation2d()));
+            } else {
+                position.transformBy(new Transform2d(new Translation2d(-1.1 , .6), new Rotation2d()));
+            }
+
+        }
+        return position;
+    }
+
     /**
-     * Returns the position the robot must be within a certain degree of error of to score on the Grid
-     * <p>
-     * TODO fix to apply for both alliance colors
-     * <p>
-     * TODO Add more shit for substation loading
-     *
      * @return position
      */
 
     public Pose2d getLockedPosition() {
-        Pose2d position;
-
-        if (m_team.equals(Team.BLUE)) {
-            position = FieldConstants.aprilTags.get(blueTags[m_grid - 1]).toPose2d();
-            position.transformBy(new Transform2d(new Translation2d(Units.inchesToMeters(50), Units.inchesToMeters(0)), new Rotation2d()));
-        } else {
-            position = FieldConstants.aprilTags.get(redTags[m_grid - 1]).toPose2d();
-            position.transformBy(new Transform2d(new Translation2d(Units.inchesToMeters(0), 0), new Rotation2d()));
-        }
-        //return position;
-        return new Pose2d(new Translation2d(2.1, 1), new Rotation2d(179));
+        return getPosition(m_team, m_grid, m_pieceType, m_side);
     }
 
     @Override
     public void periodic() {
-        // This method will be called once per scheduler run
+        if(DriverStation.getAlliance().equals(DriverStation.Alliance.Blue)) {
+            m_team = VisionLocking.Team.BLUE;
+        } else {
+            m_team = VisionLocking.Team.RED;
+        }
     }
 
     public enum Team {
