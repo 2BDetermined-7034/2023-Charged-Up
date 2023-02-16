@@ -12,6 +12,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
@@ -25,6 +26,7 @@ import frc.robot.util.SwerveModule;
 import frc.robot.constants.COTSSwerveConstants;
 import frc.robot.constants.SwerveModuleConstants;
 import org.littletonrobotics.junction.Logger;
+import org.littletonrobotics.junction.inputs.LoggedPowerDistribution;
 
 public class SwerveDrive extends SubsystemBase {
 
@@ -215,6 +217,8 @@ public class SwerveDrive extends SubsystemBase {
         m_backRightModule.setDesiredState(m_states[3], m_IsOpenLoop);
 
         Logger.getInstance().recordOutput("Pose2D", getPosition());
+        Logger.getInstance().recordOutput("Swerve Module States", m_states);
+        LoggedPowerDistribution.getInstance(0, PowerDistribution.ModuleType.kRev);
     }
 
     private void updateOdometry() {
