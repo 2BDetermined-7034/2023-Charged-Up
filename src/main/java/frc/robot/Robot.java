@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.PowerDistribution;
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
@@ -41,8 +42,20 @@ public class Robot extends LoggedRobot {
     switch (AdvantageKitConstants.currentMode) {
       // Running on a real robot, log to a USB stick
       case REAL:
-        logger.addDataReceiver(new WPILOGWriter("/media/sda1/"));
-        logger.addDataReceiver(new NT4Publisher());
+        Logger.getInstance().recordMetadata("ProjectName", "MyProject"); // Set a metadata value
+
+        if (isReal()) {
+          Logger.getInstance().addDataReceiver(new WPILOGWriter("/media/sda1/")); // Log to a USB stick
+          Logger.getInstance().addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables
+          new PowerDistribution(1, PowerDistribution.ModuleType.kRev); // Enables power distribution logging
+        } else {
+          setUseTiming(false); // Run as fast as possible
+          String logPath = LogFileUtil.findReplayLog(); // Pull the replay log from AdvantageScope (or prompt the user)
+          Logger.getInstance().setReplaySource(new WPILOGReader(logPath)); // Read replay log
+          Logger.getInstance().addDataReceiver(new WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim"))); // Save outputs to a new log
+        }
+
+        Logger.getInstance().start(); // Start logging! No more data receivers, replay sources, or metadata values may be added.
         break;
 
       // Running a physics simulator, log to local folder
