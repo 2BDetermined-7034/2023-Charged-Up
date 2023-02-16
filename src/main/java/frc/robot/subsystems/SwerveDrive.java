@@ -1,25 +1,28 @@
 package frc.robot.subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
+import com.pathplanner.lib.PathPlannerTrajectory;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.constants.Constants;
-import frc.robot.util.SwerveModule;
 import frc.robot.constants.COTSSwerveConstants;
+import frc.robot.constants.Constants;
 import frc.robot.constants.SwerveModuleConstants;
-
+import frc.robot.util.SwerveModule;
 public class SwerveDrive extends SubsystemBase {
 
     //FL, FR, BL, BR
@@ -42,17 +45,21 @@ public class SwerveDrive extends SubsystemBase {
     SwerveModuleState[] m_states;
     ChassisSpeeds m_speeds;
 
+    private final Field2d m_field;
+
+    private final LimeLight limeLight = new LimeLight();
+
     public SwerveDrive() {
         ShuffleboardTab tab = Shuffleboard.getTab("Drivetrain");
-
+        zeroGyroscope();
         m_frontLeftModule = new SwerveModule(
                 0,
                 tab.getLayout("Front Left Module", BuiltInLayouts.kList).withSize(1, 3).withPosition(0, 0),
                 new SwerveModuleConstants(
-                    Constants.Drivebase.MotorIDs.flDrive,
-                    Constants.Drivebase.MotorIDs.flSteer,
-                    Constants.Drivebase.MotorIDs.flEncoder,
-                    Constants.Drivebase.MotorIDs.flOffset
+                        Constants.Drivebase.MotorIDs.flDrive,
+                        Constants.Drivebase.MotorIDs.flSteer,
+                        Constants.Drivebase.MotorIDs.flEncoder,
+                        Constants.Drivebase.MotorIDs.flOffset
                 ),
                 COTSSwerveConstants.SDSMK4i(Constants.Drivebase.Measurements.driveRatio)
         );
@@ -93,42 +100,31 @@ public class SwerveDrive extends SubsystemBase {
                 COTSSwerveConstants.SDSMK4i(Constants.Drivebase.Measurements.driveRatio)
         );
 
-
         m_estimator = new SwerveDrivePoseEstimator(
                 m_kinematics,
                 getGyroscopeRotation(),
-                new SwerveModulePosition[] {
-                        m_frontLeftModule.getPosition(),
-                        m_frontRightModule.getPosition(),
-                        m_backLeftModule.getPosition(),
-                        m_backRightModule.getPosition()
-                },
+                getModulePosition(),
                 new Pose2d(),
-                VecBuilder.fill(0.02, 0.02, 0.01), // estimator values (x, y, rotation) std-devs
-                VecBuilder.fill(0.15, 0.15, 0.01)
+                VecBuilder.fill(0.1, 0.1, 0.1), // estimator values (x, y, rotation) std-devs
+                VecBuilder.fill(0.9, 0.9, 0.9)
         );
 
-        m_states = m_kinematics.toSwerveModuleStates(new ChassisSpeeds(0, 0, 0));
-        //tab.add("Field", m_field).withSize(4,2).withPosition(4, 0);
 
+        m_field = new Field2d();
+        m_states = m_kinematics.toSwerveModuleStates(new ChassisSpeeds(0, 0, 0));
+        limeLight.setModeVision();
+
+
+        tab.add(m_field).withPosition(4, 0).withSize(5, 4);
         tab.addNumber("Odometry X", () -> getPosition().getX()).withPosition(0, 4);
         tab.addNumber("Odometry Y", () -> getPosition().getY()).withPosition(1, 4);
         tab.addNumber("Odometry Angle", () -> getPosition().getRotation().getDegrees()).withPosition(2, 4);
         tab.addNumber("Gyroscope Angle", () -> getGyroscopeRotation().getDegrees()).withPosition(3, 4);
+        tab.addBoolean("Tag", () -> limeLight.isTargetAvailable()).withPosition(4, 5);
     }
 
-    public void setPosition(Pose2d m_position) {
-        zeroGyroscope();
-        m_estimator.resetPosition(
-                getGyroscopeRotation(),
-                new SwerveModulePosition[] {
-                    m_frontLeftModule.getPosition(),
-                    m_frontRightModule.getPosition(),
-                    m_backLeftModule.getPosition(),
-                    m_backRightModule.getPosition()
-                },
-                m_position
-        );
+    public static Rotation2d getGyroscopeRotation() {
+        return Rotation2d.fromDegrees(360 - m_navx.getYaw());
     }
 
     public void addVisionMeasurement(Pose2d m_observed, double time){
@@ -138,7 +134,9 @@ public class SwerveDrive extends SubsystemBase {
     public double getMaxSpeed() {
         return m_frontLeftModule.cotsSwerveConstants.maxSpeed;
     }
+
     public Pose2d getPosition() {
+        //Logger.getInstance().recordOutput("Position", m_estimator.getEstimatedPosition());
         return m_estimator.getEstimatedPosition();
     }
 
@@ -146,8 +144,18 @@ public class SwerveDrive extends SubsystemBase {
         return m_kinematics;
     }
 
-    public ChassisSpeeds getVelocity() {return m_speeds;}
+    public void setPosition(Pose2d m_position) {
+        zeroGyroscope();
+        m_estimator.resetPosition(
+                getGyroscopeRotation(),
+                getModulePosition(),
+                m_position
+        );
+    }
 
+    public LimeLight getLimeLight() {
+        return limeLight;
+    }
 
     /**
      * Sets the gyroscope angle to zero. This can be used to set the direction the robot is currently facing to the
@@ -157,23 +165,38 @@ public class SwerveDrive extends SubsystemBase {
         m_navx.zeroYaw();
     }
 
-    public static Rotation2d getGyroscopeRotation() {
-        if (m_navx.isMagnetometerCalibrated()) {
-            // We will only get valid fused headings if the magnetometer is calibrated
-            return Rotation2d.fromDegrees(m_navx.getFusedHeading());
-        }
-
-        // We have to invert the angle of the NavX so that rotating the robot counter-clockwise makes the angle increase.
-        return Rotation2d.fromDegrees(360.0 - m_navx.getYaw());
+    public ChassisSpeeds getVelocity() {
+        return m_speeds;
     }
 
+    public SwerveModulePosition[] getModulePosition() {
+        return new SwerveModulePosition[]{
+                m_frontLeftModule.getPosition(),
+                m_frontRightModule.getPosition(),
+                m_backLeftModule.getPosition(),
+                m_backRightModule.getPosition()
+        };
+    }
+
+    public void setLimeLightDriver() {
+        limeLight.setModeDriver();
+    }
+
+    public void setLimeLightVision() {
+        limeLight.setModeVision();
+    }
 
     public void drive(ChassisSpeeds chassisSpeeds) {
         m_speeds = chassisSpeeds;
         m_states = m_kinematics.toSwerveModuleStates(chassisSpeeds);
     }
 
-    public void setModuleStates(SwerveModuleState[] states){
+    public void stop() {
+        m_speeds = new ChassisSpeeds(0, 0, 0);
+        m_states = m_kinematics.toSwerveModuleStates(m_speeds);
+    }
+
+    public void setModuleStates(SwerveModuleState[] states) {
         m_states = states;
     }
 
@@ -183,19 +206,33 @@ public class SwerveDrive extends SubsystemBase {
 
         m_estimator.update(
                 getGyroscopeRotation(),
-                new SwerveModulePosition[] {
-                        m_frontLeftModule.getPosition(),
-                        m_frontRightModule.getPosition(),
-                        m_backLeftModule.getPosition(),
-                        m_backRightModule.getPosition()
-                }
+                getModulePosition()
         );
 
-        m_frontLeftModule.setDesiredState(m_states[0], true);
-        m_frontRightModule.setDesiredState(m_states[1], true);
-        m_backLeftModule.setDesiredState(m_states[2], true);
-        m_backRightModule.setDesiredState(m_states[3], true);
+        updateOdometry();
+        m_field.setRobotPose(getPosition());
 
+        boolean m_IsOpenLoop = false;
+        m_frontLeftModule.setDesiredState(m_states[0], m_IsOpenLoop);
+        m_frontRightModule.setDesiredState(m_states[1], m_IsOpenLoop);
+        m_backLeftModule.setDesiredState(m_states[2], m_IsOpenLoop);
+        m_backRightModule.setDesiredState(m_states[3], m_IsOpenLoop);
+    }
+
+    private void updateOdometry() {
+        if (limeLight.isTargetAvailable()) {
+            addVisionMeasurement(limeLight.getBotPose().toPose2d(), Timer.getFPGATimestamp());
+        } else {
+        }
+    }
+
+    public void addTrajectory(PathPlannerTrajectory m_trajectory) {
+        m_field.getObject("traj").setTrajectory(m_trajectory);
+    }
+
+    public Transform2d getCamTransform() {
+        if (limeLight.isTargetAvailable()) return limeLight.getCamTransform2d();
+        return new Transform2d();
     }
 
 }
