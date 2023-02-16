@@ -5,25 +5,38 @@
 package frc.robot;
 
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 import frc.robot.commands.Arm.ArmOverride;
 import frc.robot.commands.Arm.SetArmCommand;
-import frc.robot.commands.Drive.*;
+
+import frc.robot.commands.clob.GravityClawCommand;
+import frc.robot.commands.clob.GravityClawToggleCommand;
 import frc.robot.constants.Constants.OperatorConstants;
 import frc.robot.commands.Auto.AutoFactory;
-import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.Arm.Arm;
+import frc.robot.subsystems.GravityClawSubsystem;
+
 import frc.robot.subsystems.SwerveDrive;
 import frc.robot.subsystems.VisionLocking;
-import frc.robot.subsystems.Arm.Arm;
 
 
 public class RobotContainer {
     private final SwerveDrive m_swerveDrive = new SwerveDrive();
     private final Arm m_Arm = new Arm();
     private final CommandPS4Controller m_driverController = new CommandPS4Controller(OperatorConstants.kDriverControllerPort);
+
+    private final CommandPS4Controller m_operatorController = new CommandPS4Controller(OperatorConstants.kDriverControllerPort);
+
+    private final GravityClawSubsystem gravityClawSubsystem = new GravityClawSubsystem();
+
+    private final GravityClawCommand gravityClawCommandTrue = new GravityClawCommand(gravityClawSubsystem, true);
+    private final GravityClawCommand gravityClawCommandFalse = new GravityClawCommand(gravityClawSubsystem, false);
+private final GravityClawToggleCommand gravityClawToggleCommand = new GravityClawToggleCommand(gravityClawSubsystem);
     private final VisionLocking m_visionLocker = new VisionLocking();
 
     private final AutoFactory autoFactory;
+
 
     public RobotContainer() {
 
@@ -39,18 +52,43 @@ public class RobotContainer {
     }
 
     private void configureBindings() {
-        m_driverController.R1().whileTrue(new ArmOverride(m_Arm, () -> m_driverController.getLeftX(), () -> m_driverController.getRightY(), () -> m_driverController.getR2Axis()));
+            m_driverController.R1().whileTrue(new ArmOverride(m_Arm, () -> m_driverController.getLeftX(), () -> m_driverController.getRightY(), () -> m_driverController.getR2Axis()));
 
-        m_driverController.share().whileTrue(m_swerveDrive.runOnce(m_swerveDrive::zeroGyroscope));
+            m_driverController.share().whileTrue(m_swerveDrive.runOnce(m_swerveDrive::zeroGyroscope));
+//            m_operatorController.circle()
 
+            //m_driverController.triangle().whileTrue(m_swerveDrive.runOnce(m_swerveDrive::setLimeLightVision));
+            //m_driverController.circle().whileTrue(new DriveToTarget(m_swerveDrive, m_visionLocker).andThen(new ChaseTagCommand(m_swerveDrive, m_visionLocker)));
 
-        //m_driverController.triangle().whileTrue(m_swerveDrive.runOnce(m_swerveDrive::setLimeLightVision));
-        //m_driverController.circle().whileTrue(new DriveToTarget(m_swerveDrive, m_visionLocker).andThen(new ChaseTagCommand(m_swerveDrive, m_visionLocker)));
+            m_driverController.triangle().onTrue(new SetArmCommand(m_Arm, Units.degreesToRadians(90), Units.degreesToRadians(90)));
+            m_driverController.square().onTrue(new SetArmCommand(m_Arm, Units.degreesToRadians(90), Units.degreesToRadians(309)));
+            m_driverController.circle().onTrue(new SetArmCommand(m_Arm,Units.degreesToRadians(130),  Units.degreesToRadians(45)));
+            m_driverController.cross().onTrue(new SetArmCommand(m_Arm, Units.degreesToRadians(90), Units.degreesToRadians(270)));
+
+            m_operatorController.circle().onTrue(gravityClawCommandTrue);
+            m_operatorController.square().onTrue(gravityClawCommandFalse);
+            m_operatorController.triangle().onTrue(gravityClawToggleCommand);
+
 
         m_driverController.triangle().onTrue(new SetArmCommand(m_Arm, Units.degreesToRadians(90), Units.degreesToRadians(90)));
         m_driverController.square().onTrue(new SetArmCommand(m_Arm, Units.degreesToRadians(90), Units.degreesToRadians(309)));
-        m_driverController.circle().onTrue(new SetArmCommand(m_Arm,Units.degreesToRadians(130),  Units.degreesToRadians(45)));
+        m_driverController.circle().onTrue(new SetArmCommand(m_Arm, Units.degreesToRadians(130), Units.degreesToRadians(45)));
         m_driverController.cross().onTrue(new SetArmCommand(m_Arm, Units.degreesToRadians(90), Units.degreesToRadians(270)));
+
+        // Gunner controls
+
+        m_operatorController.cross().whileTrue(m_swerveDrive.runOnce(m_swerveDrive::zeroGyroscope));
+
+        m_operatorController.povLeft().whileTrue(m_visionLocker.runOnce(() -> m_visionLocker.setSide(VisionLocking.Side.LEFT)));
+        m_operatorController.povRight().whileTrue(m_visionLocker.runOnce(() -> m_visionLocker.setSide(VisionLocking.Side.RIGHT)));
+        m_operatorController.povUp().whileTrue(m_visionLocker.runOnce(m_visionLocker::levelUp));
+        m_operatorController.povDown().whileTrue(m_visionLocker.runOnce(m_visionLocker::levelDown));
+
+        m_operatorController.L1().whileTrue(m_visionLocker.runOnce(m_visionLocker::gridLeft));
+        m_operatorController.R1().whileTrue(m_visionLocker.runOnce(m_visionLocker::gridRight));
+
+        m_operatorController.square().whileTrue(m_visionLocker.runOnce(m_visionLocker::togglePiece));
+
     }
 
 
