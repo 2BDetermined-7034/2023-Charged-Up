@@ -6,15 +6,12 @@ import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.PathPoint;
 import com.pathplanner.lib.auto.PIDConstants;
 import com.pathplanner.lib.auto.SwerveAutoBuilder;
-import com.pathplanner.lib.commands.PPSwerveControllerCommand;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.SwerveDrive;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -30,7 +27,7 @@ public class PathFactory {
 
         SwerveAutoBuilder autoBuilder = new SwerveAutoBuilder(
                 m_swerveDrive::getPosition, // Pose supplier
-                m_swerveDrive::resetOdometry,
+                m_swerveDrive::setPosition,
                 m_swerveDrive.getKinematics(), // SwerveDriveKinematics
                 new PIDConstants(Constants.Drivebase.Auto.kP, 0, 0), // X controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
                 new PIDConstants(Constants.Drivebase.Auto.kP, 0, 0), // Y controller (usually the same values as X controller)
@@ -53,7 +50,7 @@ public class PathFactory {
     }
 
     public PathFactory(SwerveDrive drive, PathPlannerTrajectory path, boolean useAlliance, boolean isFirstPath){
-        this(drive, path, useAlliance, isFirstPath, new HashMap<String, Command>());
+        this(drive, path, useAlliance, isFirstPath, new HashMap<>());
     }
 
     public static PathPlannerTrajectory pathMaker(List<PathPoint> points) {
