@@ -10,12 +10,11 @@ import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 import frc.robot.commands.Arm.ArmOverride;
 import frc.robot.commands.Arm.SetArmCommand;
 
-import frc.robot.commands.Drive.*;
-import frc.robot.commands.GravityClawCommand;
-import frc.robot.commands.GravityClawToggleCommand;
+import frc.robot.commands.clob.GravityClawCommand;
+import frc.robot.commands.clob.GravityClawToggleCommand;
 import frc.robot.constants.Constants.OperatorConstants;
 import frc.robot.commands.Auto.AutoFactory;
-import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.Arm.Arm;
 import frc.robot.subsystems.GravityClawSubsystem;
 
 import frc.robot.subsystems.SwerveDrive;
@@ -75,17 +74,17 @@ private final GravityClawToggleCommand gravityClawToggleCommand = new GravityCla
 
         // Gunner controls
 
-        m_gunnerController.cross().whileTrue(m_swerveDrive.runOnce(m_swerveDrive::zeroGyroscope));
+        m_operatorController.cross().whileTrue(m_swerveDrive.runOnce(m_swerveDrive::zeroGyroscope));
 
-        m_gunnerController.povLeft().whileTrue(m_visionLocking.runOnce(() -> m_visionLocking.setSide(VisionLocking.Side.LEFT)));
-        m_gunnerController.povRight().whileTrue(m_visionLocking.runOnce(() -> m_visionLocking.setSide(VisionLocking.Side.RIGHT)));
-        m_gunnerController.povUp().whileTrue(m_visionLocking.runOnce(m_visionLocking::levelUp));
-        m_gunnerController.povDown().whileTrue(m_visionLocking.runOnce(m_visionLocking::levelDown));
+        m_operatorController.povLeft().whileTrue(m_visionLocker.runOnce(() -> m_visionLocker.setSide(VisionLocking.Side.LEFT)));
+        m_operatorController.povRight().whileTrue(m_visionLocker.runOnce(() -> m_visionLocker.setSide(VisionLocking.Side.RIGHT)));
+        m_operatorController.povUp().whileTrue(m_visionLocker.runOnce(m_visionLocker::levelUp));
+        m_operatorController.povDown().whileTrue(m_visionLocker.runOnce(m_visionLocker::levelDown));
 
-        m_gunnerController.L1().whileTrue(m_visionLocking.runOnce(m_visionLocking::gridLeft));
-        m_gunnerController.R1().whileTrue(m_visionLocking.runOnce(m_visionLocking::gridRight));
+        m_operatorController.L1().whileTrue(m_visionLocker.runOnce(m_visionLocker::gridLeft));
+        m_operatorController.R1().whileTrue(m_visionLocker.runOnce(m_visionLocker::gridRight));
 
-        m_gunnerController.square().whileTrue(m_visionLocking.runOnce(m_visionLocking::togglePiece));
+        m_operatorController.square().whileTrue(m_visionLocker.runOnce(m_visionLocker::togglePiece));
 
     }
 
