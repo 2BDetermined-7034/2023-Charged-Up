@@ -5,24 +5,23 @@
 package frc.robot;
 
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 import frc.robot.commands.Arm.ArmOverride;
 import frc.robot.commands.Arm.SetArmCommand;
-import frc.robot.commands.Drive.*;
-import frc.robot.constants.Constants.OperatorConstants;
 import frc.robot.commands.Auto.AutoFactory;
-import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.constants.Constants.OperatorConstants;
+import frc.robot.subsystems.Arm.Arm;
 import frc.robot.subsystems.SwerveDrive;
 import frc.robot.subsystems.VisionLocking;
-import frc.robot.subsystems.Arm.Arm;
 
 
 public class RobotContainer {
     private final SwerveDrive m_swerveDrive = new SwerveDrive();
     private final Arm m_Arm = new Arm();
     private final CommandPS4Controller m_driverController = new CommandPS4Controller(OperatorConstants.kDriverControllerPort);
-    private final VisionLocking m_visionLocker = new VisionLocking();
-
+    private final CommandPS4Controller m_gunnerController = new CommandPS4Controller(OperatorConstants.kGunnerControllerPort);
+    private final VisionLocking m_visionLocking = new VisionLocking();
 
     public RobotContainer() {
 
@@ -46,8 +45,22 @@ public class RobotContainer {
 
         m_driverController.triangle().onTrue(new SetArmCommand(m_Arm, Units.degreesToRadians(90), Units.degreesToRadians(90)));
         m_driverController.square().onTrue(new SetArmCommand(m_Arm, Units.degreesToRadians(90), Units.degreesToRadians(309)));
-        m_driverController.circle().onTrue(new SetArmCommand(m_Arm,Units.degreesToRadians(130),  Units.degreesToRadians(45)));
+        m_driverController.circle().onTrue(new SetArmCommand(m_Arm, Units.degreesToRadians(130), Units.degreesToRadians(45)));
         m_driverController.cross().onTrue(new SetArmCommand(m_Arm, Units.degreesToRadians(90), Units.degreesToRadians(270)));
+
+        // Gunner controls
+
+        m_gunnerController.cross().whileTrue(m_swerveDrive.runOnce(m_swerveDrive::zeroGyroscope));
+
+        m_gunnerController.povLeft().whileTrue(m_visionLocking.runOnce(() -> m_visionLocking.setSide(VisionLocking.Side.LEFT)));
+        m_gunnerController.povRight().whileTrue(m_visionLocking.runOnce(() -> m_visionLocking.setSide(VisionLocking.Side.RIGHT)));
+        m_gunnerController.povUp().whileTrue(m_visionLocking.runOnce(m_visionLocking::levelUp));
+        m_gunnerController.povDown().whileTrue(m_visionLocking.runOnce(m_visionLocking::levelDown));
+
+        m_gunnerController.L1().whileTrue(m_visionLocking.runOnce(m_visionLocking::gridLeft));
+        m_gunnerController.R1().whileTrue(m_visionLocking.runOnce(m_visionLocking::gridRight));
+
+        m_gunnerController.square().whileTrue(m_visionLocking.runOnce(m_visionLocking::togglePiece));
     }
 
 
