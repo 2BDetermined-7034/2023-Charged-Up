@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.constants.Constants;
 
 public class GravityClawSubsystem extends SubsystemBase {
     private DoubleSolenoid sol;
@@ -36,7 +37,7 @@ public class GravityClawSubsystem extends SubsystemBase {
      * the {@link #getInstance()} method to get the singleton instance.
      */
     public GravityClawSubsystem() {
-        sol = new DoubleSolenoid(PneumaticsModuleType.REVPH,0,1);
+        sol = new DoubleSolenoid(PneumaticsModuleType.REVPH, Constants.GravityClaw.forwardChannel,Constants.GravityClaw.reverseChannel);
         // TODO: Set the default command, if any, for this subsystem by calling setDefaultCommand(command)
         //       in the constructor or in the robot coordination class, such as RobotContainer.
         //       Also, you can call addChild(name, sendableChild) to associate sendables with the subsystem
