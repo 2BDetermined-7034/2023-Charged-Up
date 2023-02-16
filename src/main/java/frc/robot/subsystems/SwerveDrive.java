@@ -174,6 +174,8 @@ public class SwerveDrive extends SubsystemBase {
     public static Rotation2d getGyroscopeRotation() {
         return Rotation2d.fromDegrees(360 - m_navx.getYaw());
     }
+    public Rotation2d getRoll() { return Rotation2d.fromDegrees(m_navx.getRoll()); }
+
 
     public void setLimeLightDriver() {
         limeLight.setModeDriver();
