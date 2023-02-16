@@ -3,7 +3,6 @@ package frc.robot.commands.Auto;
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.AutoBalance;
@@ -29,9 +28,9 @@ public class AutoFactory {
         m_drive = drive;
         m_arm = arm;
         m_visionlocker = vision;
+
+        configureDashboard();
     }
-
-
 
     public void configureDashboard(){
         startingPosition = new SendableChooser<>();
@@ -42,7 +41,7 @@ public class AutoFactory {
         firstAction = new AutoAction("First", m_drive,m_arm);
         secondAction = new AutoAction("First", m_drive,m_arm);
     }
-    public Command getAuto(SwerveDrive drive) {
+    public Command getAuto() {
         Command first = firstAction.getSelected(m_visionlocker.getTeam(), startingPosition.getSelected());
 
         return first;
@@ -57,7 +56,7 @@ public class AutoFactory {
     public static Command getDriveOn(SwerveDrive drive) {
         PathPlannerTrajectory path = PathPlanner.loadPath("driveOn", new PathConstraints(Constants.Drivebase.Auto.maxVelocity, Constants.Drivebase.Auto.maxAcceleration));
 
-        return new PathFactory(drive, path, true,true, eventMap).getCommand().andThen(new AutoBalance(drive)).andThen(drive.run(drive::lockDrive));
+        return new PathFactory(drive, path, true,true, eventMap).getCommand().andThen(new AutoBalance(drive));
     }
 
     public static Command getSquareAuto(SwerveDrive drive) {

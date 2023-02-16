@@ -23,16 +23,19 @@ public class RobotContainer {
     private final CommandPS4Controller m_driverController = new CommandPS4Controller(OperatorConstants.kDriverControllerPort);
     private final VisionLocking m_visionLocker = new VisionLocking();
 
+    private final AutoFactory autoFactory;
 
     public RobotContainer() {
 
-//        m_swerveDrive.setDefaultCommand(new DefaultDriveCommand(
-//                m_swerveDrive,
-//                () -> -square(modifyAxis(m_driverController.getLeftY() ) * m_swerveDrive.getMaxSpeed()),
-//                () -> -square(modifyAxis(m_driverController.getLeftX()) * m_swerveDrive.getMaxSpeed()),
-//                () -> -square(modifyAxis(m_driverController.getRightX()) * m_swerveDrive.getMaxSpeed())
-//        ));
+        m_swerveDrive.setDefaultCommand(new DefaultDriveCommand(
+                m_swerveDrive,
+                () -> -square(modifyAxis(m_driverController.getLeftY() ) * m_swerveDrive.getMaxSpeed()),
+                () -> -square(modifyAxis(m_driverController.getLeftX()) * m_swerveDrive.getMaxSpeed()),
+                () -> -square(modifyAxis(m_driverController.getRightX()) * m_swerveDrive.getMaxSpeed())
+        ));
         configureBindings();
+
+        autoFactory = new AutoFactory(m_swerveDrive, m_Arm, m_visionLocker);
     }
 
     private void configureBindings() {
@@ -53,8 +56,7 @@ public class RobotContainer {
 
     public Command getAutonomousCommand() {
         // An example command will be run in autonomous
-        return AutoFactory.getSmallSquare(m_swerveDrive);
-
+        return autoFactory.getAuto();
     }
 
     private static double deadband(double value, double deadband) {
