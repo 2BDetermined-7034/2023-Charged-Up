@@ -4,14 +4,17 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.math.geometry.*;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.FieldConstants;
-import edu.wpi.first.math.util.Units;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -24,7 +27,7 @@ public class VisionLocking extends SubsystemBase {
     public enum Level {
         HIGH, MID, LOW
     }
-        public enum Side {
+    public enum Side {
         LEFT, RIGHT
     }
 
@@ -177,28 +180,28 @@ public class VisionLocking extends SubsystemBase {
     }
 
     /**
-     * 
+     *
      * Returns the position the robot must be within a certain degree of error of to score on the Grid
-     * 
+     *
      * TODO fix to apply for both alliance colors
-     * 
+     *
      * TODO Add more shit for substation loading
-     * 
+     *
      * @return position
      */
 
     public Pose2d getLockedPosition() {
         Pose2d position;
 
-        if (m_team.equals(Team.BLUE)){
+        if (m_team.equals(Team.BLUE)) {
             position = FieldConstants.aprilTags.get(blueTags[m_grid - 1]).toPose2d();
-            position.transformBy(new Transform2d(new Translation2d(Units.inchesToMeters(10),0),new Rotation2d()));
+            position.transformBy(new Transform2d(new Translation2d(Units.inchesToMeters(50), Units.inchesToMeters(0)), new Rotation2d()));
         } else {
             position = FieldConstants.aprilTags.get(redTags[m_grid - 1]).toPose2d();
-            position.transformBy(new Transform2d(new Translation2d(Units.inchesToMeters(-10),0),new Rotation2d()));
+            position.transformBy(new Transform2d(new Translation2d(Units.inchesToMeters(0), 0), new Rotation2d()));
         }
-
-        return position;
+        //return position;
+        return new Pose2d(new Translation2d(2.1, 1), new Rotation2d(179));
     }
 
     public void updateLocationArray(){
@@ -227,9 +230,8 @@ public class VisionLocking extends SubsystemBase {
                 break;
         }
     }
-
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
     }
-} 
+}

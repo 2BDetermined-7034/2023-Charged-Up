@@ -4,14 +4,19 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
+
     <list default="true" id="452aa9b7-8048-422e-bff9-c7f331f820f3" name="Changes" comment="good locking">
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/jarRepositories.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2023-01-11,_8_37_a_m__[Changes]/shelved.patch" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2023-01-11__8_37_a_m___Changes_.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/commands/Drive/ChaseTagCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/commands/Drive/ChaseTagCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/commands/Drive/DriveToTarget.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/commands/Drive/DriveToTarget.java" afterDir="false" />
+=======
+    <list default="true" id="452aa9b7-8048-422e-bff9-c7f331f820f3" name="Changes" comment="Master Finalization">
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/RobotContainer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/RobotContainer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/subsystems/VisionLocking.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/subsystems/VisionLocking.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/commands/Arm/ArmOverride.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/commands/Arm/ArmOverride.java" afterDir="false" />
+
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,7 +42,17 @@
             <expand>
               <path>
                 <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="2022-Charged-Up" type="f1a62948:ProjectNode" />
+                <item name="2023-Charged-Up" type="f1a62948:ProjectNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="2023-Charged-Up" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="2023-Charged-Up" type="f1a62948:ProjectNode" />
+                <item name="Dependencies" type="6de06a37:ExternalSystemViewDefaultContributor$MyDependenciesNode" />
               </path>
             </expand>
             <select />
@@ -49,24 +64,27 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="FRC v2 Command" />
         <option value="Class" />
+        <option value="FRC v2 Subsystem" />
+        <option value="package-info" />
+        <option value="FRC v2 Command" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="master" />
+        <entry key="$PROJECT_DIR$" value="ArmKFilter" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RESET_MODE" value="HARD" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
   <component name="ProjectId" id="2K4AYUozbpCqwUC0ZnbOvM7li9X" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+  <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="2" id="Add" />
   </component>
   <component name="ProjectViewState">
@@ -93,7 +111,7 @@
     &quot;project.structure.last.edited&quot;: &quot;SDKs&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;Errors&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
@@ -153,7 +171,7 @@
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="452aa9b7-8048-422e-bff9-c7f331f820f3" name="Changes" comment="good locking" />
+      <changelist id="452aa9b7-8048-422e-bff9-c7f331f820f3" name="Changes" comment="New FeedForward Implementation" />
       <created>1673223532025</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
@@ -169,8 +187,8 @@
       <workItem from="1673371366495" duration="525000" />
       <workItem from="1673371902826" duration="13298000" />
       <workItem from="1673403264848" duration="6082000" />
-      <workItem from="1674011655388" duration="4122000" />
-      <workItem from="1675825551472" duration="4452000" />
+      <workItem from="1674085459703" duration="16010000" />
+      <workItem from="1675225086960" duration="3692000" />
     </task>
     <task id="LOCAL-00001" summary="askdnasl">
       <created>1673225455965</created>
@@ -200,21 +218,95 @@
       <option name="project" value="LOCAL" />
       <updated>1673456436953</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="no auto">
+      <created>1673757298287</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1673757298287</updated>
+    </task>
+    <task id="LOCAL-00006" summary="aaaaaaaaaa">
+      <created>1673919722519</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1673919722519</updated>
+    </task>
+    <task id="LOCAL-00007" summary="pathplannertrajectory thing">
+      <created>1674013022526</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1674013022526</updated>
+    </task>
+    <task id="LOCAL-00008" summary="pathplannertrajectory thing">
+      <created>1674013033880</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1674013033880</updated>
+    </task>
+    <task id="LOCAL-00009" summary="push">
+      <created>1674772692263</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1674772692263</updated>
+    </task>
+    <task id="LOCAL-00010" summary="good locking">
+      <created>1674778805114</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1674778805114</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="master" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="askdnasl" />
     <MESSAGE value="updated swerve to 2023" />
     <MESSAGE value="Setup to tune gains tonight" />
-    <option name="LAST_COMMIT_MESSAGE" value="Setup to tune gains tonight" />
+    <MESSAGE value="no auto" />
+    <MESSAGE value="aaaaaaaaaa" />
+    <MESSAGE value="pathplannertrajectory thing" />
+    <MESSAGE value="push" />
+    <MESSAGE value="good locking" />
+    <option name="LAST_COMMIT_MESSAGE" value="good locking" />
   </component>
   <component name="WpiLibVersionService">
-    <option name="lastChecked" value="20230207190612" />
+
+    <option name="lastChecked" value="20230121141902" />
+=======
+    <option name="lastChecked" value="20230209220259" />
+
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
