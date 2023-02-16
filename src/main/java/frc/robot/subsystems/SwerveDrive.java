@@ -18,15 +18,14 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.constants.COTSSwerveConstants;
 import frc.robot.constants.Constants;
-import frc.robot.constants.SwerveModuleConstants;
 import frc.robot.util.SwerveModule;
-
+import frc.robot.constants.COTSSwerveConstants;
+import frc.robot.constants.SwerveModuleConstants;
 public class SwerveDrive extends SubsystemBase {
 
-    public static final AHRS m_navx = new AHRS(SPI.Port.kMXP, (byte) 200);
     //FL, FR, BL, BR
     private final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
             new Translation2d(Constants.Drivebase.Measurements.width / 2.0, Constants.Drivebase.Measurements.length / 2.0),
@@ -34,15 +33,21 @@ public class SwerveDrive extends SubsystemBase {
             new Translation2d(-Constants.Drivebase.Measurements.width / 2.0, Constants.Drivebase.Measurements.length / 2.0),
             new Translation2d(-Constants.Drivebase.Measurements.width / 2.0, -Constants.Drivebase.Measurements.length / 2.0)
     );
+
+    private static final AHRS m_navx = new AHRS(SPI.Port.kMXP, (byte) 200);
+
     private final SwerveModule m_frontLeftModule;
     private final SwerveModule m_frontRightModule;
     private final SwerveModule m_backLeftModule;
     private final SwerveModule m_backRightModule;
 
     private final SwerveDrivePoseEstimator m_estimator;
-    private final Field2d m_field;
+
     SwerveModuleState[] m_states;
     ChassisSpeeds m_speeds;
+
+    private final Field2d m_field;
+
     private LimeLight limeLight = new LimeLight();
 
     public SwerveDrive() {
@@ -52,10 +57,10 @@ public class SwerveDrive extends SubsystemBase {
                 0,
                 tab.getLayout("Front Left Module", BuiltInLayouts.kList).withSize(1, 3).withPosition(0, 0),
                 new SwerveModuleConstants(
-                        Constants.Drivebase.MotorIDs.flDrive,
-                        Constants.Drivebase.MotorIDs.flSteer,
-                        Constants.Drivebase.MotorIDs.flEncoder,
-                        Constants.Drivebase.MotorIDs.flOffset
+                    Constants.Drivebase.MotorIDs.flDrive,
+                    Constants.Drivebase.MotorIDs.flSteer,
+                    Constants.Drivebase.MotorIDs.flEncoder,
+                    Constants.Drivebase.MotorIDs.flOffset
                 ),
                 COTSSwerveConstants.SDSMK4i(Constants.Drivebase.Measurements.driveRatio)
         );
@@ -111,35 +116,14 @@ public class SwerveDrive extends SubsystemBase {
         limeLight.setModeVision();
 
 
-        tab.add(m_field).withPosition(4, 0).withSize(5, 4);
+        tab.add(m_field).withPosition(4,0).withSize(5,4);
         tab.addNumber("Odometry X", () -> getPosition().getX()).withPosition(0, 4);
         tab.addNumber("Odometry Y", () -> getPosition().getY()).withPosition(1, 4);
         tab.addNumber("Odometry Angle", () -> getPosition().getRotation().getDegrees()).withPosition(2, 4);
         tab.addNumber("Gyroscope Angle", () -> getGyroscopeRotation().getDegrees()).withPosition(3, 4);
-        tab.addNumber("Gyro Roll", () -> getRoll().getRadians()).withPosition(3, 4);
-        tab.addBoolean("Tag", () -> limeLight.isTargetAvailable()).withPosition(4, 5);
+        tab.addBoolean("Tag", () -> limeLight.isTargetAvailable()).withPosition(4,5);
     }
 
-    public static Rotation2d getGyroscopeRotation() {
-        return Rotation2d.fromDegrees(360 - m_navx.getYaw());
-    }
-
-    public void addVisionMeasurement(Pose2d m_observed, double time) {
-        m_estimator.addVisionMeasurement(m_observed, time);
-    }
-
-    public Rotation2d getRoll() {
-        return Rotation2d.fromDegrees(m_navx.getRoll());
-    }
-
-    public double getMaxSpeed() {
-        return m_frontLeftModule.cotsSwerveConstants.maxSpeed;
-    }
-
-    public Pose2d getPosition() {
-        //Logger.getInstance().recordOutput("Position", m_estimator.getEstimatedPosition());
-        return m_estimator.getEstimatedPosition();
-    }
 
     public void setPosition(Pose2d m_position) {
         zeroGyroscope();
@@ -150,17 +134,25 @@ public class SwerveDrive extends SubsystemBase {
         );
     }
 
+    public void addVisionMeasurement(Pose2d m_observed, double time){
+        m_estimator.addVisionMeasurement(m_observed, time);
+    }
+
+    public double getMaxSpeed() {
+        return m_frontLeftModule.cotsSwerveConstants.maxSpeed;
+    }
+    public Pose2d getPosition() {
+        //Logger.getInstance().recordOutput("Position", m_estimator.getEstimatedPosition());
+        return m_estimator.getEstimatedPosition();
+    }
+
     public SwerveDriveKinematics getKinematics() {
         return m_kinematics;
     }
 
-    public LimeLight getLimeLight() {
-        return limeLight;
-    }
+    public LimeLight getLimeLight() {return limeLight;}
 
-    public ChassisSpeeds getVelocity() {
-        return m_speeds;
-    }
+    public ChassisSpeeds getVelocity() {return m_speeds;}
 
     /**
      * Sets the gyroscope angle to zero. This can be used to set the direction the robot is currently facing to the
@@ -171,7 +163,7 @@ public class SwerveDrive extends SubsystemBase {
     }
 
     public SwerveModulePosition[] getModulePosition() {
-        return new SwerveModulePosition[]{
+        return new SwerveModulePosition[] {
                 m_frontLeftModule.getPosition(),
                 m_frontRightModule.getPosition(),
                 m_backLeftModule.getPosition(),
@@ -179,10 +171,13 @@ public class SwerveDrive extends SubsystemBase {
         };
     }
 
+    public static Rotation2d getGyroscopeRotation() {
+        return Rotation2d.fromDegrees(360 - m_navx.getYaw());
+    }
+
     public void setLimeLightDriver() {
         limeLight.setModeDriver();
     }
-
     public void setLimeLightVision() {
         limeLight.setModeVision();
     }
@@ -191,20 +186,11 @@ public class SwerveDrive extends SubsystemBase {
         m_speeds = chassisSpeeds;
         m_states = m_kinematics.toSwerveModuleStates(chassisSpeeds);
     }
-
-    public void lockDrive() {
-        m_frontLeftModule.setDesiredState(new SwerveModuleState(0, new Rotation2d(135)), false);
-        m_frontRightModule.setDesiredState(new SwerveModuleState(0, new Rotation2d(225)), false);
-        m_backLeftModule.setDesiredState(new SwerveModuleState(0, new Rotation2d(45)), false);
-        m_backRightModule.setDesiredState(new SwerveModuleState(0, new Rotation2d(-45)), false);
-    }
-
-    public void stop() {
-        m_speeds = new ChassisSpeeds(0, 0, 0);
+    public void stop(){
+        m_speeds = new ChassisSpeeds(0,0,0);
         m_states = m_kinematics.toSwerveModuleStates(m_speeds);
     }
-
-    public void setModuleStates(SwerveModuleState[] states) {
+    public void setModuleStates(SwerveModuleState[] states){
         m_states = states;
     }
 
@@ -228,7 +214,7 @@ public class SwerveDrive extends SubsystemBase {
     }
 
     private void updateOdometry() {
-        if (limeLight.isTargetAvailable()) {
+        if(limeLight.isTargetAvailable()) {
             addVisionMeasurement(limeLight.getBotPose().toPose2d(), Timer.getFPGATimestamp());
         } else return;
     }
@@ -238,12 +224,8 @@ public class SwerveDrive extends SubsystemBase {
     }
 
     public Transform2d getCamTransform() {
-        if (limeLight.isTargetAvailable()) return limeLight.getCamTransform2d();
+        if(limeLight.isTargetAvailable()) return limeLight.getCamTransform2d();
         return new Transform2d();
-    }
-
-    public void resetOdometry(Pose2d pose) {
-        m_estimator.resetPosition(getGyroscopeRotation(), getModulePosition(), pose);
     }
 
 }
