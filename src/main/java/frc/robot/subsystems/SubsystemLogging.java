@@ -2,9 +2,7 @@ package frc.robot.subsystems;
 
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.inputs.LoggedPowerDistribution;
@@ -18,21 +16,27 @@ public interface SubsystemLogging {
     default void log(String ඞ, String... doub) {
         Logger.getInstance().recordOutput(ඞ, doub);
     }
-     default void log(String ඞ, int doub) {
+
+    default void log(String ඞ, int doub) {
         Logger.getInstance().recordOutput(ඞ, (doub));
     }
-     default void log(String ඞ, Pose2d... doub) {
+
+    default void log(String ඞ, Pose2d... doub) {
         Logger.getInstance().recordOutput(ඞ, (doub));
     }
-     default void log(String ඞ, double... doub) {
-        Logger.getInstance().recordOutput(ඞ,  (doub));
-    }
-     default void log(String ඞ, boolean... doub) {
+
+    default void log(String ඞ, double... doub) {
         Logger.getInstance().recordOutput(ඞ, (doub));
     }
-     default void log(String ඞ, SwerveModuleState... doub) {
+
+    default void log(String ඞ, boolean... doub) {
         Logger.getInstance().recordOutput(ඞ, (doub));
     }
+
+    default void log(String ඞ, SwerveModuleState... doub) {
+        Logger.getInstance().recordOutput(ඞ, (doub));
+    }
+
     default void log(String ඞ, Long... doub) {
         Logger.getInstance().recordOutput(ඞ, Arrays.toString(doub));
     }
@@ -46,5 +50,6 @@ public interface SubsystemLogging {
     /**
      * Where subsystems should override and log shit
      */
-    default void configureLogging() {}
+    default void configureLogging() {
+    }
 }
