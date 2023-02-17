@@ -9,6 +9,8 @@ public interface SubsystemLogging {
 
     /*Dumb Log Methods*/
     // amogus ඞඞඞඞඞඞඞඞ
+    // i love coding with aaryan
+    // I also love coding with aaryan based
     default void log(String ඞ, String... doub) {
         Logger.getInstance().recordOutput(ඞ, doub);
     }
