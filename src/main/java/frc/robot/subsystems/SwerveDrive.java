@@ -28,7 +28,7 @@ import frc.robot.constants.SwerveModuleConstants;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.inputs.LoggedPowerDistribution;
 
-public class SwerveDrive extends SubsystemBase {
+public class SwerveDrive extends SubsystemBase implements SubsystemLogging{
 
     //FL, FR, BL, BR
     private final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
@@ -235,4 +235,9 @@ public class SwerveDrive extends SubsystemBase {
         return new Transform2d();
     }
 
+    @Override
+    public void configureLogging() {
+        log("Pose2D", getPosition());
+        log("Swerve Module States", m_states);
+    }
 }

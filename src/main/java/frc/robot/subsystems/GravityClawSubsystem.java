@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
 
-public class GravityClawSubsystem extends SubsystemBase {
+public class GravityClawSubsystem extends SubsystemBase implements SubsystemLogging{
     private DoubleSolenoid sol;
 
     // With eager singleton initialization, any static variables/fields used in the 

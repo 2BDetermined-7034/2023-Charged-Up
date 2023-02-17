@@ -17,7 +17,7 @@ import static frc.robot.constants.Constants.Vision;
 
 import java.util.Optional;
 
-public class LimeLight extends SubsystemBase {
+public class LimeLight extends SubsystemBase implements SubsystemLogging{
 
   private final NetworkTable limeLightTable;
   private static IntegerPublisher getpipePub;
@@ -311,5 +311,15 @@ public class LimeLight extends SubsystemBase {
     {
       this.blinkLED();
     }
+  }
+
+  @Override
+  public void configureLogging() {
+    log("Target Area", getTargetArea());
+    log("Target Offset Y", getTargetOffsetY());
+    log("Target Offset X", getTargetOffsetX());
+    log("Target ID", getTargetID());
+    log("Target Area", getTargetArea());
+    log("Latency", getLatency());
   }
 }

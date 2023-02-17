@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
 
-public class Indexer extends SubsystemBase {
+public class Indexer extends SubsystemBase implements SubsystemLogging{
     public CANSparkMax indexerMotor;
 
     public Indexer() {
@@ -24,7 +24,5 @@ public class Indexer extends SubsystemBase {
         public void runIndexerClockwise (){
             indexerMotor.setVoltage(-Constants.Intake.indexerSpeed);
         }
-
-
-    }
+}
 
