@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 import frc.robot.commands.Arm.ArmOverride;
 import frc.robot.commands.Arm.SetArmCommand;
 
+import frc.robot.commands.Drive.DefaultDriveCommand;
 import frc.robot.commands.clob.GravityClawCommand;
 import frc.robot.commands.clob.GravityClawToggleCommand;
 import frc.robot.constants.Constants.OperatorConstants;
@@ -39,12 +40,12 @@ public class RobotContainer {
 
     public RobotContainer() {
 
-//        m_swerveDrive.setDefaultCommand(new DefaultDriveCommand(
-//                m_swerveDrive,
-//                () -> -square(modifyAxis(m_driverController.getLeftY() ) * m_swerveDrive.getMaxSpeed()),
-//                () -> -square(modifyAxis(m_driverController.getLeftX()) * m_swerveDrive.getMaxSpeed()),
-//                () -> -square(modifyAxis(m_driverController.getRightX()) * m_swerveDrive.getMaxSpeed())
-//        ));
+        m_swerveDrive.setDefaultCommand(new DefaultDriveCommand(
+                m_swerveDrive,
+                () -> -square(modifyAxis(m_driverController.getLeftY() ) * m_swerveDrive.getMaxSpeed()),
+                () -> -square(modifyAxis(m_driverController.getLeftX()) * m_swerveDrive.getMaxSpeed()),
+                () -> -square(modifyAxis(m_driverController.getRightX()) * m_swerveDrive.getMaxSpeed())
+        ));
         configureBindings();
     }
 

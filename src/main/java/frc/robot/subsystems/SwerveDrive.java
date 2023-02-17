@@ -28,7 +28,7 @@ import frc.robot.constants.SwerveModuleConstants;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.inputs.LoggedPowerDistribution;
 
-public class SwerveDrive extends SubsystemBase implements SubsystemLogging{
+public class SwerveDrive extends SubsystemBase implements SubsystemLogging {
 
     //FL, FR, BL, BR
     private final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
@@ -218,6 +218,8 @@ public class SwerveDrive extends SubsystemBase implements SubsystemLogging{
         m_backLeftModule.setDesiredState(m_states[2], m_IsOpenLoop);
         m_backRightModule.setDesiredState(m_states[3], m_IsOpenLoop);
 
+        updateLogging();
+
     }
 
     private void updateOdometry() {
@@ -237,7 +239,7 @@ public class SwerveDrive extends SubsystemBase implements SubsystemLogging{
 
     @Override
     public void updateLogging() {
-        log("Pose2D", getPosition());
-        log("Swerve Module States", m_states);
-    }
+    log("Pose2D", getPosition());
+    log("Swerve Module States", m_states);
+}
 }

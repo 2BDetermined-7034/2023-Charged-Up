@@ -24,10 +24,12 @@ public class VisionLocking extends SubsystemBase implements SubsystemLogging {
     public enum Team {
         RED, BLUE
     }
+
     public enum Level {
         HIGH(0), MID(1), LOW(2);
 
         private final int modeVal;
+
         Level(int val) {
             modeVal = val;
         }
@@ -36,9 +38,11 @@ public class VisionLocking extends SubsystemBase implements SubsystemLogging {
             return modeVal;
         }
     }
+
     public enum Side {
         LEFT(0), RIGHT(1);
         private final int modeVal;
+
         Side(int val) {
             modeVal = val;
         }
@@ -52,6 +56,7 @@ public class VisionLocking extends SubsystemBase implements SubsystemLogging {
         CONES(0), CUBES(1);
 
         private final int modeVal;
+
         PieceType(int val) {
             modeVal = val;
         }
@@ -60,13 +65,14 @@ public class VisionLocking extends SubsystemBase implements SubsystemLogging {
             return modeVal;
         }
     }
+
     private Team m_team;
     private Level m_level;
     private Side m_side;
     private int m_grid;
     private PieceType m_pieceType;
-    private final int[] blueTags = {8,7,6};
-    private final int[] redTags = {3,2,1};
+    private final int[] blueTags = {8, 7, 6};
+    private final int[] redTags = {3, 2, 1};
     private final ShuffleboardTab driverTab;
     private final ShuffleboardLayout gridLocationLayout;
     private final ShuffleboardLayout gridSelectionLayout;
@@ -74,7 +80,9 @@ public class VisionLocking extends SubsystemBase implements SubsystemLogging {
     private boolean[] gridSelection;
     private boolean coneCube;
 
-    /** Creates a new VisionLocking. */
+    /**
+     * Creates a new VisionLocking.
+     */
     public VisionLocking() {
         m_team = Team.BLUE;
         m_pieceType = PieceType.CONES;
@@ -94,7 +102,7 @@ public class VisionLocking extends SubsystemBase implements SubsystemLogging {
         updateLogging();
     }
 
-    public void configureDashboard(){
+    public void configureDashboard() {
         // Grid selection layout config
         Map selecProperties = Map.of("colorWhenFalse", "#000000", "colorWhenTrue", "#7cfc00");
         gridSelectionLayout.addBoolean("Left", () -> gridSelection[0]).withProperties(selecProperties).withPosition(0, 0);
@@ -127,70 +135,80 @@ public class VisionLocking extends SubsystemBase implements SubsystemLogging {
         updateLocationArray();
     }
 
-    public void setTeam(Team setTo){
+    public void setTeam(Team setTo) {
         m_team = setTo;
     }
-    public void setLevel(Level setTo){
-        m_level = setTo ;
+
+    public void setLevel(Level setTo) {
+        m_level = setTo;
     }
-    public void setSide(Side setTo){
+
+    public void setSide(Side setTo) {
         m_side = setTo;
         updateLocationArray();
     }
-    public void setGrid(int setTo){
+
+    public void setGrid(int setTo) {
         m_grid = setTo;
     }
-    public void setPieceType(PieceType setTo){
+
+    public void setPieceType(PieceType setTo) {
         m_pieceType = setTo;
     }
 
-    public Team getTeam(){
+    public Team getTeam() {
         return m_team;
     }
-    public PieceType getPieceType(){
+
+    public PieceType getPieceType() {
         return m_pieceType;
     }
-    public int setGrid(){
+
+    public int setGrid() {
         return m_grid;
     }
-    public Side setSide(){
+
+    public Side setSide() {
         return m_side;
     }
-    public Level getLevel(){
+
+    public Level getLevel() {
         return m_level;
     }
-    public void gridRight(){
+
+    public void gridRight() {
         if (m_grid < 2) {
             m_grid += 1;
         }
         updateGridArray();
     }
-    public void gridLeft(){
+
+    public void gridLeft() {
         if (m_grid > 0) {
             m_grid -= 1;
         }
         updateGridArray();
     }
 
-    public void levelUp(){
-        if (m_level.equals(Level.LOW)){
+    public void levelUp() {
+        if (m_level.equals(Level.LOW)) {
             m_level = Level.MID;
-        } else if(m_level.equals(Level.MID)) {
+        } else if (m_level.equals(Level.MID)) {
             m_level = Level.HIGH;
         }
         updateLocationArray();
     }
 
-    public void levelDown(){
-        if (m_level.equals(Level.HIGH)){
+    public void levelDown() {
+        if (m_level.equals(Level.HIGH)) {
             m_level = Level.MID;
-        } else if(m_level.equals(Level.MID)) {
+        } else if (m_level.equals(Level.MID)) {
             m_level = Level.LOW;
         }
         updateLocationArray();
     }
 
-    public void toggleSide(){
+    public void toggleSide() {
         if (m_side.equals(Side.LEFT)) {
             m_side = Side.RIGHT;
         } else {
@@ -198,7 +216,8 @@ public class VisionLocking extends SubsystemBase implements SubsystemLogging {
         }
         updateLocationArray();
     }
-    public void togglePiece(){
+
+    public void togglePiece() {
         if (m_pieceType.equals(PieceType.CONES)) {
             m_pieceType = PieceType.CUBES;
         } else {
@@ -209,11 +228,10 @@ public class VisionLocking extends SubsystemBase implements SubsystemLogging {
     }
 
     /**
-     *
      * Returns the position the robot must be within a certain degree of error of to score on the Grid
-     *
+     * <p>
      * TODO fix to apply for both alliance colors
-     *
+     * <p>
      * TODO Add more shit for substation loading
      *
      * @return position
@@ -233,24 +251,24 @@ public class VisionLocking extends SubsystemBase implements SubsystemLogging {
         return new Pose2d(new Translation2d(2.1, 1), new Rotation2d(179));
     }
 
-    public void updateLocationArray(){
+    public void updateLocationArray() {
         gridLocation = new boolean[3][3];
         int x = 0;
-        if(m_pieceType.equals(PieceType.CUBES)){
+        if (m_pieceType.equals(PieceType.CUBES)) {
             x = 1;
-        } else if(m_side.equals(Side.RIGHT)){
+        } else if (m_side.equals(Side.RIGHT)) {
             x = 2;
         }
         gridLocation[x][m_level.ordinal()] = true;
     }
 
-    public void updateGridArray(){
+    public void updateGridArray() {
         Arrays.fill(gridSelection, false);
         gridSelection[m_grid] = true;
     }
 
-    public void updatePieceType(){
-        switch(m_pieceType){
+    public void updatePieceType() {
+        switch (m_pieceType) {
             case CONES:
                 coneCube = false;
                 break;
@@ -265,10 +283,14 @@ public class VisionLocking extends SubsystemBase implements SubsystemLogging {
         log("Grid", m_grid);
         log("Piece", m_pieceType.getModeVal() == 0 ? "Cube" : "Cone");
         log("Side", m_side.getModeVal() == 0 ? "Left" : "Right");
-        log("Level", m_level.getModeVal() == 0 ?  "High" : (m_level.getModeVal() == 1 ? "Mid" : "Low"));}
+        log("Level", m_level.getModeVal() == 0 ? "High" : (m_level.getModeVal() == 1 ? "Mid" : "Low"));
+    }
+
+
 
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
+        updateLogging();
     }
 }

@@ -96,7 +96,7 @@ public class Arm extends SubsystemBase implements SubsystemLogging {
     /**
      * Updates NetworkTables Publishers
      */
-    public void updateDashBoard() {
+   public void updateDashBoard() {
         currentTheta1.set(Units.radiansToDegrees(getCurrentState().getTheta1()));
         currentTheta2.set(Units.radiansToDegrees(getCurrentState().getTheta2()));
 

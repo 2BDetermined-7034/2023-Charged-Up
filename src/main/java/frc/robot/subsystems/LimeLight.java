@@ -19,7 +19,6 @@ import java.util.Optional;
 
 public class LimeLight extends SubsystemBase implements SubsystemLogging{
 
-  private final NetworkTable limeLightTable;
   private static IntegerPublisher getpipePub;
   private static IntegerSubscriber getPipeSub;
 
@@ -39,7 +38,7 @@ public class LimeLight extends SubsystemBase implements SubsystemLogging{
 
   private static DoublePublisher distance;
 
-  private static long[] legalTags = new long[] {1,2,3,4,5,6,7,8};
+  private static final long[] legalTags = new long[] {1,2,3,4,5,6,7,8};
 
   private enum LEDMode
   {
@@ -69,7 +68,7 @@ public class LimeLight extends SubsystemBase implements SubsystemLogging{
   /** Creates a new LimeLight. */
   public LimeLight() {
 
-    limeLightTable = NetworkTableInstance.getDefault().getTable("limelight");
+    NetworkTable limeLightTable = NetworkTableInstance.getDefault().getTable("limelight");
 
 
     getPipeSub = limeLightTable.getIntegerTopic("getpipe").subscribe(0);
@@ -98,6 +97,7 @@ public class LimeLight extends SubsystemBase implements SubsystemLogging{
   public void periodic() {
     // This method will be called once per scheduler run
     getTapeDistance().ifPresent((dist) -> distance.set(dist));
+    updateLogging();
   }
 
   /**
@@ -127,7 +127,7 @@ public class LimeLight extends SubsystemBase implements SubsystemLogging{
   }
 
   /**
-   * Get whether or not a target is detected.
+   * Get whether a target is detected.
    * @return true if target is found and false if target is not found.
    */
   public boolean isTargetAvailable()
@@ -146,23 +146,21 @@ public class LimeLight extends SubsystemBase implements SubsystemLogging{
 
   public Optional<Double> getTapeDistance()
   {
-    //double a = getTargetArea();
-    //return Units.inchesToMeters(113 + -27.8*a + Math.pow(3.36*a, 2) + Math.pow(-0.138*a, 3));
-    double targetoffsetAngle = ty.get(-1);
+    double targetOffsetAngle = ty.get(-1);
 
-    double angleToGoalRadians = Units.degreesToRadians(Vision.limeLightMountAngleDegrees + targetoffsetAngle);
+    double angleToGoalRadians = Units.degreesToRadians(Vision.limeLightMountAngleDegrees + targetOffsetAngle);
     if(isTargetAvailable()) {
-      return Optional.ofNullable(Vision.goalHeighInches - Vision.limeligtLensHeighInches/(Math.tan(angleToGoalRadians)));
+      return Optional.of(Vision.goalHeighInches - Vision.limeligtLensHeighInches/(Math.tan(angleToGoalRadians)));
 
     }
-    return Optional.ofNullable(null);
+    return Optional.empty();
 
   }
 
 
   /**
    * Get ID of detected AprilTag
-   * @return AprilTag Id from 1-8
+   * @return AprilTag ID from 1-8
    */
   public long getTargetID() {
     long id = tid.get(-1);
@@ -212,15 +210,15 @@ public class LimeLight extends SubsystemBase implements SubsystemLogging{
 
   /**
    * Get Robot transform in field-space. Translation (X,Y,Z) Rotation(X,Y,Z)
-   * LimeLight has it's own dict for apriltag poses
+   * LimeLight has its own dict for apriltag poses
    * @return Pose3d of Robot
    */
   public Pose3d getBotPose() {
-    double[] poseVals = botpose.get();
-    if(poseVals.length != 0) {
+    double[] poseValues = botpose.get();
+    if(poseValues.length != 0) {
       return new Pose3d(
-              new Translation3d(poseVals[0], poseVals[1], poseVals[2]),
-              new Rotation3d(Units.degreesToRadians(poseVals[3]), Units.degreesToRadians(poseVals[4]), Units.degreesToRadians(poseVals[5])));
+              new Translation3d(poseValues[0], poseValues[1], poseValues[2]),
+              new Rotation3d(Units.degreesToRadians(poseValues[3]), Units.degreesToRadians(poseValues[4]), Units.degreesToRadians(poseValues[5])));
     }
     return new Pose3d();
   }
@@ -316,7 +314,7 @@ public class LimeLight extends SubsystemBase implements SubsystemLogging{
   @Override
   public void updateLogging() {
     log("Target Area", getTargetArea());
-    log("Target Offset Y", getTargetOffsetY());
+    log("Offset Y", getTargetOffsetY());
     log("Target Offset X", getTargetOffsetX());
     log("Target ID", getTargetID());
     log("Target Area", getTargetArea());

@@ -8,33 +8,30 @@ import org.littletonrobotics.junction.Logger;
 public interface SubsystemLogging {
 
     /*Dumb Log Methods*/
-    // amogus amognusamognusamognusamognusamognusamognusamognusamognus
-    // i love coding with aaryan
-    // I also love coding with aaryan based
-    default void log(String amognus, String... doub) {
-        Logger.getInstance().recordOutput(amognus, doub);
+    default void log(String key, String... val) {
+        Logger.getInstance().recordOutput(String.format("%s %s", this.getClass().getName().replace("frc.robot.subsystems.", ""), key), (val));
     }
-     default void log(String amognus, int doub) {
-        Logger.getInstance().recordOutput(amognus, (doub));
+     default void log(String key, int val) {
+         Logger.getInstance().recordOutput(String.format("%s %s", this.getClass().getName().replace("frc.robot.subsystems.", ""), key), (val));
     }
-     default void log(String amognus, Pose2d... doub) {
-        Logger.getInstance().recordOutput(amognus, (doub));
+     default void log(String key, Pose2d... val) {
+         Logger.getInstance().recordOutput(String.format("%s %s", this.getClass().getName().replace("frc.robot.subsystems.", ""), key), (val));
     }
-     default void log(String amognus, double... doub) {
-        Logger.getInstance().recordOutput(amognus,  (doub));
+     default void log(String key, double... val) {
+         Logger.getInstance().recordOutput(String.format("%s %s", this.getClass().getName().replace("frc.robot.subsystems.", ""), key), (val));
     }
-     default void log(String amognus, boolean... doub) {
-        Logger.getInstance().recordOutput(amognus, (doub));
+     default void log(String key, boolean... val) {
+         Logger.getInstance().recordOutput(String.format("%s %s", this.getClass().getName().replace("frc.robot.subsystems.", ""), key), (val));
     }
-     default void log(String amognus, SwerveModuleState... doub) {
-        Logger.getInstance().recordOutput(amognus, (doub));
+     default void log(String key, SwerveModuleState... val) {
+         Logger.getInstance().recordOutput(String.format("%s %s", this.getClass().getName().replace("frc.robot.subsystems.", ""), key), (val));
     }
-    default void log(String amognus, long... doub) {
-        Logger.getInstance().recordOutput(amognus, (doub));
+    default void log(String key, long... val) {
+        Logger.getInstance().recordOutput(String.format("%s %s", this.getClass().getName().replace("frc.robot.subsystems.", ""), key), (val));
     }
 
     /**
-     * Where subsystems should <b><u>override</u></b> and log shit
+     * Where subsystems should <b><u>override</u></b> and log stuff
      */
     default void updateLogging() {
         Logger.getInstance().recordOutput(String.format("%s Default", this.getClass().getName()), "amogus");
