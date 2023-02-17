@@ -19,20 +19,46 @@ import frc.robot.constants.FieldConstants;
 import java.util.Arrays;
 import java.util.Map;
 
-public class VisionLocking extends SubsystemBase {
+public class VisionLocking extends SubsystemBase implements SubsystemLogging {
 
     public enum Team {
         RED, BLUE
     }
     public enum Level {
-        HIGH, MID, LOW
+        HIGH(0), MID(1), LOW(2);
+
+        private final int modeVal;
+        Level(int val) {
+            modeVal = val;
+        }
+
+        public int getModeVal() {
+            return modeVal;
+        }
     }
     public enum Side {
-        LEFT, RIGHT
+        LEFT(0), RIGHT(1);
+        private final int modeVal;
+        Side(int val) {
+            modeVal = val;
+        }
+
+        public int getModeVal() {
+            return modeVal;
+        }
     }
 
     public enum PieceType {
-        CONES, CUBES
+        CONES(0), CUBES(1);
+
+        private final int modeVal;
+        PieceType(int val) {
+            modeVal = val;
+        }
+
+        public int getModeVal() {
+            return modeVal;
+        }
     }
     private Team m_team;
     private Level m_level;
@@ -230,6 +256,14 @@ public class VisionLocking extends SubsystemBase {
                 break;
         }
     }
+
+    @Override
+    public void configureLogging() {
+        log("Grid", m_grid);
+        log("Piece", m_pieceType.getModeVal() == 0 ? "Cube" : "Cone");
+        log("Side", m_side.getModeVal() == 0 ? "Left" : "Right");
+        log("Level", m_level.getModeVal() == 0 ?  "High" : (m_level.getModeVal() == 1 ? "Mid" : "Low"));}
+
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
