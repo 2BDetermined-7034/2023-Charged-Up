@@ -44,8 +44,6 @@ public class AutoBalance extends CommandBase {
                 SwerveDrive.getGyroscopeRotation()
         ));
 
-        m_swerveDrive.lockDrive();
-
     }
 
     // Called once the command ends or is interrupted.

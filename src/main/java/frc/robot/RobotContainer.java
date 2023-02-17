@@ -11,13 +11,9 @@ import frc.robot.commands.Arm.ArmOverride;
 import frc.robot.commands.Arm.SetArmCommand;
 
 import frc.robot.commands.Drive.DefaultDriveCommand;
-import frc.robot.commands.clob.GravityClawCommand;
-import frc.robot.commands.clob.GravityClawToggleCommand;
 import frc.robot.constants.Constants.OperatorConstants;
 import frc.robot.commands.Auto.AutoFactory;
 import frc.robot.subsystems.Arm.Arm;
-import frc.robot.subsystems.GravityClawSubsystem;
-
 import frc.robot.subsystems.SwerveDrive;
 import frc.robot.subsystems.VisionLocking;
 
@@ -29,11 +25,11 @@ public class RobotContainer {
 
     private final CommandPS4Controller m_operatorController = new CommandPS4Controller(OperatorConstants.kDriverControllerPort);
 
-    private final GravityClawSubsystem gravityClawSubsystem = new GravityClawSubsystem();
+    //private final GravityClawSubsystem gravityClawSubsystem = new GravityClawSubsystem();
 
-    private final GravityClawCommand gravityClawCommandTrue = new GravityClawCommand(gravityClawSubsystem, true);
-    private final GravityClawCommand gravityClawCommandFalse = new GravityClawCommand(gravityClawSubsystem, false);
-    private final GravityClawToggleCommand gravityClawToggleCommand = new GravityClawToggleCommand(gravityClawSubsystem);
+    //private final GravityClawCommand gravityClawCommandTrue = new GravityClawCommand(gravityClawSubsystem, true);
+    //private final GravityClawCommand gravityClawCommandFalse = new GravityClawCommand(gravityClawSubsystem, false);
+    //private final GravityClawToggleCommand gravityClawToggleCommand = new GravityClawToggleCommand(gravityClawSubsystem);
     private final VisionLocking m_visionLocker = new VisionLocking();
 
     private final AutoFactory autoFactory;
@@ -66,9 +62,9 @@ public class RobotContainer {
             m_driverController.circle().onTrue(new SetArmCommand(m_Arm,Units.degreesToRadians(130),  Units.degreesToRadians(45)));
             m_driverController.cross().onTrue(new SetArmCommand(m_Arm, Units.degreesToRadians(90), Units.degreesToRadians(270)));
 
-            m_operatorController.circle().onTrue(gravityClawCommandTrue);
-            m_operatorController.square().onTrue(gravityClawCommandFalse);
-            m_operatorController.triangle().onTrue(gravityClawToggleCommand);
+            //m_operatorController.circle().onTrue(gravityClawCommandTrue);
+            //m_operatorController.square().onTrue(gravityClawCommandFalse);
+            //m_operatorController.triangle().onTrue(gravityClawToggleCommand);
 
 
         // Gunner controls
