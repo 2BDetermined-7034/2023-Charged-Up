@@ -123,7 +123,7 @@ public class Arm extends SubsystemBase implements SubsystemLogging {
      * AdvantageKit Logging
      */
     @Override
-    public void configureLogging() {
+    public void updateLogging() {
         log("theta1", getCurrentState().getTheta1());
         log("theta2", getCurrentState().getTheta2());
         log("omega1", getCurrentState().getOmega1());
@@ -219,7 +219,7 @@ public class Arm extends SubsystemBase implements SubsystemLogging {
         setVoltages(MathUtil.clamp(input1 + betterFeedForward1, -12, 12), MathUtil.clamp(input2 + betterFeedForward2, -12, 12));
 
         updateDashBoard();
-        configureLogging();
+        updateLogging();
     }
 
 

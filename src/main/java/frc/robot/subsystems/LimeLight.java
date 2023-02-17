@@ -314,7 +314,7 @@ public class LimeLight extends SubsystemBase implements SubsystemLogging{
   }
 
   @Override
-  public void configureLogging() {
+  public void updateLogging() {
     log("Target Area", getTargetArea());
     log("Target Offset Y", getTargetOffsetY());
     log("Target Offset X", getTargetOffsetX());

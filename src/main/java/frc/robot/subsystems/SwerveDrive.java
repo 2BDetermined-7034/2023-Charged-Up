@@ -236,7 +236,7 @@ public class SwerveDrive extends SubsystemBase implements SubsystemLogging{
     }
 
     @Override
-    public void configureLogging() {
+    public void updateLogging() {
         log("Pose2D", getPosition());
         log("Swerve Module States", m_states);
     }

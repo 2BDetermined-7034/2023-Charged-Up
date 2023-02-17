@@ -91,6 +91,7 @@ public class VisionLocking extends SubsystemBase implements SubsystemLogging {
         coneCube = false;
 
         configureDashboard();
+        updateLogging();
     }
 
     public void configureDashboard(){
@@ -260,7 +261,7 @@ public class VisionLocking extends SubsystemBase implements SubsystemLogging {
     }
 
     @Override
-    public void configureLogging() {
+    public void updateLogging() {
         log("Grid", m_grid);
         log("Piece", m_pieceType.getModeVal() == 0 ? "Cube" : "Cone");
         log("Side", m_side.getModeVal() == 0 ? "Left" : "Right");
