@@ -17,11 +17,12 @@ import edu.wpi.first.networktables.DoublePublisher;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.subsystems.SubsystemLogging;
 import frc.robot.util.ArmState;
 
 import static frc.robot.constants.Constants.ArmConstants.*;
 
-public class Arm extends SubsystemBase {
+public class Arm extends SubsystemBase implements SubsystemLogging {
     private final CANSparkMax m_motor1, m_motor2;
     private final RelativeEncoder m_motor1Encoder, m_motor2Encoder;
     private final NetworkTable networkTable = NetworkTableInstance.getDefault().getTable("Arm");
@@ -91,6 +92,7 @@ public class Arm extends SubsystemBase {
         feedForwardOutput2 = networkTable.getDoubleTopic("FeedForward2").publish();
     }
 
+
     /**
      * Updates NetworkTables Publishers
      */
@@ -115,6 +117,21 @@ public class Arm extends SubsystemBase {
 
         feedForwardOutput1.set(armFeedForward1.calculate(controller1.getSetpoint().position, controller1.getSetpoint().velocity, 0));
         feedForwardOutput2.set(armFeedForward2.calculate(controller2.getSetpoint().position, controller2.getSetpoint().velocity, 0));
+    }
+
+    /**
+     * AdvantageKit Logging
+     */
+    @Override
+    public void configureLogging() {
+        log("theta1", getCurrentState().getTheta1());
+        log("theta2", getCurrentState().getTheta2());
+        log("omega1", getCurrentState().getOmega1());
+        log("omega2", getCurrentState().getOmega2());
+        log("Applied Output1", m_motor1.getAppliedOutput());
+        log("Applied Output2", m_motor2.getAppliedOutput());
+        log("error1", controller1.getPositionError());
+        log("error2", controller2.getPositionError());
     }
 
     /**
@@ -202,5 +219,8 @@ public class Arm extends SubsystemBase {
         setVoltages(MathUtil.clamp(input1 + betterFeedForward1, -12, 12), MathUtil.clamp(input2 + betterFeedForward2, -12, 12));
 
         updateDashBoard();
+        configureLogging();
     }
+
+
 }
