@@ -9,31 +9,31 @@ public interface SubsystemLogging {
 
     /*Dumb Log Methods*/
     default void log(String key, String... val) {
-        Logger.getInstance().recordOutput(String.format("%s %s", this.getClass().getName().replace("frc.robot.subsystems.", ""), key), (val));
+        Logger.getInstance().recordOutput(String.format("%s %s", this.getClass().getName().substring(21), key), (val));
     }
      default void log(String key, int val) {
-         Logger.getInstance().recordOutput(String.format("%s %s", this.getClass().getName().replace("frc.robot.subsystems.", ""), key), (val));
+         Logger.getInstance().recordOutput(String.format("%s %s", this.getClass().getName().substring(21), key), (val));
     }
      default void log(String key, Pose2d... val) {
-         Logger.getInstance().recordOutput(String.format("%s %s", this.getClass().getName().replace("frc.robot.subsystems.", ""), key), (val));
+         Logger.getInstance().recordOutput(String.format("%s %s", this.getClass().getName().substring(21), key), (val));
     }
      default void log(String key, double... val) {
-         Logger.getInstance().recordOutput(String.format("%s %s", this.getClass().getName().replace("frc.robot.subsystems.", ""), key), (val));
+         Logger.getInstance().recordOutput(String.format("%s %s", this.getClass().getName().substring(21), key), (val));
     }
      default void log(String key, boolean... val) {
-         Logger.getInstance().recordOutput(String.format("%s %s", this.getClass().getName().replace("frc.robot.subsystems.", ""), key), (val));
+         Logger.getInstance().recordOutput(String.format("%s %s", this.getClass().getName().substring(21), key), (val));
     }
      default void log(String key, SwerveModuleState... val) {
-         Logger.getInstance().recordOutput(String.format("%s %s", this.getClass().getName().replace("frc.robot.subsystems.", ""), key), (val));
+         Logger.getInstance().recordOutput(String.format("%s %s", this.getClass().getName().substring(21), key), (val));
     }
     default void log(String key, long... val) {
-        Logger.getInstance().recordOutput(String.format("%s %s", this.getClass().getName().replace("frc.robot.subsystems.", ""), key), (val));
+        Logger.getInstance().recordOutput(String.format("%s %s", this.getClass().getName().substring(21), key), (val));
     }
 
     /**
      * Where subsystems should <b><u>override</u></b> and log stuff
      */
     default void updateLogging() {
-        Logger.getInstance().recordOutput(String.format("%s Default", this.getClass().getName()), "amogus");
+        Logger.getInstance().recordOutput(String.format("%s %s", this.getClass().getName().substring(21), "Default"), ("amogus"));
     }
 }
