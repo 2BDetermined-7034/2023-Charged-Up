@@ -43,6 +43,7 @@ public class Robot extends LoggedRobot {
       case REAL:
         logger.addDataReceiver(new WPILOGWriter("/media/sda1/"));
         logger.addDataReceiver(new NT4Publisher());
+        logger.start();
         break;
 
       // Running a physics simulator, log to local folder
@@ -61,7 +62,7 @@ public class Robot extends LoggedRobot {
     }
 
     // Start AdvantageKit logger
-    logger.start();
+
 
     // Instantiate our RobotContainer. This will perform all our button bindings,
     // and put our autonomous chooser on the dashboard.
