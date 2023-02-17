@@ -8,29 +8,29 @@ import org.littletonrobotics.junction.Logger;
 public interface SubsystemLogging {
 
     /*Dumb Log Methods*/
-    // amogus ඞඞඞඞඞඞඞඞ
+    // amogus amognusamognusamognusamognusamognusamognusamognusamognus
     // i love coding with aaryan
     // I also love coding with aaryan based
-    default void log(String ඞ, String... doub) {
-        Logger.getInstance().recordOutput(ඞ, doub);
+    default void log(String amognus, String... doub) {
+        Logger.getInstance().recordOutput(amognus, doub);
     }
-     default void log(String ඞ, int doub) {
-        Logger.getInstance().recordOutput(ඞ, (doub));
+     default void log(String amognus, int doub) {
+        Logger.getInstance().recordOutput(amognus, (doub));
     }
-     default void log(String ඞ, Pose2d... doub) {
-        Logger.getInstance().recordOutput(ඞ, (doub));
+     default void log(String amognus, Pose2d... doub) {
+        Logger.getInstance().recordOutput(amognus, (doub));
     }
-     default void log(String ඞ, double... doub) {
-        Logger.getInstance().recordOutput(ඞ,  (doub));
+     default void log(String amognus, double... doub) {
+        Logger.getInstance().recordOutput(amognus,  (doub));
     }
-     default void log(String ඞ, boolean... doub) {
-        Logger.getInstance().recordOutput(ඞ, (doub));
+     default void log(String amognus, boolean... doub) {
+        Logger.getInstance().recordOutput(amognus, (doub));
     }
-     default void log(String ඞ, SwerveModuleState... doub) {
-        Logger.getInstance().recordOutput(ඞ, (doub));
+     default void log(String amognus, SwerveModuleState... doub) {
+        Logger.getInstance().recordOutput(amognus, (doub));
     }
-    default void log(String ඞ, long... doub) {
-        Logger.getInstance().recordOutput(ඞ, (doub));
+    default void log(String amognus, long... doub) {
+        Logger.getInstance().recordOutput(amognus, (doub));
     }
 
     /**
