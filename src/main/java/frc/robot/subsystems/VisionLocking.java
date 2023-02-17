@@ -103,6 +103,7 @@ public class VisionLocking extends SubsystemBase implements SubsystemLogging {
         // Grid location layout config
         Map coneSlotProperties = Map.of("colorWhenFalse", "#000000", "colorWhenTrue", "#FDDA0D");
         Map cubeSlotProperties = Map.of("colorWhenFalse", "#000000", "colorWhenTrue", "#5D3FD3");
+
         // Cube slots
         gridLocationLayout.addBoolean("TL", () -> gridLocation[0][0]).withProperties(cubeSlotProperties).withPosition(0, 0);
         gridLocationLayout.addBoolean("ML", () -> gridLocation[0][1]).withProperties(cubeSlotProperties).withPosition(0, 1);
@@ -111,6 +112,7 @@ public class VisionLocking extends SubsystemBase implements SubsystemLogging {
         gridLocationLayout.addBoolean("TR", () -> gridLocation[2][0]).withProperties(cubeSlotProperties).withPosition(2, 0);
         gridLocationLayout.addBoolean("MR", () -> gridLocation[2][1]).withProperties(cubeSlotProperties).withPosition(2, 1);
         gridLocationLayout.addBoolean("BR", () -> gridLocation[2][2]).withProperties(cubeSlotProperties).withPosition(2, 2);
+
         // Cone slots
         gridLocationLayout.addBoolean("TM", () -> gridLocation[1][0]).withProperties(coneSlotProperties).withPosition(1, 0);
         gridLocationLayout.addBoolean("MM", () -> gridLocation[1][1]).withProperties(coneSlotProperties).withPosition(1, 1);
