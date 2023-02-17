@@ -7,6 +7,7 @@ import java.util.Map;
 
 public class AdvantageKitConstants {
     private static final RobotType robot = RobotType.ROBOT_2023C;
+    public static final Mode currentMode = Mode.REAL;
     public static final double loopPeriodSecs = 0.02;
     public static final boolean tuningMode = false;
 

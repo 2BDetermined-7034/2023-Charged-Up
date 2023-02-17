@@ -136,28 +136,28 @@ public class LimeLight extends SubsystemBase {
   }
 
   /**
-   * Get area of detected target.                                                                                                                        
+   * Get area of detected target.
    * @return target area from 0% to 100%.
    */
   public double getTargetArea()
   {
     return ta.get(0.0);
   }
-  
-public Optional<Double> getTapeDistance()
-{
-  //double a = getTargetArea();
-  //return Units.inchesToMeters(113 + -27.8*a + Math.pow(3.36*a, 2) + Math.pow(-0.138*a, 3));
-  double targetoffsetAngle = ty.get(-1);
 
-  double angleToGoalRadians = Units.degreesToRadians(Vision.limeLightMountAngleDegrees + targetoffsetAngle);
-  if(isTargetAvailable()) {
-    return Optional.ofNullable(Vision.goalHeighInches - Vision.limeligtLensHeighInches/(Math.tan(angleToGoalRadians)));
+  public Optional<Double> getTapeDistance()
+  {
+    //double a = getTargetArea();
+    //return Units.inchesToMeters(113 + -27.8*a + Math.pow(3.36*a, 2) + Math.pow(-0.138*a, 3));
+    double targetoffsetAngle = ty.get(-1);
+
+    double angleToGoalRadians = Units.degreesToRadians(Vision.limeLightMountAngleDegrees + targetoffsetAngle);
+    if(isTargetAvailable()) {
+      return Optional.ofNullable(Vision.goalHeighInches - Vision.limeligtLensHeighInches/(Math.tan(angleToGoalRadians)));
+
+    }
+    return Optional.ofNullable(null);
 
   }
-  return Optional.ofNullable(null);
-
-}
 
 
   /**
@@ -191,8 +191,8 @@ public Optional<Double> getTapeDistance()
 
     double[] camTransform = camTran.get(new double[0]);
     return new Transform3d(
-      new Translation3d(camTransform[0], camTransform[1], camTransform[2]),
-      new Rotation3d(camTransform[3], camTransform[4], camTransform[5])
+            new Translation3d(camTransform[0], camTransform[1], camTransform[2]),
+            new Rotation3d(camTransform[3], camTransform[4], camTransform[5])
     );
 
   }
@@ -204,8 +204,8 @@ public Optional<Double> getTapeDistance()
   public Transform2d getCamTransform2d() {
     double[] camTransform = camTran.get(new double[] {0.0, 0.0, 0.0, 0.0, 0.0, 0.0});
     if(0 != camTransform.length) {
-    return new Transform2d(
-      new Translation2d(camTransform[0], camTransform[1]), new Rotation3d(Units.degreesToRadians(camTransform[3]), Units.degreesToRadians(camTransform[4]), Units.degreesToRadians(camTransform[5])).toRotation2d());
+      return new Transform2d(
+              new Translation2d(camTransform[0], camTransform[1]), new Rotation3d(Units.degreesToRadians(camTransform[3]), Units.degreesToRadians(camTransform[4]), Units.degreesToRadians(camTransform[5])).toRotation2d());
     }
     return new Transform2d();
   }
@@ -213,14 +213,14 @@ public Optional<Double> getTapeDistance()
   /**
    * Get Robot transform in field-space. Translation (X,Y,Z) Rotation(X,Y,Z)
    * LimeLight has it's own dict for apriltag poses
-   * @return Pose3d of Robot 
+   * @return Pose3d of Robot
    */
   public Pose3d getBotPose() {
     double[] poseVals = botpose.get();
     if(poseVals.length != 0) {
-    return new Pose3d(
-      new Translation3d(poseVals[0], poseVals[1], poseVals[2]),
-      new Rotation3d(Units.degreesToRadians(poseVals[3]), Units.degreesToRadians(poseVals[4]), Units.degreesToRadians(poseVals[5])));
+      return new Pose3d(
+              new Translation3d(poseVals[0], poseVals[1], poseVals[2]),
+              new Rotation3d(Units.degreesToRadians(poseVals[3]), Units.degreesToRadians(poseVals[4]), Units.degreesToRadians(poseVals[5])));
     }
     return new Pose3d();
   }
@@ -241,7 +241,7 @@ public Optional<Double> getTapeDistance()
   public void turnOnLED()
   {
     this.setLEDMode(LEDMode.ON);
-  }                 
+  }
   public void turnOffLED()
   {
     this.setLEDMode(LEDMode.OFF);
@@ -293,7 +293,7 @@ public Optional<Double> getTapeDistance()
   {
     return ledModeSub.get(0) == LEDMode.ON.modeValue && camModeSub.get(0) == CamMode.VISION.modeValue;
   }
-  
+
   /**
    * Method to toggle the type of video feed.
    */

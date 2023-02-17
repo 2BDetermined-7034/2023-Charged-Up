@@ -32,7 +32,7 @@ public class RobotContainer {
 
     private final GravityClawCommand gravityClawCommandTrue = new GravityClawCommand(gravityClawSubsystem, true);
     private final GravityClawCommand gravityClawCommandFalse = new GravityClawCommand(gravityClawSubsystem, false);
-private final GravityClawToggleCommand gravityClawToggleCommand = new GravityClawToggleCommand(gravityClawSubsystem);
+    private final GravityClawToggleCommand gravityClawToggleCommand = new GravityClawToggleCommand(gravityClawSubsystem);
     private final VisionLocking m_visionLocker = new VisionLocking();
 
 
@@ -49,22 +49,22 @@ private final GravityClawToggleCommand gravityClawToggleCommand = new GravityCla
     }
 
     private void configureBindings() {
-            m_driverController.R1().whileTrue(new ArmOverride(m_Arm, () -> m_driverController.getLeftX(), () -> m_driverController.getRightY(), () -> m_driverController.getR2Axis()));
+        m_driverController.R1().whileTrue(new ArmOverride(m_Arm, () -> m_driverController.getLeftX(), () -> m_driverController.getRightY(), () -> m_driverController.getR2Axis()));
 
-            m_driverController.share().whileTrue(m_swerveDrive.runOnce(m_swerveDrive::zeroGyroscope));
+        m_driverController.share().whileTrue(m_swerveDrive.runOnce(m_swerveDrive::zeroGyroscope));
 //            m_operatorController.circle()
 
-            //m_driverController.triangle().whileTrue(m_swerveDrive.runOnce(m_swerveDrive::setLimeLightVision));
-            //m_driverController.circle().whileTrue(new DriveToTarget(m_swerveDrive, m_visionLocker).andThen(new ChaseTagCommand(m_swerveDrive, m_visionLocker)));
+        //m_driverController.triangle().whileTrue(m_swerveDrive.runOnce(m_swerveDrive::setLimeLightVision));
+        //m_driverController.circle().whileTrue(new DriveToTarget(m_swerveDrive, m_visionLocker).andThen(new ChaseTagCommand(m_swerveDrive, m_visionLocker)));
 
-            m_driverController.triangle().onTrue(new SetArmCommand(m_Arm, Units.degreesToRadians(90), Units.degreesToRadians(90)));
-            m_driverController.square().onTrue(new SetArmCommand(m_Arm, Units.degreesToRadians(90), Units.degreesToRadians(309)));
-            m_driverController.circle().onTrue(new SetArmCommand(m_Arm,Units.degreesToRadians(130),  Units.degreesToRadians(45)));
-            m_driverController.cross().onTrue(new SetArmCommand(m_Arm, Units.degreesToRadians(90), Units.degreesToRadians(270)));
+        m_driverController.triangle().onTrue(new SetArmCommand(m_Arm, Units.degreesToRadians(90), Units.degreesToRadians(90)));
+        m_driverController.square().onTrue(new SetArmCommand(m_Arm, Units.degreesToRadians(90), Units.degreesToRadians(309)));
+        m_driverController.circle().onTrue(new SetArmCommand(m_Arm,Units.degreesToRadians(130),  Units.degreesToRadians(45)));
+        m_driverController.cross().onTrue(new SetArmCommand(m_Arm, Units.degreesToRadians(90), Units.degreesToRadians(270)));
 
-            m_operatorController.circle().onTrue(gravityClawCommandTrue);
-            m_operatorController.square().onTrue(gravityClawCommandFalse);
-            m_operatorController.triangle().onTrue(gravityClawToggleCommand);
+        m_operatorController.circle().onTrue(gravityClawCommandTrue);
+        m_operatorController.square().onTrue(gravityClawCommandFalse);
+        m_operatorController.triangle().onTrue(gravityClawToggleCommand);
 
 
         m_driverController.triangle().onTrue(new SetArmCommand(m_Arm, Units.degreesToRadians(90), Units.degreesToRadians(90)));

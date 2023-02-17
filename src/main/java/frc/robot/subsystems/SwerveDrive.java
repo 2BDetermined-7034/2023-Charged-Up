@@ -12,6 +12,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
@@ -24,6 +25,9 @@ import frc.robot.constants.Constants;
 import frc.robot.util.SwerveModule;
 import frc.robot.constants.COTSSwerveConstants;
 import frc.robot.constants.SwerveModuleConstants;
+import org.littletonrobotics.junction.Logger;
+import org.littletonrobotics.junction.inputs.LoggedPowerDistribution;
+
 public class SwerveDrive extends SubsystemBase {
 
     //FL, FR, BL, BR
@@ -107,7 +111,7 @@ public class SwerveDrive extends SubsystemBase {
                 getModulePosition(),
                 new Pose2d(),
                 VecBuilder.fill(0.1, 0.1, 0.1), // estimator values (x, y, rotation) std-devs
-                VecBuilder.fill(0.9, 0.9, 0.9)
+                VecBuilder.fill(0.5, 0.5, 0.5)
         );
 
 
@@ -213,10 +217,14 @@ public class SwerveDrive extends SubsystemBase {
         m_frontRightModule.setDesiredState(m_states[1], m_IsOpenLoop);
         m_backLeftModule.setDesiredState(m_states[2], m_IsOpenLoop);
         m_backRightModule.setDesiredState(m_states[3], m_IsOpenLoop);
+
+        Logger.getInstance().recordOutput("Pose2D", getPosition());
+        Logger.getInstance().recordOutput("Swerve Module States", m_states);
+        LoggedPowerDistribution.getInstance(0, PowerDistribution.ModuleType.kRev);
     }
 
     private void updateOdometry() {
-        if(limeLight.isTargetAvailable()) {
+        if(limeLight.isTargetAvailable() && limeLight.getBotPose() != null) {
             addVisionMeasurement(limeLight.getBotPose().toPose2d(), Timer.getFPGATimestamp());
         } else return;
     }
