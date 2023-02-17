@@ -218,9 +218,6 @@ public class SwerveDrive extends SubsystemBase {
         m_backLeftModule.setDesiredState(m_states[2], m_IsOpenLoop);
         m_backRightModule.setDesiredState(m_states[3], m_IsOpenLoop);
 
-        Logger.getInstance().recordOutput("Pose2D", getPosition());
-        Logger.getInstance().recordOutput("Swerve Module States", m_states);
-        LoggedPowerDistribution.getInstance(0, PowerDistribution.ModuleType.kRev);
     }
 
     private void updateOdometry() {
