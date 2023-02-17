@@ -66,7 +66,6 @@ public class PathFactory {
                 new PathConstraints(1, 1),
                 pose2dToPathpoint(startPos),
                 pose2dToPathpoint(endPos)
-
         );
 
     }

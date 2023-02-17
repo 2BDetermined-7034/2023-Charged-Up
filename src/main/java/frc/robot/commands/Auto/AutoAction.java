@@ -21,7 +21,7 @@ import frc.robot.subsystems.VisionLocking;
 import java.util.ArrayList;
 import java.util.List;
 
-import static frc.robot.constants.Constants.ArmConstants.ArmSetPoints.*;
+import static frc.robot.constants.Constants.ArmConstants.ArmSetpoints.*;
 
 public class AutoAction {
     ShuffleboardLayout tab;
@@ -51,7 +51,7 @@ public class AutoAction {
         actionChooser.addOption("Leave Community", "LC");
         actionChooser.addOption("Do Nothing", "NA");
 
-        heightChooser = new SendableChooser<CommandBase>();
+        heightChooser = new SendableChooser<>();
         heightChooser.addOption("L1", new SetArmCommand(arm, low[0], low[1]));
         heightChooser.addOption("L2", new SetArmCommand(arm, medium[0], medium[1]));
         heightChooser.addOption("L3", new SetArmCommand(arm, high[0], high[1]));

@@ -38,8 +38,8 @@ public class AutoFactory {
         startingPosition.addOption("Mid", 2);
         startingPosition.addOption("Low", 3);
 
-        firstAction = new AutoAction("First", m_drive,m_arm);
-        secondAction = new AutoAction("First", m_drive,m_arm);
+        firstAction = new AutoAction("First", m_drive, m_arm);
+        secondAction = new AutoAction("First", m_drive, m_arm);
     }
     public Command getAuto() {
         Command first = firstAction.getSelected(m_visionlocker.getTeam(), startingPosition.getSelected());
