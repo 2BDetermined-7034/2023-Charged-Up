@@ -57,5 +57,9 @@ public class GravityClawSubsystem extends SubsystemBase implements SubsystemLogg
             sol.set(DoubleSolenoid.Value.kForward);
         }
     }
+    @Override
+    public void periodic() {
+        updateLogging();
+    }
 }
 
