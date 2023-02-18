@@ -5,6 +5,7 @@ import frc.robot.subsystems.Indexer;
 
 public class RunIndexerCommand extends CommandBase {
     private final Indexer m_indexer;
+
     public RunIndexerCommand(Indexer indexer) {
         m_indexer = indexer;
         // each subsystem used by the command must be passed into the
