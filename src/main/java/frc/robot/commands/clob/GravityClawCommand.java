@@ -7,6 +7,7 @@ import frc.robot.subsystems.GravityClawSubsystem;
 public class GravityClawCommand extends CommandBase {
     private final GravityClawSubsystem gravityClawSubsystem;
     private final boolean direction;
+
     public GravityClawCommand(GravityClawSubsystem gravityClawSubsystem, boolean direction) {
         this.gravityClawSubsystem = gravityClawSubsystem;
         this.direction = direction;
@@ -19,12 +20,11 @@ public class GravityClawCommand extends CommandBase {
     public void initialize() {
 
 
-
     }
 
     @Override
     public void execute() {
-    gravityClawSubsystem.setSolonoid(direction);
+        gravityClawSubsystem.setSolonoid(direction);
 
     }
 
