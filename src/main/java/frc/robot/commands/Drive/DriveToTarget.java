@@ -9,7 +9,6 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.constants.Constants;
 import frc.robot.subsystems.SwerveDrive;
 import frc.robot.subsystems.VisionLocking;
 
@@ -19,16 +18,14 @@ import java.util.function.Supplier;
 
 public class DriveToTarget extends CommandBase {
 
-    SwerveDrive m_swerve;
-    VisionLocking m_locker;
-    PathPlannerTrajectory m_trajectory;
-
-
     private final Timer timer = new Timer();
     private final Supplier<Pose2d> poseSupplier;
     private final SwerveDriveKinematics kinematics;
     private final PPHolonomicDriveController controller;
     private final Consumer<SwerveModuleState[]> outputModuleStates;
+    SwerveDrive m_swerve;
+    VisionLocking m_locker;
+    PathPlannerTrajectory m_trajectory;
 
 
     public DriveToTarget(SwerveDrive m_swerve, VisionLocking m_locker) {
