@@ -21,65 +21,19 @@ import java.util.Map;
 
 public class VisionLocking extends SubsystemBase implements SubsystemLogging {
 
-    public enum Team {
-        RED, BLUE
-    }
-
-    public enum Level {
-        HIGH(0), MID(1), LOW(2);
-
-        private final int modeVal;
-
-        Level(int val) {
-            modeVal = val;
-        }
-
-        public int getModeVal() {
-            return modeVal;
-        }
-    }
-
-    public enum Side {
-        LEFT(0), RIGHT(1);
-        private final int modeVal;
-
-        Side(int val) {
-            modeVal = val;
-        }
-
-        public int getModeVal() {
-            return modeVal;
-        }
-    }
-
-    public enum PieceType {
-        CONES(0), CUBES(1);
-
-        private final int modeVal;
-
-        PieceType(int val) {
-            modeVal = val;
-        }
-
-        public int getModeVal() {
-            return modeVal;
-        }
-    }
-
-    private Team m_team;
-    private Level m_level;
-    private Side m_side;
-    private int m_grid;
-    private PieceType m_pieceType;
     private final int[] blueTags = {8, 7, 6};
     private final int[] redTags = {3, 2, 1};
     private final ShuffleboardTab driverTab;
     private final ShuffleboardLayout gridLocationLayout;
     private final ShuffleboardLayout gridSelectionLayout;
+    private Team m_team;
+    private Level m_level;
+    private Side m_side;
+    private int m_grid;
+    private PieceType m_pieceType;
     private boolean[][] gridLocation;
-    private boolean[] gridSelection;
+    private final boolean[] gridSelection;
     private boolean coneCube;
-
     /**
      * Creates a new VisionLocking.
      */
@@ -135,14 +89,6 @@ public class VisionLocking extends SubsystemBase implements SubsystemLogging {
         updateLocationArray();
     }
 
-    public void setTeam(Team setTo) {
-        m_team = setTo;
-    }
-
-    public void setLevel(Level setTo) {
-        m_level = setTo;
-    }
-
     public void setSide(Side setTo) {
         m_side = setTo;
         updateLocationArray();
@@ -152,16 +98,20 @@ public class VisionLocking extends SubsystemBase implements SubsystemLogging {
         m_grid = setTo;
     }
 
-    public void setPieceType(PieceType setTo) {
-        m_pieceType = setTo;
-    }
-
     public Team getTeam() {
         return m_team;
     }
 
+    public void setTeam(Team setTo) {
+        m_team = setTo;
+    }
+
     public PieceType getPieceType() {
         return m_pieceType;
+    }
+
+    public void setPieceType(PieceType setTo) {
+        m_pieceType = setTo;
     }
 
     public int setGrid() {
@@ -174,6 +124,10 @@ public class VisionLocking extends SubsystemBase implements SubsystemLogging {
 
     public Level getLevel() {
         return m_level;
+    }
+
+    public void setLevel(Level setTo) {
+        m_level = setTo;
     }
 
     public void gridRight() {
@@ -286,11 +240,55 @@ public class VisionLocking extends SubsystemBase implements SubsystemLogging {
         log("Level", m_level.getModeVal() == 0 ? "High" : (m_level.getModeVal() == 1 ? "Mid" : "Low"));
     }
 
-
-
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
         updateLogging();
+    }
+
+    public enum Team {
+        RED, BLUE
+    }
+
+    public enum Level {
+        HIGH(0), MID(1), LOW(2);
+
+        private final int modeVal;
+
+        Level(int val) {
+            modeVal = val;
+        }
+
+        public int getModeVal() {
+            return modeVal;
+        }
+    }
+
+    public enum Side {
+        LEFT(0), RIGHT(1);
+        private final int modeVal;
+
+        Side(int val) {
+            modeVal = val;
+        }
+
+        public int getModeVal() {
+            return modeVal;
+        }
+    }
+
+
+    public enum PieceType {
+        CONES(0), CUBES(1);
+
+        private final int modeVal;
+
+        PieceType(int val) {
+            modeVal = val;
+        }
+
+        public int getModeVal() {
+            return modeVal;
+        }
     }
 }
