@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 import frc.robot.commands.Arm.ArmOverride;
 import frc.robot.commands.Arm.SetArmCommand;
 
+import frc.robot.commands.Drive.AutoBalance;
 import frc.robot.commands.Drive.DefaultDriveCommand;
 import frc.robot.commands.clob.GravityClawCommand;
 import frc.robot.commands.clob.GravityClawToggleCommand;
@@ -35,6 +36,8 @@ public class RobotContainer {
     private final GravityClawCommand gravityClawCommandFalse = new GravityClawCommand(gravityClawSubsystem, false);
     private final GravityClawToggleCommand gravityClawToggleCommand = new GravityClawToggleCommand(gravityClawSubsystem);
     private final VisionLocking m_visionLocker = new VisionLocking();
+
+    private final AutoBalance balance = new AutoBalance(m_swerveDrive);
 
 
 
@@ -85,7 +88,9 @@ public class RobotContainer {
         m_operatorController.L1().whileTrue(m_visionLocker.runOnce(m_visionLocker::gridLeft));
         m_operatorController.R1().whileTrue(m_visionLocker.runOnce(m_visionLocker::gridRight));
 
-        m_operatorController.square().whileTrue(m_visionLocker.runOnce(m_visionLocker::togglePiece));
+        //m_operatorController.square().whileTrue(m_visionLocker.runOnce(m_visionLocker::togglePiece));
+
+        m_operatorController.square().whileTrue(balance);
 
     }
 

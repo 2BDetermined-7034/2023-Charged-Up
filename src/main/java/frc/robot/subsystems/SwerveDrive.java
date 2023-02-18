@@ -237,6 +237,9 @@ public class SwerveDrive extends SubsystemBase implements SubsystemLogging {
         return new Transform2d();
     }
 
+    public void lockModules() {
+    }
+
     @Override
     public void updateLogging() {
     log("Pose2D", getPosition());
