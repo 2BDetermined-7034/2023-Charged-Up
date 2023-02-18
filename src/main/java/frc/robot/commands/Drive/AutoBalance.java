@@ -1,15 +1,15 @@
 package frc.robot.commands.Drive;
 
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.SwerveDrive;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
 
 public class AutoBalance extends CommandBase {
     private final SwerveDrive m_swerveDrive;
 
-    PIDController pid = new PIDController(1.4,0,0.2);
+    PIDController pid = new PIDController(1.4, 0, 0.2);
 
     public AutoBalance(SwerveDrive swerveDrive) {
         m_swerveDrive = swerveDrive;
@@ -22,7 +22,8 @@ public class AutoBalance extends CommandBase {
 
     // Called when the command is initially scheduled.
     @Override
-    public void initialize() {}
+    public void initialize() {
+    }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
@@ -34,7 +35,8 @@ public class AutoBalance extends CommandBase {
                 SwerveDrive.getGyroscopeRotation()
         ));
 
-        SmartDashboard.putBoolean("isAtSetpoint", pid.atSetpoint());}
+        SmartDashboard.putBoolean("isAtSetpoint", pid.atSetpoint());
+    }
 
     // Called once the command ends or is interrupted.
     @Override
