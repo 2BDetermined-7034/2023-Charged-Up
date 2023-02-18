@@ -21,7 +21,7 @@ public class GravityClawToggleCommand extends CommandBase {
 
     @Override
     public void execute() {
-gravityClawSubsystem.ToggleSolonoid();
+        gravityClawSubsystem.ToggleSolonoid();
     }
 
     @Override
