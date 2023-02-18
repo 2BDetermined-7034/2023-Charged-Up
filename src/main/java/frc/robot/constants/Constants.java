@@ -19,10 +19,12 @@ public final class Constants {
 
         public static final int kOperatorControllerPort = 1;
     }
-    public static class GravityClaw{
+
+    public static class GravityClaw {
         public static final int forwardChannel = 0;
         public static final int reverseChannel = 1;
     }
+
     public static class Drivebase {
 
         public static class Measurements {
@@ -60,15 +62,14 @@ public final class Constants {
         }
 
         public static class MotorConfig {
+            public static final double openLoopRamp = 0.25;
+            public static final double closedLoopRamp = 0.0;
             public static int angleSmartCurrentLimit = 25;
             public static int angleSecondaryCurrentLimit = 60;
             public static CANSparkMax.IdleMode angleNeutralMode = CANSparkMax.IdleMode.kBrake;
             public static int driveSmartCurrentLimit = 25;
             public static int driveSecondaryCurrentLimit = 60;
             public static CANSparkMax.IdleMode driveNeutralMode = CANSparkMax.IdleMode.kBrake;
-
-            public static final double openLoopRamp = 0.25;
-            public static final double closedLoopRamp = 0.0;
 
         }
 
