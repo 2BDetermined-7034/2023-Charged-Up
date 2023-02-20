@@ -12,11 +12,13 @@ import frc.robot.commands.Arm.SetArmCommand;
 import frc.robot.commands.Auto.AutoFactory;
 import frc.robot.commands.Drive.AutoBalance;
 import frc.robot.commands.Drive.DefaultDriveCommand;
+import frc.robot.commands.Intake.RunIntakeCommand;
 import frc.robot.commands.clob.GravityClawCommand;
 import frc.robot.commands.clob.GravityClawToggleCommand;
 import frc.robot.constants.Constants.OperatorConstants;
 import frc.robot.subsystems.Arm.Arm;
 import frc.robot.subsystems.GravityClawSubsystem;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.SwerveDrive;
 import frc.robot.subsystems.VisionLocking;
 
@@ -36,6 +38,8 @@ public class RobotContainer {
     private final VisionLocking m_visionLocker = new VisionLocking();
 
     private final AutoBalance balance = new AutoBalance(m_swerveDrive);
+
+    private final Intake intake = new Intake();
 
 
     public RobotContainer() {
@@ -82,11 +86,6 @@ public class RobotContainer {
         //m_driverController.triangle().whileTrue(m_swerveDrive.runOnce(m_swerveDrive::setLimeLightVision));
         //m_driverController.circle().whileTrue(new DriveToTarget(m_swerveDrive, m_visionLocker).andThen(new ChaseTagCommand(m_swerveDrive, m_visionLocker)));
 
-        m_driverController.triangle().onTrue(new SetArmCommand(m_Arm, Units.degreesToRadians(90), Units.degreesToRadians(90)));
-        m_driverController.square().onTrue(new SetArmCommand(m_Arm, Units.degreesToRadians(90), Units.degreesToRadians(309)));
-        m_driverController.circle().onTrue(new SetArmCommand(m_Arm, Units.degreesToRadians(130), Units.degreesToRadians(45)));
-        m_driverController.cross().onTrue(new SetArmCommand(m_Arm, Units.degreesToRadians(90), Units.degreesToRadians(270)));
-
         m_operatorController.circle().onTrue(gravityClawCommandTrue);
         m_operatorController.square().onTrue(gravityClawCommandFalse);
         m_operatorController.triangle().onTrue(gravityClawToggleCommand);
@@ -112,6 +111,10 @@ public class RobotContainer {
         //m_operatorController.square().whileTrue(m_visionLocker.runOnce(m_visionLocker::togglePiece));
 
         m_operatorController.square().whileTrue(balance);
+
+        m_operatorController.L2().whileTrue(intake.runOnce(intake::runIntakeForward));
+        m_operatorController.L2().whileFalse(intake.runOnce(intake::setCoterminal));
+
 
     }
 
