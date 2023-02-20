@@ -42,7 +42,7 @@ public class Arm extends SubsystemBase implements SubsystemLogging {
         controller2 = new ProfiledPIDController(10, 0, 0, new TrapezoidProfile.Constraints(4, 8));
         controller1 = new ProfiledPIDController(4, 0, 0, new TrapezoidProfile.Constraints(2.5, 3));
 
-        armFeedForward2 = new ArmFeedforward(0.05, kG1, kV1, kA1);
+        armFeedForward2 = new ArmFeedforward(0.01, kG1, kV1, kA1);
         armFeedForward1 = new ArmFeedforward(0.0, kG2, kV2, kA2);
 
         m_motor1 = new CANSparkMax(motor1ID, CANSparkMaxLowLevel.MotorType.kBrushless);
@@ -61,22 +61,22 @@ public class Arm extends SubsystemBase implements SubsystemLogging {
         m_motor1Encoder.setPosition(Units.degreesToRadians(90));
         m_motor2Encoder.setPosition(Units.degreesToRadians(270));
 
+        //DIO encoders
         m_AbsoluteEncoder1 = new Encoder(0,1, false, CounterBase.EncodingType.k2X);
         m_AbsoluteEncoder2 = new Encoder(0,1, false, CounterBase.EncodingType.k2X);
         m_AbsoluteEncoder1.setSamplesToAverage(6);
         m_AbsoluteEncoder2.setSamplesToAverage(6);
         m_AbsoluteEncoder1.setDistancePerPulse(S1);
         m_AbsoluteEncoder2.setDistancePerPulse(S2);
-        m_AbsoluteEncoder1.setMinRate(2);
-        m_AbsoluteEncoder2.setMinRate(2);
-
 
         goalState = new ArmState(Rotation2d.fromDegrees(90), Rotation2d.fromDegrees(270), 0, 0, 0, 0);
         last_velocity1 = 0;
         last_velocity2 = 0;
 
-        configureDashBoard();
         isOpenLoop = false;
+
+        configureDashBoard();
+
     }
 
     /**
