@@ -131,7 +131,7 @@ public final class Constants {
 
         //Gearing of each segment
         public static final double G1 = 80.;
-        public static final double G2 = 112.5;
+        public static final double G2 = 48;
 
         public static final double S1 = 2 * Math.PI * (1 / G1);
         public static final double S2 = 2 * Math.PI * (1 / G2);
@@ -142,7 +142,7 @@ public final class Constants {
 
         //ArmFeedForward Gains
         public static final double kG1 = 0.23d, kV1 = 1.56, kA1 = 0.01d;
-        public static final double kG2 = 0.07, kV2 = 2.19, kA2 = 0.01d;
+        public static final double kG2 = 0.14, kV2 = 0.94, kA2 = .01;
 
         //Gravity
         public static final double g = 9.81;
