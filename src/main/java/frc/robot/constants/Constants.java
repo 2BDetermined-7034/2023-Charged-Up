@@ -142,7 +142,7 @@ public final class Constants {
 
         //ArmFeedForward Gains
         public static final double kG1 = 0.23d, kV1 = 1.56, kA1 = 0.01d;
-        public static final double kG2 = 0.07, kV2 = 2.19, kA2 = 0.01d;
+        public static final double kG2 = 0.16, kV2 = 0.78, kA2 = .02;
 
         //Gravity
         public static final double g = 9.81;
