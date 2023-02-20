@@ -4,6 +4,7 @@
 
 package frc.robot.constants;
 
+import com.pathplanner.lib.auto.PIDConstants;
 import com.revrobotics.CANSparkMax;
 import edu.wpi.first.math.MatBuilder;
 import edu.wpi.first.math.Matrix;
@@ -26,7 +27,6 @@ public final class Constants {
     }
 
     public static class Drivebase {
-
         public static class Measurements {
             public static final double width = Units.inchesToMeters(32);
             public static final double length = Units.inchesToMeters(32);
@@ -35,23 +35,29 @@ public final class Constants {
         }
 
         public static class MotorIDs {
-            public static final int flDrive = 3;
-            public static final int flSteer = 13;
-            public static final int flEncoder = 1;
-            //            public static final Rotation2d flOffset = Rotation2d.fromDegrees(173.1);
-            public static final Rotation2d flOffset = Rotation2d.fromDegrees(263.1 + 0); //266.6
 
-            public static final int frDrive = 12;
-            public static final int frSteer = 11;
+            // practice robot settings:
+            public static final int flDrive = 3;
+            public static final int flSteer = 1;
+            public static final int flEncoder = 1;
+            public static final Rotation2d flOffset = Rotation2d.fromDegrees(263.1 + 0); // TODO change flOffset
+
+
+            // Practice robot settings (done):
+            public static final int frDrive = 3;
+
+            public static final int frSteer = 4;
             public static final int frEncoder = 2;
-            //            public static final Rotation2d frOffset = Rotation2d.fromDegrees(252.8 + 0);
-            public static final Rotation2d frOffset = Rotation2d.fromDegrees(68.7 - 2);
+            public static final Rotation2d frOffset = Rotation2d.fromDegrees(68.7 - 2); // TODO change frOffset
+
+            // Practice robot settings:
 
             public static final int blDrive = 5;
             public static final int blSteer = 14;
             public static final int blEncoder = 4;
-//            public static final Rotation2d blOffset = Rotation2d.fromDegrees(217.3 - 0);
+            // public static final Rotation2d blOffset = Rotation2d.fromDegrees(217.3 - 0);
 
+            // TODO change blOffset
             public static final Rotation2d blOffset = Rotation2d.fromDegrees(160.83 - 1);
 
             public static final int brDrive = 2;
@@ -164,5 +170,8 @@ public final class Constants {
                 0,
                 B4
         );
+
+        public static final double kG1 = 0.12d, kV1 = 1.56, kA1 = 0.01d;
+        public static final double kG2 = 0.04, kV2 = 2.19, kA2 = 0d;
     }
 }
