@@ -141,8 +141,8 @@ public final class Constants {
         public static final int N2 = 1;
 
         //ArmFeedForward Gains
-        public static final double kG1 = 0.23d, kV1 = 1.56, kA1 = 0.01d;
-        public static final double kG2 = 0.14, kV2 = 0.94, kA2 = .01;
+        public static final double kG1 = 0.10d, kV1 = 3.56, kA1 = 0.01d;
+        public static final double kG2 = 0.13, kV2 = 2.60, kA2 = .01;
 
         //Gravity
         public static final double g = 9.81;
