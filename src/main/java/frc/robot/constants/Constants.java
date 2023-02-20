@@ -108,6 +108,11 @@ public final class Constants {
 
         public static final int motor1ID = 15;
         public static final int motor2ID = 9;
+
+        public static final int EncoderChannelA1 = 0;
+        public static final int EncoderChannelB1 = 1;
+        public static final int EncoderChannelA2 = 3;
+        public static final int EncoderChannelB2 = 4;
         //Length of Segments
         public static final double l1 = Units.inchesToMeters(38.5);
         public static final double l2 = Units.inchesToMeters(33.5);

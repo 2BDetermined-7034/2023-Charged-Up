@@ -62,8 +62,8 @@ public class Arm extends SubsystemBase implements SubsystemLogging {
         m_motor2Encoder.setPosition(Units.degreesToRadians(270));
 
         //DIO encoders
-        m_AbsoluteEncoder1 = new Encoder(0,1, false, CounterBase.EncodingType.k2X);
-        m_AbsoluteEncoder2 = new Encoder(0,1, false, CounterBase.EncodingType.k2X);
+        m_AbsoluteEncoder1 = new Encoder(EncoderChannelA1,EncoderChannelB1, false, CounterBase.EncodingType.k2X);
+        m_AbsoluteEncoder2 = new Encoder(EncoderChannelA2,EncoderChannelB2, false, CounterBase.EncodingType.k2X);
         m_AbsoluteEncoder1.setSamplesToAverage(6);
         m_AbsoluteEncoder2.setSamplesToAverage(6);
         m_AbsoluteEncoder1.setDistancePerPulse(S1);
