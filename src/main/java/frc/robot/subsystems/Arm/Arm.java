@@ -4,9 +4,7 @@
 
 package frc.robot.subsystems.Arm;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel;
-import com.revrobotics.RelativeEncoder;
+import com.revrobotics.*;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -16,6 +14,8 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.DoublePublisher;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.CounterBase;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.SubsystemLogging;
 import frc.robot.util.ArmState;
@@ -25,6 +25,7 @@ import static frc.robot.constants.Constants.ArmConstants.*;
 public class Arm extends SubsystemBase implements SubsystemLogging {
     private final CANSparkMax m_motor1, m_motor2;
     private final RelativeEncoder m_motor1Encoder, m_motor2Encoder;
+    private final Encoder m_AbsoluteEncoder1, m_AbsoluteEncoder2;
     private final NetworkTable networkTable = NetworkTableInstance.getDefault().getTable("Arm");
     private final ProfiledPIDController controller1, controller2;
     private final ArmFeedforward armFeedForward1, armFeedForward2;
@@ -41,8 +42,8 @@ public class Arm extends SubsystemBase implements SubsystemLogging {
         controller2 = new ProfiledPIDController(10, 0, 0, new TrapezoidProfile.Constraints(4, 8));
         controller1 = new ProfiledPIDController(4, 0, 0, new TrapezoidProfile.Constraints(2.5, 3));
 
-        armFeedForward2 = new ArmFeedforward(0.05, 0.25, 0.19, 0.01);
-        armFeedForward1 = new ArmFeedforward(0.0, .36, 3.9, .03);
+        armFeedForward2 = new ArmFeedforward(0.05, kG1, kV1, kA1);
+        armFeedForward1 = new ArmFeedforward(0.0, kG2, kV2, kA2);
 
         m_motor1 = new CANSparkMax(motor1ID, CANSparkMaxLowLevel.MotorType.kBrushless);
         m_motor2 = new CANSparkMax(motor2ID, CANSparkMaxLowLevel.MotorType.kBrushless);
@@ -59,6 +60,17 @@ public class Arm extends SubsystemBase implements SubsystemLogging {
 
         m_motor1Encoder.setPosition(Units.degreesToRadians(90));
         m_motor2Encoder.setPosition(Units.degreesToRadians(270));
+
+        m_AbsoluteEncoder1 = new Encoder(0,1, false, CounterBase.EncodingType.k2X);
+        m_AbsoluteEncoder2 = new Encoder(0,1, false, CounterBase.EncodingType.k2X);
+        m_AbsoluteEncoder1.setSamplesToAverage(6);
+        m_AbsoluteEncoder2.setSamplesToAverage(6);
+        m_AbsoluteEncoder1.setDistancePerPulse(S1);
+        m_AbsoluteEncoder2.setDistancePerPulse(S2);
+        m_AbsoluteEncoder1.setMinRate(2);
+        m_AbsoluteEncoder2.setMinRate(2);
+
+
         goalState = new ArmState(Rotation2d.fromDegrees(90), Rotation2d.fromDegrees(270), 0, 0, 0, 0);
         last_velocity1 = 0;
         last_velocity2 = 0;
@@ -166,17 +178,24 @@ public class Arm extends SubsystemBase implements SubsystemLogging {
      * @return Arm State
      */
     public ArmState getCurrentState() {
-        Rotation2d theta1 = Rotation2d.fromRadians(m_motor1Encoder.getPosition());
-        Rotation2d theta2 = Rotation2d.fromRadians(m_motor2Encoder.getPosition());
+//        Rotation2d theta1 = Rotation2d.fromRadians(m_motor1Encoder.getPosition());
+//        Rotation2d theta2 = Rotation2d.fromRadians(m_motor2Encoder.getPosition());
+//
+//        double omega1 = m_motor1Encoder.getVelocity();
+//        double omega2 = m_motor2Encoder.getVelocity();
+//        double firstAcceleration = (m_motor1Encoder.getVelocity() - last_velocity1) / (0.02);
+//        double secondAcceleration = (m_motor2Encoder.getVelocity() - last_velocity2) / (0.02);
+//        last_velocity1 = m_motor1Encoder.getVelocity();
+//        last_velocity2 = m_motor2Encoder.getVelocity();
 
-        double omega1 = m_motor1Encoder.getVelocity();
-        double omega2 = m_motor2Encoder.getVelocity();
-        double firstAcceleration = (m_motor1Encoder.getVelocity() - last_velocity1) / (0.02);
-        double secondAcceleration = (m_motor2Encoder.getVelocity() - last_velocity2) / (0.02);
-        last_velocity1 = m_motor1Encoder.getVelocity();
-        last_velocity2 = m_motor2Encoder.getVelocity();
+        Rotation2d theta1 = Rotation2d.fromRadians(m_AbsoluteEncoder1.getDistance());
+        Rotation2d theta2 = Rotation2d.fromRadians(m_AbsoluteEncoder2.getDistance());
+        double omega1 = m_AbsoluteEncoder1.getRate(), omega2 = m_AbsoluteEncoder2.getRate();
+        double firstAlpha = (omega1 - last_velocity1) / 0.02, secondAlpha = (omega2 - last_velocity2) / 0.02;
+        last_velocity1 = omega1;
+        last_velocity2 = omega2;
 
-        return new ArmState(theta1, theta2, omega1, omega2, firstAcceleration, secondAcceleration);
+        return new ArmState(theta1, theta2, omega1, omega2, firstAlpha, secondAlpha);
     }
 
     /**
