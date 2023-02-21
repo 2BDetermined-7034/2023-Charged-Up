@@ -24,5 +24,8 @@ public class Indexer extends SubsystemBase implements SubsystemLogging {
     public void runIndexerClockwise() {
         indexerMotor.setVoltage(-Constants.Intake.indexerSpeed);
     }
+    public void stopIndexer() {
+        indexerMotor.setVoltage(0);
+    }
 }
 

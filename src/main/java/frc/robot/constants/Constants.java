@@ -4,7 +4,6 @@
 
 package frc.robot.constants;
 
-import com.pathplanner.lib.auto.PIDConstants;
 import com.revrobotics.CANSparkMax;
 import edu.wpi.first.math.MatBuilder;
 import edu.wpi.first.math.Matrix;
@@ -22,8 +21,8 @@ public final class Constants {
     }
 
     public static class GravityClaw {
-        public static final int forwardChannel = 0;
-        public static final int reverseChannel = 1;
+        public static final int grabberFC = 0;
+        public static final int grabberRC = 1;
     }
 
     public static class Drivebase {
@@ -50,21 +49,17 @@ public final class Constants {
             public static final int frEncoder = 2;
             public static final Rotation2d frOffset = Rotation2d.fromDegrees(68.7 - 2); // TODO change frOffset
 
-            // Practice robot settings:
-
-            public static final int blDrive = 5;
-            public static final int blSteer = 14;
+            // done
+            public static final int blDrive = 22;
+            public static final int blSteer = 17;
             public static final int blEncoder = 4;
-            // public static final Rotation2d blOffset = Rotation2d.fromDegrees(217.3 - 0);
+            public static final Rotation2d blOffset = Rotation2d.fromDegrees(160.83 - 1); // TODO change bl offset
 
-            // TODO change blOffset
-            public static final Rotation2d blOffset = Rotation2d.fromDegrees(160.83 - 1);
-
-            public static final int brDrive = 2;
-            public static final int brSteer = 6;
+            // done
+            public static final int brDrive = 10;
+            public static final int brSteer = 8;
             public static final int brEncoder = 3;
-            //            public static final Rotation2d brOffset = Rotation2d.fromDegrees(155.4 + 0);
-            public static final Rotation2d brOffset = Rotation2d.fromDegrees(266.5 + 0);
+            public static final Rotation2d brOffset = Rotation2d.fromDegrees(266.5 + 0); // TODO change br offset
         }
 
         public static class MotorConfig {
@@ -89,12 +84,14 @@ public final class Constants {
 
 
     public static class Intake {
-        public static final int intakeMotor1 = 10;
-        public static final int intakeMotor2 = 11;
+        public static final int intakeMotorLeft = 11;
+        public static final int intakeMotorRight = 0;
         public static final int indexerMotor = 12;
 
         public static final double indexerSpeed = 6.0;
         public static final double intakeSpeed = 6.0;
+        public static final int intakeFC = 2;
+        public static final int intakeRC = 3;
     }
 
     public static class Vision {
@@ -105,7 +102,11 @@ public final class Constants {
     }
 
     public static class ArmConstants {
-
+        public static class ArmSetPoints {
+            public static double[] tuck = {0, 0};
+            public static double[] mid = {0, 0};
+            public static double[] high = {0, 0};
+        }
         public static final int motor1ID = 15;
         public static final int motor2ID = 9;
 

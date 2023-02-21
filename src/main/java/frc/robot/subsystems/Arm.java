@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.subsystems.Arm;
+package frc.robot.subsystems;
 
 import com.revrobotics.*;
 import edu.wpi.first.math.MathUtil;
@@ -42,6 +42,9 @@ public class Arm extends SubsystemBase implements SubsystemLogging {
         controller2 = new ProfiledPIDController(10, 0, 0, new TrapezoidProfile.Constraints(4, 8));
         controller1 = new ProfiledPIDController(4, 0, 0, new TrapezoidProfile.Constraints(2.5, 3));
 
+        controller1.setTolerance(Math.toRadians(2));
+        controller2.setTolerance(Math.toRadians(2));
+
         armFeedForward2 = new ArmFeedforward(0.01, kG1, kV1, kA1);
         armFeedForward1 = new ArmFeedforward(0.0, kG2, kV2, kA2);
 
@@ -59,7 +62,7 @@ public class Arm extends SubsystemBase implements SubsystemLogging {
         m_motor2Encoder.setVelocityConversionFactor(S2 / 60);
 
         m_motor1Encoder.setPosition(Units.degreesToRadians(90));
-        m_motor2Encoder.setPosition(Units.degreesToRadians(270));
+        m_motor2Encoder.setPosition(Units.degreesToRadians(320));
 
         //DIO encoders
         m_AbsoluteEncoder1 = new Encoder(EncoderChannelA1,EncoderChannelB1, false, CounterBase.EncodingType.k2X);
@@ -178,24 +181,35 @@ public class Arm extends SubsystemBase implements SubsystemLogging {
      * @return Arm State
      */
     public ArmState getCurrentState() {
-//        Rotation2d theta1 = Rotation2d.fromRadians(m_motor1Encoder.getPosition());
-//        Rotation2d theta2 = Rotation2d.fromRadians(m_motor2Encoder.getPosition());
-//
-//        double omega1 = m_motor1Encoder.getVelocity();
-//        double omega2 = m_motor2Encoder.getVelocity();
-//        double firstAcceleration = (m_motor1Encoder.getVelocity() - last_velocity1) / (0.02);
-//        double secondAcceleration = (m_motor2Encoder.getVelocity() - last_velocity2) / (0.02);
-//        last_velocity1 = m_motor1Encoder.getVelocity();
-//        last_velocity2 = m_motor2Encoder.getVelocity();
+        Rotation2d theta1 = Rotation2d.fromRadians(m_motor1Encoder.getPosition());
+        Rotation2d theta2 = Rotation2d.fromRadians(m_motor2Encoder.getPosition());
 
-        Rotation2d theta1 = Rotation2d.fromRadians(m_AbsoluteEncoder1.getDistance());
-        Rotation2d theta2 = Rotation2d.fromRadians(m_AbsoluteEncoder2.getDistance());
-        double omega1 = m_AbsoluteEncoder1.getRate(), omega2 = m_AbsoluteEncoder2.getRate();
-        double firstAlpha = (omega1 - last_velocity1) / 0.02, secondAlpha = (omega2 - last_velocity2) / 0.02;
-        last_velocity1 = omega1;
-        last_velocity2 = omega2;
+        double omega1 = m_motor1Encoder.getVelocity();
+        double omega2 = m_motor2Encoder.getVelocity();
+        double firstAlpha = (m_motor1Encoder.getVelocity() - last_velocity1) / (0.02);
+        double secondAlpha = (m_motor2Encoder.getVelocity() - last_velocity2) / (0.02);
+        last_velocity1 = m_motor1Encoder.getVelocity();
+        last_velocity2 = m_motor2Encoder.getVelocity();
+//
+//        Rotation2d theta1 = Rotation2d.fromRadians(m_AbsoluteEncoder1.getDistance());
+//        Rotation2d theta2 = Rotation2d.fromRadians(m_AbsoluteEncoder2.getDistance());
+//        double omega1 = m_AbsoluteEncoder1.getRate(), omega2 = m_AbsoluteEncoder2.getRate();
+//        double firstAlpha = (omega1 - last_velocity1) / 0.02, secondAlpha = (omega2 - last_velocity2) / 0.02;
+//        last_velocity1 = omega1;
+//        last_velocity2 = omega2;
 
         return new ArmState(theta1, theta2, omega1, omega2, firstAlpha, secondAlpha);
+    }
+
+    /**
+     * Checks wheather the arm is at the home position
+     * @return boolean isArmAtHomeOrAwayOnALongJourneyToFindItself'sLifePurposeAndFulfullItsDestinyOfWorkingAtObama'sFriedChicken
+     */
+    public boolean isArmHome() {
+        return Math.abs(getCurrentState().getTheta1() - Math.toRadians(90)) < Math.toRadians(4) && Math.abs(getCurrentState().getTheta2() - Math.toRadians(320)) < Math.toRadians(4);
+    }
+    public boolean isArmAtSetpoint() {
+        return controller1.atGoal() && controller2.atGoal();
     }
 
     /**
