@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
 
-public class Intake extends SubsystemBase {
+public class Intake extends SubsystemBase implements SubsystemLogging {
 
     public CANSparkMax motor1;
     public CANSparkMax motor2;
@@ -53,7 +53,8 @@ public class Intake extends SubsystemBase {
     }
 
     public void runIntake(double forward, double reverse) {
-        motorControllerGroup.setVoltage(forward > reverse && (forward > .05 || reverse  > .05) ? forward  * 6 : reverse  * 3);
+        motorControllerGroup.setVoltage(forward > reverse ? forward  * 6 : reverse  * 3);
+        //motorControllerGroup.setVoltage(forward);
     }
 
     /**
@@ -86,6 +87,15 @@ public class Intake extends SubsystemBase {
         return solenoid;
     }
 
+    @Override
+    public void updateLogging() {
+        log("Solenoid State", solenoid.get().equals(DoubleSolenoid.Value.kForward));
+    }
+
+    @Override
+    public void periodic() {
+        updateLogging();
+    }
 
 }
 

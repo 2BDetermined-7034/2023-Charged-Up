@@ -21,8 +21,8 @@ public final class Constants {
     }
 
     public static class GravityClaw {
-        public static final int grabberFC = 0;
-        public static final int grabberRC = 1;
+        public static final int grabberFC = 10;
+        public static final int grabberRC = 11;
     }
 
     public static class Drivebase {
@@ -30,36 +30,35 @@ public final class Constants {
             public static final double width = Units.inchesToMeters(32);
             public static final double length = Units.inchesToMeters(32);
             public static final double driveRatio = COTSSwerveConstants.driveGearRatios.SDSMK4i_L2;
-
         }
 
         public static class MotorIDs {
 
             // practice robot settings:
-            public static final int flDrive = 3;
-            public static final int flSteer = 1;
-            public static final int flEncoder = 1;
-            public static final Rotation2d flOffset = Rotation2d.fromDegrees(263.1 + 0); // TODO change flOffset
+            public static final int flDrive = 13;
+            public static final int flSteer = 14;
+            public static final int flEncoder = 3; // Done
+            public static final Rotation2d flOffset = Rotation2d.fromDegrees(-117.59); // TODO change flOffset
 
 
             // Practice robot settings (done):
-            public static final int frDrive = 3;
+            public static final int frDrive = 4;
 
-            public static final int frSteer = 4;
-            public static final int frEncoder = 2;
-            public static final Rotation2d frOffset = Rotation2d.fromDegrees(68.7 - 2); // TODO change frOffset
-
-            // done
-            public static final int blDrive = 22;
-            public static final int blSteer = 17;
-            public static final int blEncoder = 4;
-            public static final Rotation2d blOffset = Rotation2d.fromDegrees(160.83 - 1); // TODO change bl offset
+            public static final int frSteer = 3;
+            public static final int frEncoder = 4;
+            public static final Rotation2d frOffset = Rotation2d.fromDegrees(-54.9); // TODO change frOffset
 
             // done
-            public static final int brDrive = 10;
-            public static final int brSteer = 8;
-            public static final int brEncoder = 3;
-            public static final Rotation2d brOffset = Rotation2d.fromDegrees(266.5 + 0); // TODO change br offset
+            public static final int blDrive = 8;
+            public static final int blSteer = 7;
+            public static final int blEncoder = 2;
+            public static final Rotation2d blOffset = Rotation2d.fromDegrees(71.19); // TODO change bl offset
+
+            // done
+            public static final int brDrive = 6;
+            public static final int brSteer = 5;
+            public static final int brEncoder = 1;
+            public static final Rotation2d brOffset = Rotation2d.fromDegrees(-9.3); // TODO change br offset
         }
 
         public static class MotorConfig {
@@ -84,18 +83,19 @@ public final class Constants {
 
 
     public static class Intake {
-        public static final int intakeMotorLeft = 11;
-        public static final int intakeMotorRight = 0;
-        public static final int indexerMotor = 12;
+        public static final int intakeMotorLeft = 12;
+        public static final int intakeMotorRight = 1;
+        public static final int indexerMotorLeft = 11;
+        public static final int indexerMotorRight = 2;
+
 
         public static final double indexerSpeed = 6.0;
         public static final double intakeSpeed = 6.0;
-        public static final int intakeFC = 2;
-        public static final int intakeRC = 3;
+        public static final int intakeFC = 8;
+        public static final int intakeRC = 9;
     }
 
     public static class Vision {
-        public static final Transform2d camToRobot = new Transform2d(); //Irrelevent
         public static final double goalHeighInches = 30;
         public static final double limeligtLensHeighInches = 20;
         public static final double limeLightMountAngleDegrees = 0;
@@ -107,7 +107,7 @@ public final class Constants {
             public static double[] mid = {0, 0};
             public static double[] high = {0, 0};
         }
-        public static final int motor1ID = 15;
+        public static final int motor1ID = 10;
         public static final int motor2ID = 9;
 
         public static final int EncoderChannelA1 = 0;
@@ -142,7 +142,7 @@ public final class Constants {
         public static final int N2 = 1;
 
         //ArmFeedForward Gains
-        public static final double kG1 = 0.10d, kV1 = 3.46, kA1 = 0.01d;
+        public static final double kG1 = 0.09d, kV1 = 3.46, kA1 = 0.01d;
         public static final double kG2 = 0.04, kV2 = 2.60, kA2 = .01;
 
         //Gravity

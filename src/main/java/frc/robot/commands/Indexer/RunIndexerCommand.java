@@ -31,6 +31,6 @@ public class RunIndexerCommand extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-
+        m_indexer.stopIndexer();
     }
 }
