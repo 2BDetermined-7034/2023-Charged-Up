@@ -20,19 +20,18 @@ public class Indexer extends SubsystemBase implements SubsystemLogging {
         //       such as SpeedControllers, Encoders, DigitalInputs, etc.
         indexerMotorLeft = new CANSparkMax(Constants.Intake.indexerMotorLeft, CANSparkMaxLowLevel.MotorType.kBrushless);
         indexerMotorRight = new CANSparkMax(Constants.Intake.indexerMotorRight, CANSparkMaxLowLevel.MotorType.kBrushless);
-        indexerMotorRight.setInverted(false);
-        indexerMotorLeft.setInverted(true);
+        indexerMotorRight.setInverted(true);
+        indexerMotorLeft.setInverted(false);
+
+        indexerMotorLeft.setIdleMode(CANSparkMax.IdleMode.kBrake);
+        indexerMotorRight.setIdleMode(CANSparkMax.IdleMode.kBrake);
 
         indexerMotors = new MotorControllerGroup(indexerMotorLeft, indexerMotorRight);
 
     }
 
-    public void runIndexerCounterclockwise() {
-        indexerMotors.setVoltage(Constants.Intake.indexerSpeed);
-    }
-
-    public void runIndexerClockwise() {
-        indexerMotors.setVoltage(-Constants.Intake.indexerSpeed);
+    public void runIndexer(double speed) {
+        indexerMotors.set(speed);
     }
     public void stopIndexer() {
         indexerMotors.setVoltage(0);

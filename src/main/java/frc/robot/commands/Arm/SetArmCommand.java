@@ -10,17 +10,15 @@ import frc.robot.subsystems.Intake;
 import frc.robot.util.ArmState;
 
 public class SetArmCommand extends CommandBase {
-    private final double theta1;
-    private final double theta2;
+    private final ArmState goalState;
     private final Arm arm;
     private final Intake intake;
 
     /**
      * Creates a new ArmCommand.
      */
-    public SetArmCommand(Arm arm, Intake intake, double theta1, double theta2) {
-        this.theta1 = theta1;
-        this.theta2 = theta2;
+    public SetArmCommand(Arm arm, Intake intake, ArmState goalState) {
+        this.goalState = goalState;
         this.arm = arm;
         this.intake = intake;
 
@@ -31,22 +29,22 @@ public class SetArmCommand extends CommandBase {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        ArmState goalState = new ArmState(theta1, theta2);
 
         arm.setGoalState(goalState);
-        intake.setSolenoid(true);
+        intake.setSolenoid(false);
     }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
+        if (arm.isArmAtSetpoint()){
+            intake.setSolenoid(false);
+        }
     }
 
     // Called once the command ends or is interrupted.
     @Override
-    public void end(boolean interrupted) {
-        intake.setSolenoid(false);
-    }
+    public void end(boolean interrupted) {}
 
     // Returns true when the command should end.
     @Override

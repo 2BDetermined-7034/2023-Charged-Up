@@ -28,11 +28,17 @@ public class Intake extends SubsystemBase implements SubsystemLogging {
     public Intake() {
         motor1 = new CANSparkMax(Constants.Intake.intakeMotorLeft, CANSparkMaxLowLevel.MotorType.kBrushless);
         motor2 = new CANSparkMax(Constants.Intake.intakeMotorRight, CANSparkMaxLowLevel.MotorType.kBrushless);
+        motor2.setInverted(true);
+        motor1.setInverted(false);
+
+        motor1.setIdleMode(CANSparkMax.IdleMode.kBrake);
+        motor2.setIdleMode(CANSparkMax.IdleMode.kBrake);
+
         m_Encoder1 = motor1.getEncoder();
         m_Encoder2 = motor2.getEncoder();
-        double s1 = 2 * Math.PI * (1d/1); //Replace denominator iwth gear ratio
-        double s2 = 2 * Math.PI * (1d/1); //Replace denominator iwth gear ratio
-        m_Encoder1.setPositionConversionFactor(s1/*TODO replace with Gear Ratio*/);
+        double s1 = 2 * Math.PI * (1d/4); //Replace denominator iwth gear ratio
+        double s2 = 2 * Math.PI * (1d/4); //Replace denominator iwth gear ratio
+        m_Encoder1.setPositionConversionFactor(s1);
         m_Encoder2.setPositionConversionFactor(s2);
         m_Encoder1.setPosition(0);
         m_Encoder2.setPosition(0);
@@ -52,14 +58,14 @@ public class Intake extends SubsystemBase implements SubsystemLogging {
         motorControllerGroup.setVoltage(-Constants.Intake.intakeSpeed);
     }
 
-    public void runIntake(double forward, double reverse) {
-        motorControllerGroup.setVoltage(forward > reverse ? forward  * 6 : reverse  * 3);
+    public void runIntake(double forward) {
+        motorControllerGroup.set(forward);
         //motorControllerGroup.setVoltage(forward);
     }
 
     /**
      *
-     * @param position true: forward, false: reverse
+     * @param position false: down, true: up
      */
     public void setSolenoid(boolean position) {
         if(position) {

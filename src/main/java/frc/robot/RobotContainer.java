@@ -11,14 +11,18 @@ import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.Arm.ArmOverride;
+import frc.robot.commands.Arm.ArmPathFactory;
 import frc.robot.commands.Arm.SetArmCommand;
 import frc.robot.commands.Auto.AutoFactory;
 import frc.robot.commands.Drive.AutoBalance;
 import frc.robot.commands.Drive.DefaultDriveCommand;
 import frc.robot.commands.Intake.RunIntakeCommand;
+import frc.robot.commands.clob.GravityClawCommand;
 import frc.robot.commands.clob.GravityClawToggleCommand;
+import frc.robot.constants.Constants;
 import frc.robot.constants.Constants.OperatorConstants;
 import frc.robot.subsystems.*;
+import frc.robot.util.ArmState;
 
 
 public class RobotContainer {
@@ -36,6 +40,9 @@ public class RobotContainer {
 
     public RobotContainer() {
         m_driverController.share().whileTrue(m_swerveDrive.runOnce(m_swerveDrive::zeroGyroscope));
+
+
+        m_Arm.setGoalState(m_Arm.getCurrentState());
         m_swerveDrive.setDefaultCommand(new DefaultDriveCommand(
                 m_swerveDrive,
                 () -> -square(modifyAxis(m_driverController.getLeftY()) * m_swerveDrive.getMaxSpeed()),
@@ -71,10 +78,7 @@ public class RobotContainer {
     }
 
     private void configureBindings() {
-        m_driverController.R1().whileTrue(new ArmOverride(m_Arm, m_driverController::getLeftX, m_driverController::getRightY, m_driverController::getR2Axis));
-
-
-        m_driverController.triangle().onTrue(new GravityClawToggleCommand(gravityClawSubsystem));
+        m_driverController.triangle().toggleOnTrue(new GravityClawCommand(gravityClawSubsystem, true));
 
         m_driverController.square().whileTrue(new AutoBalance(m_swerveDrive));
         m_driverController.cross().whileTrue(m_swerveDrive.runOnce(m_swerveDrive::zeroGyroscope));
@@ -82,15 +86,17 @@ public class RobotContainer {
         new Trigger(() -> m_driverController.getR2Axis() > 0.5).whileTrue(new RunIntakeCommand(
                 intake,
                 m_indexer,
-                () -> modifyAxis(m_driverController.getR2Axis()),
-                () -> -modifyAxis(m_driverController.getL2Axis())
+                () -> m_visionLocker.getPieceType().equals(VisionLocking.PieceType.CONES) ? 0.8 : 0.2,
+                () -> 0.6,
+                true
         ));
 
         new Trigger(() -> m_driverController.getL2Axis() > 0.5).whileTrue(new RunIntakeCommand(
                 intake,
                 m_indexer,
-                () -> modifyAxis(m_driverController.getR2Axis()),
-                () -> -modifyAxis(m_driverController.getL2Axis())
+                () -> 0,
+                () -> -0.3,
+                false
         ));
 
 
@@ -104,14 +110,15 @@ public class RobotContainer {
        new Trigger(m_operatorController::getRightBumper).whileTrue(m_visionLocker.runOnce(m_visionLocker::gridRight));
 
        new Trigger(m_operatorController::getBackButton).onTrue(new GravityClawToggleCommand(gravityClawSubsystem));
-       new Trigger((() -> m_operatorController.getRightTriggerAxis() > 0.05)).onTrue(
-                new ArmOverride(m_Arm, m_operatorController::getLeftX, m_operatorController::getRightY, () -> 1));
 
-//        new Trigger(m_operatorController::getYButton).onTrue(new SetArmCommand(m_Arm, intake, Units.degreesToRadians(90), Units.degreesToRadians(90))); // high
-//        new Trigger(m_operatorController::getXButton).onTrue(new SetArmCommand(m_Arm, intake, Units.degreesToRadians(90), Units.degreesToRadians(309))); // med
-//        new Trigger(m_operatorController::getBButton).onTrue(new SetArmCommand(m_Arm, intake, Units.degreesToRadians(130), Units.degreesToRadians(45))); // low
+        new Trigger(m_operatorController::getAButton).onTrue(new SetArmCommand(m_Arm, intake, Constants.ArmConstants.ArmSetPoints.tuck)); // high// med
+        new Trigger(m_operatorController::getBButton).onTrue(ArmPathFactory.getScoreMidPath(m_Arm, intake)); // low
+        new Trigger(m_operatorController::getYButton).onTrue(ArmPathFactory.getScoreHighPath(m_Arm, intake)); // low
 //
-        new Trigger(m_operatorController::getBButton).onTrue(m_visionLocker.runOnce(m_visionLocker::togglePiece));
+        new Trigger(m_operatorController::getXButton).onTrue(m_visionLocker.runOnce(m_visionLocker::togglePiece));
+
+        new Trigger((() -> Math.abs(m_operatorController.getRightTriggerAxis()) > 0.05)).onTrue(
+                new ArmOverride(m_Arm, m_operatorController::getLeftX, m_operatorController::getRightY, m_operatorController::getRightTriggerAxis));
     }
 
     public Command getAutonomousCommand() {

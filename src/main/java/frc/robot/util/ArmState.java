@@ -30,6 +30,10 @@ public class ArmState {
         this(theta1, theta2, omega1, omega2, 0, 0);
     }
 
+    public ArmState(Rotation2d theta1, Rotation2d theta2) {
+        this(theta1, theta2, 0, 0);
+    }
+
     public ArmState(double theta1, double theta2) {this(Rotation2d.fromRadians(theta1), Rotation2d.fromRadians(theta2), 0, 0);}
 
     public ArmState(double theta1, double theta2, double omega1, double omega2, double alpha1, double alpha2) {
@@ -40,6 +44,11 @@ public class ArmState {
         this(mat.get(0,0), mat.get(1,0), mat.get(2,0), mat.get(3,0), 0, 0);
 
     }
+
+    public ArmState(double degreesToRadians, double degreesToRadians1, double omega1, double omega2) {
+        this(degreesToRadians, degreesToRadians1, omega1, omega2, 0, 0);
+    }
+
     /**
      * Checks if an inverse-kinematics solution exists for the given point in space
      * @param x position in space of end effector
@@ -92,5 +101,7 @@ public class ArmState {
         return this;
 
     }
+
+
 
 }

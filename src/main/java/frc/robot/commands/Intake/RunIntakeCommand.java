@@ -9,15 +9,19 @@ import java.util.function.DoubleSupplier;
 
 public class RunIntakeCommand extends CommandBase {
     private final Intake m_intake;
-    private final DoubleSupplier forwardSpeed;
-    private final DoubleSupplier reverseSpeed;
-    private final Indexer index;
+    private final DoubleSupplier intakeSpeed;
+    private final DoubleSupplier indexerSpeed;
 
-    public RunIntakeCommand(Intake intake, Indexer index,  DoubleSupplier forwardSpeed, DoubleSupplier reverseSpeed) {
+    private final Indexer index;
+    private final boolean fireSolenoid;
+
+    public RunIntakeCommand(Intake intake, Indexer index,  DoubleSupplier intakeSpeed, DoubleSupplier indexerSpeed, boolean fireSoelenoid) {
         m_intake = intake;
         this.index = index;
-        this.forwardSpeed = forwardSpeed;
-        this.reverseSpeed = reverseSpeed;
+        this.intakeSpeed = intakeSpeed;
+        this.indexerSpeed = indexerSpeed;
+        this.fireSolenoid = fireSoelenoid;
+
         // each subsystem used by the command must be passed into the
         // addRequirements() method (which takes a vararg of Subsystem)
         addRequirements(intake);
@@ -26,19 +30,15 @@ public class RunIntakeCommand extends CommandBase {
 
     @Override
     public void initialize() {
-        m_intake.setSolenoid(true);
-
+        if(fireSolenoid) {
+            m_intake.setSolenoid(false);
+        }
     }
 
     @Override
     public void execute() {
-//        if(setCoterminal) {
-//            m_intake.setCoterminal();
-//        } else {
-//            m_intake.runIntakeForward();
-//        }
-        index.runIndexerClockwise();
-        m_intake.runIntake(forwardSpeed.getAsDouble(), reverseSpeed.getAsDouble());
+        m_intake.runIntake(intakeSpeed.getAsDouble());
+        index.runIndexer(indexerSpeed.getAsDouble());
     }
 
     @Override
@@ -49,10 +49,9 @@ public class RunIntakeCommand extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-        m_intake.runIntake(0,0);
+        m_intake.runIntake(0);
         index.stopIndexer();
 
-       // m_intake.setCoterminal();
         m_intake.setSolenoid(false);
     }
 }

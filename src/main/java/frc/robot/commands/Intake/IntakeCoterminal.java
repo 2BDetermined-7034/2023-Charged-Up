@@ -1,17 +1,17 @@
-package frc.robot.commands.clob;
+package frc.robot.commands.Intake;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.GravityClawSubsystem;
+import frc.robot.subsystems.Intake;
 
 
-public class GravityClawToggleCommand extends CommandBase {
-    private final GravityClawSubsystem gravityClawSubsystem;
+public class IntakeCoterminal extends CommandBase {
 
-    public GravityClawToggleCommand(GravityClawSubsystem gravityClawSubsystem) {
-        this.gravityClawSubsystem = gravityClawSubsystem;
+    Intake m_intake;
+    public IntakeCoterminal(Intake m_intake) {
         // each subsystem used by the command must be passed into the
         // addRequirements() method (which takes a vararg of Subsystem)
-        addRequirements(this.gravityClawSubsystem);
+        this.m_intake = m_intake;
+        addRequirements(m_intake);
     }
 
     @Override
@@ -21,13 +21,13 @@ public class GravityClawToggleCommand extends CommandBase {
 
     @Override
     public void execute() {
-        gravityClawSubsystem.ToggleSolonoid();
+        m_intake.setCoterminal();
     }
 
     @Override
     public boolean isFinished() {
         // TODO: Make this return true when this Command no longer needs to run execute()
-        return true;
+        return false;
     }
 
     @Override

@@ -12,6 +12,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.numbers.N2;
 import edu.wpi.first.math.util.Units;
+import frc.robot.util.ArmState;
 
 public final class Constants {
     public static class OperatorConstants {
@@ -88,8 +89,7 @@ public final class Constants {
         public static final int indexerMotorLeft = 11;
         public static final int indexerMotorRight = 2;
 
-
-        public static final double indexerSpeed = 6.0;
+        public static final double indexerSpeed = 0.2;
         public static final double intakeSpeed = 6.0;
         public static final int intakeFC = 8;
         public static final int intakeRC = 9;
@@ -103,10 +103,15 @@ public final class Constants {
 
     public static class ArmConstants {
         public static class ArmSetPoints {
-            public static double[] tuck = {0, 0};
-            public static double[] mid = {0, 0};
-            public static double[] high = {0, 0};
+            public static ArmState intake = new ArmState(Units.degreesToRadians(111), Units.degreesToRadians(263));
+            public static ArmState tuck = new ArmState(Units.degreesToRadians(74), Units.degreesToRadians(223));
+            public static ArmState mid = new ArmState(Units.degreesToRadians(95), Units.degreesToRadians(22));
+            public static ArmState high = new ArmState(Units.degreesToRadians(50), Units.degreesToRadians(50));
+
         }
+
+        public static final double kMaxArmOverrideSpeedShoulder = 1.5;
+        public static final double kMaxArmOverrideSpeedDistal = 2;
         public static final int motor1ID = 10;
         public static final int motor2ID = 9;
 
@@ -142,8 +147,8 @@ public final class Constants {
         public static final int N2 = 1;
 
         //ArmFeedForward Gains
-        public static final double kG1 = 0.09d, kV1 = 3.46, kA1 = 0.01d;
-        public static final double kG2 = 0.04, kV2 = 2.60, kA2 = .01;
+        public static final double kG1 = 0.11d, kV1 = 3.46, kA1 = 0.01d;
+        public static final double kG2 = 0.07, kV2 = 2.60, kA2 = .01;
 
         //Gravity
         public static final double g = 9.81;
