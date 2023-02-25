@@ -4,23 +4,28 @@
 
 package frc.robot.commands.Arm;
 
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Intake;
 import frc.robot.util.ArmState;
 
+import java.util.function.BooleanSupplier;
+
 public class SetArmCommand extends CommandBase {
     private final ArmState goalState;
     private final Arm arm;
     private final Intake intake;
+    private final boolean toggleIntakeOnEnd;
 
     /**
      * Creates a new ArmCommand.
      */
-    public SetArmCommand(Arm arm, Intake intake, ArmState goalState) {
+    public SetArmCommand(Arm arm, Intake intake, ArmState goalState, boolean toggleIntakeOnEnd) {
         this.goalState = goalState;
         this.arm = arm;
         this.intake = intake;
+        this.toggleIntakeOnEnd = toggleIntakeOnEnd;
 
         // Use addRequirements() here to declare subsystem dependencies.
         addRequirements(arm);
@@ -36,15 +41,13 @@ public class SetArmCommand extends CommandBase {
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
-    public void execute() {
-        if (arm.isArmAtSetpoint()){
-            intake.setSolenoid(false);
-        }
-    }
+    public void execute() {}
 
     // Called once the command ends or is interrupted.
     @Override
-    public void end(boolean interrupted) {}
+    public void end(boolean interrupted) {
+        if(toggleIntakeOnEnd) intake.toggleSolenoid();
+    }
 
     // Returns true when the command should end.
     @Override

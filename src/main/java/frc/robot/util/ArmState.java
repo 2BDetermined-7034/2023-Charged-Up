@@ -49,6 +49,10 @@ public class ArmState {
         this(degreesToRadians, degreesToRadians1, omega1, omega2, 0, 0);
     }
 
+    public ArmState() {
+
+    }
+
     /**
      * Checks if an inverse-kinematics solution exists for the given point in space
      * @param x position in space of end effector

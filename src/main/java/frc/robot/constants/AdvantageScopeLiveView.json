@@ -60,22 +60,22 @@
           },
           "fields": [
             {
-              "key": "/AdvantageKit/RealOutputs/Arm.Arm theta1/0",
+              "key": "/AdvantageKit/RealOutputs/Arm theta1/0",
               "color": "#e5b31b",
               "show": true
             },
             {
-              "key": "/AdvantageKit/RealOutputs/Arm.Arm theta2/0",
+              "key": "/AdvantageKit/RealOutputs/Arm theta2/0",
               "color": "#2b66a2",
               "show": true
             },
             {
-              "key": "/AdvantageKit/RealOutputs/Arm.Arm omega1/0",
+              "key": "/AdvantageKit/RealOutputs/Arm Target Theta1/0",
               "color": "#af2437",
               "show": true
             },
             {
-              "key": "/AdvantageKit/RealOutputs/Arm.Arm omega2/0",
+              "key": "/AdvantageKit/RealOutputs/Arm Target Theta2/0",
               "color": "#80588e",
               "show": true
             }

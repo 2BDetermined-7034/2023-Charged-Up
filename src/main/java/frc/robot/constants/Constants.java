@@ -9,7 +9,6 @@ import edu.wpi.first.math.MatBuilder;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.numbers.N2;
 import edu.wpi.first.math.util.Units;
 import frc.robot.util.ArmState;
@@ -102,9 +101,10 @@ public final class Constants {
     }
 
     public static class ArmConstants {
-        public static class ArmSetPoints {
-            public static ArmState intake = new ArmState(Units.degreesToRadians(111), Units.degreesToRadians(263));
-            public static ArmState tuck = new ArmState(Units.degreesToRadians(74), Units.degreesToRadians(223));
+        public static class ArmSetPoints { ;
+            public static ArmState preIntake = new ArmState(Units.degreesToRadians(99), Units.degreesToRadians(251), 0, 0.2);
+            public static ArmState intake = new ArmState(Units.degreesToRadians(112), Units.degreesToRadians(264));
+            public static ArmState tuck = new ArmState(Units.degreesToRadians(80), Units.degreesToRadians(220));
             public static ArmState mid = new ArmState(Units.degreesToRadians(95), Units.degreesToRadians(22));
             public static ArmState high = new ArmState(Units.degreesToRadians(50), Units.degreesToRadians(50));
 

@@ -121,7 +121,7 @@ public class SwerveDrive extends SubsystemBase implements SubsystemLogging {
     }
 
     public static Rotation2d getGyroscopeRotation() {
-        return Rotation2d.fromDegrees(360 - m_navx.getYaw());
+        return Rotation2d.fromDegrees(-m_navx.getYaw());
     }
 
     public void addVisionMeasurement(Pose2d m_observed, double time) {

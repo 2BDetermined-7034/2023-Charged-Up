@@ -1,6 +1,7 @@
 package frc.robot.commands.Intake;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.constants.Constants;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
 
@@ -52,6 +53,6 @@ public class RunIntakeCommand extends CommandBase {
         m_intake.runIntake(0);
         index.stopIndexer();
 
-        m_intake.setSolenoid(false);
+        m_intake.setSolenoid(true);
     }
 }

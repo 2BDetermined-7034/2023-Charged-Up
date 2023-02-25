@@ -4,7 +4,6 @@
 
 package frc.robot;
 
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
@@ -12,17 +11,15 @@ import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.Arm.ArmOverride;
 import frc.robot.commands.Arm.ArmPathFactory;
-import frc.robot.commands.Arm.SetArmCommand;
 import frc.robot.commands.Auto.AutoFactory;
 import frc.robot.commands.Drive.AutoBalance;
 import frc.robot.commands.Drive.DefaultDriveCommand;
+import frc.robot.commands.Drive.HeadingDriveCommand;
 import frc.robot.commands.Intake.RunIntakeCommand;
 import frc.robot.commands.clob.GravityClawCommand;
 import frc.robot.commands.clob.GravityClawToggleCommand;
-import frc.robot.constants.Constants;
 import frc.robot.constants.Constants.OperatorConstants;
 import frc.robot.subsystems.*;
-import frc.robot.util.ArmState;
 
 
 public class RobotContainer {
@@ -39,10 +36,9 @@ public class RobotContainer {
 
 
     public RobotContainer() {
-        m_driverController.share().whileTrue(m_swerveDrive.runOnce(m_swerveDrive::zeroGyroscope));
-
-
         m_Arm.setGoalState(m_Arm.getCurrentState());
+
+        m_driverController.share().whileTrue(m_swerveDrive.runOnce(m_swerveDrive::zeroGyroscope));
         m_swerveDrive.setDefaultCommand(new DefaultDriveCommand(
                 m_swerveDrive,
                 () -> -square(modifyAxis(m_driverController.getLeftY()) * m_swerveDrive.getMaxSpeed()),
@@ -78,10 +74,21 @@ public class RobotContainer {
     }
 
     private void configureBindings() {
-        m_driverController.triangle().toggleOnTrue(new GravityClawCommand(gravityClawSubsystem, true));
+        m_driverController.triangle().onTrue(new HeadingDriveCommand(
+                m_swerveDrive,
+                0,
+                () -> -square(modifyAxis(m_driverController.getLeftY()) * m_swerveDrive.getMaxSpeed()),
+                () -> -square(modifyAxis(m_driverController.getLeftX()) * m_swerveDrive.getMaxSpeed()),
+                () -> -square(modifyAxis(m_driverController.getRightX()) * m_swerveDrive.getMaxSpeed()))
+        );
 
-        m_driverController.square().whileTrue(new AutoBalance(m_swerveDrive));
-        m_driverController.cross().whileTrue(m_swerveDrive.runOnce(m_swerveDrive::zeroGyroscope));
+        m_driverController.cross().onTrue(new HeadingDriveCommand(
+                m_swerveDrive,
+                180,
+                () -> -square(modifyAxis(m_driverController.getLeftY()) * m_swerveDrive.getMaxSpeed()),
+                () -> -square(modifyAxis(m_driverController.getLeftX()) * m_swerveDrive.getMaxSpeed()),
+                () -> -square(modifyAxis(m_driverController.getRightX()) * m_swerveDrive.getMaxSpeed()))
+        );
 
         new Trigger(() -> m_driverController.getR2Axis() > 0.5).whileTrue(new RunIntakeCommand(
                 intake,
@@ -95,10 +102,19 @@ public class RobotContainer {
                 intake,
                 m_indexer,
                 () -> 0,
+                () -> -0.8,
+                false
+        ));
+        new Trigger(() -> m_driverController.getL2Axis() > 0.05 && m_driverController.getL2Axis() < 0.5).whileTrue(new RunIntakeCommand(
+                intake,
+                m_indexer,
+                () -> 0,
                 () -> -0.3,
                 false
         ));
 
+
+        m_driverController.L1().onTrue(m_visionLocker.runOnce(m_visionLocker::togglePiece));
 
         // Gunner controls
         new POVButton(m_operatorController, 180).whileTrue(m_visionLocker.runOnce(() -> m_visionLocker.setSide(VisionLocking.Side.LEFT)));
@@ -111,7 +127,7 @@ public class RobotContainer {
 
        new Trigger(m_operatorController::getBackButton).onTrue(new GravityClawToggleCommand(gravityClawSubsystem));
 
-        new Trigger(m_operatorController::getAButton).onTrue(new SetArmCommand(m_Arm, intake, Constants.ArmConstants.ArmSetPoints.tuck)); // high// med
+        new Trigger(m_operatorController::getAButton).onTrue(ArmPathFactory.getIntakePath(m_Arm, intake)); // high// med
         new Trigger(m_operatorController::getBButton).onTrue(ArmPathFactory.getScoreMidPath(m_Arm, intake)); // low
         new Trigger(m_operatorController::getYButton).onTrue(ArmPathFactory.getScoreHighPath(m_Arm, intake)); // low
 //
