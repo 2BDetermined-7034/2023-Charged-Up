@@ -4,26 +4,39 @@ import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.PathPoint;
-import com.pathplanner.lib.commands.PPSwerveControllerCommand;
-import edu.wpi.first.math.controller.PIDController;
+import com.pathplanner.lib.auto.PIDConstants;
+import com.pathplanner.lib.auto.SwerveAutoBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.SwerveDrive;
-
+import java.util.HashMap;
 import java.util.List;
 
 public class PathFactory {
     private final Command followTrajectoryCommand;
     SwerveDrive m_swerveDrive;
 
-    public PathFactory(SwerveDrive drive, PathPlannerTrajectory path, boolean isFirstPath) {
+    public PathFactory(SwerveDrive drive, PathPlannerTrajectory path, boolean useAlliance, boolean isFirstPath, HashMap<String, Command> eventMap) {
 
         m_swerveDrive = drive;
         m_swerveDrive.addTrajectory(path);
 
+
+        SwerveAutoBuilder autoBuilder = new SwerveAutoBuilder(
+                m_swerveDrive::getPosition, // Pose supplier
+                m_swerveDrive::setPosition,
+                m_swerveDrive.getKinematics(), // SwerveDriveKinematics
+                new PIDConstants(Constants.Drivebase.Auto.kP, 0, 0), // X controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
+                new PIDConstants(Constants.Drivebase.Auto.kP, 0, 0), // Y controller (usually the same values as X controller)
+                m_swerveDrive::setModuleStates, // Module states consumer
+                eventMap,
+                useAlliance, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true
+                m_swerveDrive // Module states consumer // The drive subsystem. Used to properly set the requirements of path following commands
+        );
+        Command fullAuto = autoBuilder.fullAuto(path);
 
         followTrajectoryCommand = new SequentialCommandGroup(
                 new InstantCommand(() -> {
@@ -32,17 +45,12 @@ public class PathFactory {
                         m_swerveDrive.setPosition(path.getInitialHolonomicPose());
                     }
                 }),
-                new PPSwerveControllerCommand(
-                        path,
-                        m_swerveDrive::getPosition, // Pose supplier
-                        m_swerveDrive.getKinematics(), // SwerveDriveKinematics
-                        new PIDController(Constants.Drivebase.Auto.kP, 0, 0), // X controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
-                        new PIDController(Constants.Drivebase.Auto.kP, 0, 0), // Y controller (usually the same values as X controller)
-                        new PIDController(Constants.Drivebase.Auto.kP, 0, 0), // Rotation controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
-                        m_swerveDrive::setModuleStates, // Module states consumer
-                        m_swerveDrive // Requires this drive subsystem
-                )
+                fullAuto
         );
+    }
+
+    public PathFactory(SwerveDrive drive, PathPlannerTrajectory path, boolean useAlliance, boolean isFirstPath){
+        this(drive, path, useAlliance, isFirstPath, new HashMap<>());
     }
 
     public static PathPlannerTrajectory pathMaker(List<PathPoint> points) {
@@ -58,12 +66,7 @@ public class PathFactory {
                 new PathConstraints(1, 1),
                 pose2dToPathpoint(startPos),
                 pose2dToPathpoint(endPos)
-
         );
-
-
-        //TrajectoryGenerator.generateTrajectory(startPos, endPos, new);
-
 
     }
 

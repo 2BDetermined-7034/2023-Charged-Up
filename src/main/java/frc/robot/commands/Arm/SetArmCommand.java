@@ -15,16 +15,14 @@ import java.util.function.BooleanSupplier;
 public class SetArmCommand extends CommandBase {
     private final ArmState goalState;
     private final Arm arm;
-    private final Intake intake;
     private final boolean toggleIntakeOnEnd;
 
     /**
      * Creates a new ArmCommand.
      */
-    public SetArmCommand(Arm arm, Intake intake, ArmState goalState, boolean toggleIntakeOnEnd) {
+    public SetArmCommand(Arm arm, ArmState goalState, boolean toggleIntakeOnEnd) {
         this.goalState = goalState;
         this.arm = arm;
-        this.intake = intake;
         this.toggleIntakeOnEnd = toggleIntakeOnEnd;
 
         // Use addRequirements() here to declare subsystem dependencies.
@@ -36,7 +34,6 @@ public class SetArmCommand extends CommandBase {
     public void initialize() {
 
         arm.setGoalState(goalState);
-        //intake.setSolenoid(false);
     }
 
     // Called every time the scheduler runs while the command is scheduled.
@@ -46,7 +43,6 @@ public class SetArmCommand extends CommandBase {
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
-        //if(toggleIntakeOnEnd) intake.toggleSolenoid();
     }
 
     // Returns true when the command should end.

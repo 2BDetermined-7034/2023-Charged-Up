@@ -111,7 +111,7 @@ public class RobotContainer {
                 intake,
                 m_indexer,
                 () -> 0,
-                () -> 0.3,
+                () -> 0.7,
                 false
         ));
 
@@ -124,6 +124,10 @@ public class RobotContainer {
         new POVButton(m_operatorController, 90).whileTrue(m_visionLocker.runOnce(m_visionLocker::levelUp));
         new POVButton(m_operatorController, 270).whileTrue(m_visionLocker.runOnce(m_visionLocker::levelDown));
 
+
+        new Trigger(m_operatorController::getRightStickButton).whileTrue(m_Arm.runOnce(
+                () -> m_Arm.setGoalState(m_Arm.getCurrentState().clear())
+        ));
        new Trigger(m_operatorController::getLeftBumper).whileTrue(m_visionLocker.runOnce(m_visionLocker::gridLeft));
        new Trigger(m_operatorController::getRightBumper).whileTrue(m_visionLocker.runOnce(m_visionLocker::gridRight));
 
@@ -132,6 +136,7 @@ public class RobotContainer {
         new Trigger(m_operatorController::getAButton).onTrue(ArmPathFactory.getIntakePath(m_Arm, gravityClawSubsystem, intake)); // high// med
         new Trigger(m_operatorController::getBButton).onTrue(ArmPathFactory.getScoreMidPath(m_Arm, intake)); // low
         new Trigger(m_operatorController::getYButton).onTrue(ArmPathFactory.getScoreHighPath(m_Arm, intake)); // low
+        new Trigger(m_operatorController::getStartButton).onTrue(ArmPathFactory.getScoreMidFrontPath(m_Arm, intake)); // low
 //
         new Trigger(m_operatorController::getXButton).onTrue(m_visionLocker.runOnce(m_visionLocker::togglePiece));
         new Trigger((() -> Math.abs(m_operatorController.getLeftTriggerAxis()) > 0.05)).onTrue(

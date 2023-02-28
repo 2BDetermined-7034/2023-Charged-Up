@@ -109,10 +109,14 @@ public final class Constants {
             public static ArmState intake = new ArmState(Units.degreesToRadians(112), Units.degreesToRadians(264));
             public static ArmState tuck = new ArmState(Units.degreesToRadians(91), Units.degreesToRadians(235));
             public static ArmState mid = new ArmState(Units.degreesToRadians(95), Units.degreesToRadians(10));
+            public static ArmState frontMid = new ArmState(Units.degreesToRadians(124), Units.degreesToRadians(164));
             public static ArmState high = new ArmState(Units.degreesToRadians(47), Units.degreesToRadians(47));
             public static ArmState startCone = new ArmState(Units.degreesToRadians(95), Units.degreesToRadians(240));
 
         }
+
+        public static final double kEncoder1Offset = 0.8611;
+        public static final double kEncoder2Offset = 0.6134;
 
         public static final double kMaxArmOverrideSpeedShoulder = 1.5;
         public static final double kMaxArmOverrideSpeedDistal = 2;

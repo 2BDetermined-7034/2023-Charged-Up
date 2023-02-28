@@ -77,8 +77,8 @@ public class Arm extends SubsystemBase implements SubsystemLogging {
         m_AbsoluteEncoder1.setDistancePerRotation(-360);
         m_AbsoluteEncoder2.setDistancePerRotation(-360);
 
-        m_AbsoluteEncoder1.setPositionOffset(0.8611);
-        m_AbsoluteEncoder2.setPositionOffset(0.6134);
+        m_AbsoluteEncoder1.setPositionOffset(kEncoder1Offset);
+        m_AbsoluteEncoder2.setPositionOffset(kEncoder2Offset);
 
         last_velocity1 = 0;
         last_velocity2 = 0;
