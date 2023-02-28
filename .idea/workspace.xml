@@ -4,21 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="452aa9b7-8048-422e-bff9-c7f331f820f3" name="Changes" comment="ayy">
-      <change afterPath="$PROJECT_DIR$/src/main/java/frc/robot/commands/Arm/ArmOverrideIK.java" afterDir="false" />
+    <list default="true" id="452aa9b7-8048-422e-bff9-c7f331f820f3" name="Changes" comment="good!">
+      <change afterPath="$PROJECT_DIR$/src/main/deploy/pathplanner/exit.path" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/deploy/pathplanner/exitLevel.path" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/deploy/pathplanner/New Path.path" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/RobotContainer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/RobotContainer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/commands/Arm/ArmOverride.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/commands/Arm/ArmOverride.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/commands/Arm/ArmPathFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/commands/Arm/ArmPathFactory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/commands/Arm/SetArmCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/commands/Arm/SetArmCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/commands/Auto/AutoFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/commands/Auto/AutoFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/commands/Drive/AutoBalance.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/commands/Drive/AutoBalance.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/commands/clob/GravityClawCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/commands/clob/GravityClawCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/constants/Constants.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/constants/Constants.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/subsystems/Arm.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/subsystems/Arm.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/subsystems/Indexer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/subsystems/Indexer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/subsystems/Intake.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/subsystems/Intake.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/subsystems/SwerveDrive.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/subsystems/SwerveDrive.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/util/ArmState.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/util/ArmState.java" afterDir="false" />
     </list>
     <list id="da014224-40a7-4142-88d2-2a73b4eadd3e" name="Changes by Blake" comment="" />
     <list id="b16ebefe-fc4a-49f6-a9fc-970fc4659a09" name="Changes by wlhsf" comment="" />
@@ -314,7 +309,14 @@
       <option name="project" value="LOCAL" />
       <updated>1677295966108</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="boowomp">
+      <created>1677545547278</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1677545547278</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -359,7 +361,9 @@
     <MESSAGE value="path following" />
     <MESSAGE value="works" />
     <MESSAGE value="ayy" />
-    <option name="LAST_COMMIT_MESSAGE" value="ayy" />
+    <MESSAGE value="boowomp" />
+    <MESSAGE value="good!" />
+    <option name="LAST_COMMIT_MESSAGE" value="good!" />
   </component>
   <component name="WpiLibVersionService">
     <option name="lastChecked" value="20230214193640" />

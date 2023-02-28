@@ -28,7 +28,7 @@ public class AutoFactory {
                 new SetArmCommand(arm, intake, Constants.ArmConstants.ArmSetPoints.intake, false),
                 ArmPathFactory.getScoreHighPath(arm, intake),
                 new GravityClawCommand(claw, true),
-                ArmPathFactory.getIntakePath(arm, intake),
+                ArmPathFactory.getIntakePath(arm, claw, intake),
                 new PathFactory(drive, path, true).getCommand()
         );
     }
@@ -41,7 +41,7 @@ public class AutoFactory {
                 new SetArmCommand(arm, intake, Constants.ArmConstants.ArmSetPoints.intake, false),
                 ArmPathFactory.getScoreHighPath(arm, intake),
                 new GravityClawCommand(claw, true),
-                ArmPathFactory.getIntakePath(arm, intake),
+                ArmPathFactory.getIntakePath(arm, claw, intake),
                 new PathFactory(drive, path, true).getCommand(),
                 new AutoBalance(drive)
         );

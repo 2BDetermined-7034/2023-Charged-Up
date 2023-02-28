@@ -36,7 +36,7 @@ public class SetArmCommand extends CommandBase {
     public void initialize() {
 
         arm.setGoalState(goalState);
-        intake.setSolenoid(false);
+        //intake.setSolenoid(false);
     }
 
     // Called every time the scheduler runs while the command is scheduled.
@@ -46,7 +46,7 @@ public class SetArmCommand extends CommandBase {
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
-        if(toggleIntakeOnEnd) intake.toggleSolenoid();
+        //if(toggleIntakeOnEnd) intake.toggleSolenoid();
     }
 
     // Returns true when the command should end.

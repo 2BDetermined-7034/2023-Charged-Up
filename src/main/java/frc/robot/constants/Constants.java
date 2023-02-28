@@ -88,7 +88,7 @@ public final class Constants {
         public static final int indexerMotorLeft = 11;
         public static final int indexerMotorRight = 2;
 
-        public static final double indexerSpeed = 0.2;
+        public static final double indexerSpeed = 0.4;
         public static final double intakeSpeed = 6.0;
         public static final int intakeFC = 8;
         public static final int intakeRC = 9;
@@ -101,12 +101,15 @@ public final class Constants {
     }
 
     public static class ArmConstants {
-        public static class ArmSetPoints { ;
+        public static class ArmSetPoints {
+            public static ArmState knock = new ArmState(Units.degreesToRadians(99), Units.degreesToRadians(240));
+            public static ArmState passThrough = new ArmState(Units.degreesToRadians(105), Units.degreesToRadians(235), 0, 0);
             public static ArmState preIntake = new ArmState(Units.degreesToRadians(99), Units.degreesToRadians(251), 0, 0.2);
+
             public static ArmState intake = new ArmState(Units.degreesToRadians(112), Units.degreesToRadians(264));
-            public static ArmState tuck = new ArmState(Units.degreesToRadians(80), Units.degreesToRadians(220));
+            public static ArmState tuck = new ArmState(Units.degreesToRadians(91), Units.degreesToRadians(235));
             public static ArmState mid = new ArmState(Units.degreesToRadians(95), Units.degreesToRadians(10));
-            public static ArmState high = new ArmState(Units.degreesToRadians(68), Units.degreesToRadians(30));
+            public static ArmState high = new ArmState(Units.degreesToRadians(47), Units.degreesToRadians(47));
             public static ArmState startCone = new ArmState(Units.degreesToRadians(95), Units.degreesToRadians(240));
 
         }
