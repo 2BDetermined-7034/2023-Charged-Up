@@ -9,8 +9,8 @@ import static frc.robot.constants.Constants.ArmConstants.*;
 
 public class ArmOverride extends CommandBase {
 
-    private final Arm arm;
-    private final DoubleSupplier getx1, gety1, enable;
+    protected final Arm arm;
+    protected final DoubleSupplier getx1, gety1, enable;
 
     public ArmOverride(Arm arm, DoubleSupplier getx1, DoubleSupplier gety1, DoubleSupplier enable) {
         this.arm = arm;

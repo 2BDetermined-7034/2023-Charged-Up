@@ -41,7 +41,7 @@ public class Arm extends SubsystemBase implements SubsystemLogging {
      * Creates a new Arm.
      */
     public Arm() {
-        controller2 = new ProfiledPIDController(10, 1, 0.05, new TrapezoidProfile.Constraints(4, 5));
+        controller2 = new ProfiledPIDController(10, 1, 0.05, new TrapezoidProfile.Constraints(2, 5));
         controller1 = new ProfiledPIDController(3.5, 0.5, 0.05, new TrapezoidProfile.Constraints(4, 5));
 
         controller2.setIntegratorRange(-2, 2);

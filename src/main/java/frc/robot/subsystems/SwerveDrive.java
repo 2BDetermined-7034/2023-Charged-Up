@@ -178,7 +178,9 @@ public class SwerveDrive extends SubsystemBase implements SubsystemLogging {
     public Rotation2d getRoll() {
         return Rotation2d.fromDegrees(m_navx.getRoll());
     }
-
+    public Rotation2d getPitch() {
+        return Rotation2d.fromDegrees(m_navx.getPitch());
+    }
 
     public void setLimeLightDriver() {
         limeLight.setModeDriver();

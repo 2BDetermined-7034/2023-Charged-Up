@@ -28,6 +28,9 @@ public class Intake extends SubsystemBase implements SubsystemLogging {
     public Intake() {
         motor1 = new CANSparkMax(Constants.Intake.intakeMotorLeft, CANSparkMaxLowLevel.MotorType.kBrushless);
         motor2 = new CANSparkMax(Constants.Intake.intakeMotorRight, CANSparkMaxLowLevel.MotorType.kBrushless);
+        motor1.setSmartCurrentLimit(35);
+        motor2.setSmartCurrentLimit(35);
+
         motor2.setInverted(true);
         motor1.setInverted(false);
 
@@ -84,9 +87,9 @@ public class Intake extends SubsystemBase implements SubsystemLogging {
     }
 
     public void setCoterminal() {
-        motor1.setVoltage(-MathUtil.clamp(controller1.calculate(m_Encoder1.getPosition() % 180, 0), -12, 12));
+        motor1.setVoltage(-MathUtil.clamp(controller1.calculate(m_Encoder1.getPosition() % (Math.PI), 0), -12, 12));
 
-        motor2.setVoltage(-MathUtil.clamp(controller1.calculate(m_Encoder2.getPosition() % 180, 0), -12, 12));
+        motor2.setVoltage(-MathUtil.clamp(controller1.calculate(m_Encoder2.getPosition() % Math.PI, 0), -12, 12));
     }
 
     public DoubleSolenoid getSolenoid() {

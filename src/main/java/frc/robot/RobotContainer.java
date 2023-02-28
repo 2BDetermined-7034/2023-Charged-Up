@@ -39,12 +39,12 @@ public class RobotContainer {
         m_Arm.setGoalState(m_Arm.getCurrentState());
 
         m_driverController.share().whileTrue(m_swerveDrive.runOnce(m_swerveDrive::zeroGyroscope));
-        m_swerveDrive.setDefaultCommand(new DefaultDriveCommand(
-                m_swerveDrive,
-                () -> -square(modifyAxis(m_driverController.getLeftY()) * m_swerveDrive.getMaxSpeed()),
-                () -> -square(modifyAxis(m_driverController.getLeftX()) * m_swerveDrive.getMaxSpeed()),
-                () -> -square(modifyAxis(m_driverController.getRightX()) * m_swerveDrive.getMaxSpeed())
-        ));
+//        m_swerveDrive.setDefaultCommand(new DefaultDriveCommand(
+//                m_swerveDrive,
+//                () -> -square(modifyAxis(m_driverController.getLeftY()) * m_swerveDrive.getMaxSpeed()),
+//                () -> -square(modifyAxis(m_driverController.getLeftX()) * m_swerveDrive.getMaxSpeed()),
+//                () -> -square(modifyAxis(m_driverController.getRightX()) * m_swerveDrive.getMaxSpeed())
+//        ));
 
         configureBindings();
     }
@@ -90,26 +90,26 @@ public class RobotContainer {
                 () -> -square(modifyAxis(m_driverController.getRightX()) * m_swerveDrive.getMaxSpeed()))
         );
 
-        new Trigger(() -> m_driverController.getR2Axis() > 0.5).whileTrue(new RunIntakeCommand(
+        new Trigger(() -> m_driverController.getR2Axis() > 0.25).whileTrue(new RunIntakeCommand(
                 intake,
                 m_indexer,
-                () -> m_visionLocker.getPieceType().equals(VisionLocking.PieceType.CONES) ? 0.8 : 0.2,
+                () -> m_visionLocker.getPieceType().equals(VisionLocking.PieceType.CONES) ? 0.75 : 0.2,
                 () -> 0.6,
                 true
         ));
 
-        new Trigger(() -> m_driverController.getL2Axis() > 0.5).whileTrue(new RunIntakeCommand(
+        new Trigger(() -> m_driverController.getL2Axis() > 0.25).whileTrue(new RunIntakeCommand(
                 intake,
                 m_indexer,
                 () -> 0,
                 () -> -0.8,
                 false
         ));
-        new Trigger(() -> m_driverController.getL2Axis() > 0.05 && m_driverController.getL2Axis() < 0.5).whileTrue(new RunIntakeCommand(
+        m_driverController.R1().whileTrue(new RunIntakeCommand(
                 intake,
                 m_indexer,
                 () -> 0,
-                () -> -0.3,
+                () -> 0.3,
                 false
         ));
 
@@ -139,7 +139,7 @@ public class RobotContainer {
 
     public Command getAutonomousCommand() {
         // An example command will be run in autonomous
-        return AutoFactory.getSmallSquare(m_swerveDrive);
+        return AutoFactory.getOnePieceThenLevel(m_swerveDrive, intake, gravityClawSubsystem, m_Arm);
 
     }
 

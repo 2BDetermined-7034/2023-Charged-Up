@@ -29,7 +29,7 @@ public class AutoBalance extends CommandBase {
     @Override
     public void execute() {
         m_swerveDrive.drive(ChassisSpeeds.fromFieldRelativeSpeeds(
-                -pid.calculate(m_swerveDrive.getRoll().getRadians(), 0),
+                -pid.calculate(m_swerveDrive.getPitch().getRadians(), 0),
                 0,
                 0,
                 SwerveDrive.getGyroscopeRotation()

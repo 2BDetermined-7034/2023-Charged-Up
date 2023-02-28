@@ -3,6 +3,7 @@ package frc.robot.util;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.numbers.N2;
 import edu.wpi.first.math.numbers.N4;
 import edu.wpi.first.math.numbers.N1;
 
@@ -59,10 +60,14 @@ public class ArmState {
      * @param y position in space of end effector
      * @return whether the solution exists
      */
-    public boolean solutionExists(double x, double y) {
+    private boolean solutionExists(double x, double y) {
         double sqrt = Math.sqrt(x * x + y * y);
         return !(l1 + l2 < sqrt || Math.abs(l1 - l2) > sqrt);
     }
+
+//    public static Matrix<edu.wpi.first.math.numbers.N2, N1> inverseKinematics(double x, double y) {
+//        double theta2 = Math.acos(x * x + y * y - )
+//    }
 
     /** Getter Methods */
     public double getTheta1() {
