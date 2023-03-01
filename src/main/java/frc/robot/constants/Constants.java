@@ -22,8 +22,8 @@ public final class Constants {
 
     public static class GravityClaw {
         //blue
-        public static final int grabberFC = 10;
-        public static final int grabberRC = 11;
+        public static final int grabberFC = 6;
+        public static final int grabberRC = 7;
     }
 
     public static class Drivebase {
@@ -36,30 +36,30 @@ public final class Constants {
         public static class MotorIDs {
 
             // practice robot settings:
-            public static final int flDrive = 13;
-            public static final int flSteer = 14;
-            public static final int flEncoder = 3; // Done
-            public static final Rotation2d flOffset = Rotation2d.fromDegrees(-117.59); // TODO change flOffset
+            public static final int flDrive = 12;
+            public static final int flSteer = 13;
+            public static final int flEncoder = 2;
+            public static final Rotation2d flOffset = Rotation2d.fromDegrees(-21.533201217651367);
 
 
             // Practice robot settings (done):
             public static final int frDrive = 4;
 
             public static final int frSteer = 3;
-            public static final int frEncoder = 4;
-            public static final Rotation2d frOffset = Rotation2d.fromDegrees(-54.9); // TODO change frOffset
+            public static final int frEncoder = 1;
+            public static final Rotation2d frOffset = Rotation2d.fromDegrees(-65.83008575439453);
 
             // done
-            public static final int blDrive = 8;
-            public static final int blSteer = 7;
-            public static final int blEncoder = 2;
-            public static final Rotation2d blOffset = Rotation2d.fromDegrees(71.19); // TODO change bl offset
+            public static final int blDrive = 10;
+            public static final int blSteer = 9;
+            public static final int blEncoder = 3;
+            public static final Rotation2d blOffset = Rotation2d.fromDegrees(-1.23046875);
 
             // done
             public static final int brDrive = 6;
             public static final int brSteer = 5;
-            public static final int brEncoder = 1;
-            public static final Rotation2d brOffset = Rotation2d.fromDegrees(-9.3); // TODO change br offset
+            public static final int brEncoder = 4;
+            public static final Rotation2d brOffset = Rotation2d.fromDegrees(71.45);
         }
 
         public static class MotorConfig {
@@ -84,10 +84,10 @@ public final class Constants {
 
 
     public static class Intake {
-        public static final int intakeMotorLeft = 12;
-        public static final int intakeMotorRight = 1;
-        public static final int indexerMotorLeft = 11;
-        public static final int indexerMotorRight = 2;
+        public static final int intakeMotorLeft = 11;
+        public static final int intakeMotorRight = 2;
+        public static final int indexerMotorLeft = 14;
+        public static final int indexerMotorRight = 1;
 
         public static final double indexerSpeed = 0.4;
         public static final double intakeSpeed = 6.0;
@@ -104,6 +104,7 @@ public final class Constants {
 
     public static class ArmConstants {
         public static class ArmSetPoints {
+            //TODO: All new setpoints
             public static ArmState knock = new ArmState(Units.degreesToRadians(99), Units.degreesToRadians(240));
             public static ArmState passThrough = new ArmState(Units.degreesToRadians(105), Units.degreesToRadians(235), 0, 0);
             public static ArmState preIntake = new ArmState(Units.degreesToRadians(99), Units.degreesToRadians(251), 0, 0.2);
@@ -117,13 +118,13 @@ public final class Constants {
 
         }
 
-        public static final double kEncoder1Offset = 0.8611;
-        public static final double kEncoder2Offset = 0.6134;
+        public static final double kEncoder1Offset = 0.7296;
+        public static final double kEncoder2Offset = 0.5486;
 
         public static final double kMaxArmOverrideSpeedShoulder = 1.5;
         public static final double kMaxArmOverrideSpeedDistal = 2;
-        public static final int motor1ID = 10;
-        public static final int motor2ID = 9;
+        public static final int motor1ID = 8;
+        public static final int motor2ID = 7;
 
         public static final int EncoderChannelA1 = 0;
         public static final int EncoderChannelB1 = 1;

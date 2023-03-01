@@ -26,7 +26,7 @@ import frc.robot.subsystems.*;
 
 public class RobotContainer {
     private final SwerveDrive m_swerveDrive = new SwerveDrive();
-    private final Arm m_Arm = new Arm();
+    public final Arm m_Arm = new Arm();
     private final XboxController m_operatorController = new XboxController(OperatorConstants.kOperatorControllerPort);
 
     private final CommandPS4Controller m_driverController = new CommandPS4Controller(OperatorConstants.kDriverControllerPort);

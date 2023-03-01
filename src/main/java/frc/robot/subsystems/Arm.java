@@ -72,8 +72,8 @@ public class Arm extends SubsystemBase implements SubsystemLogging {
         m_motor2Encoder.setVelocityConversionFactor(S2 / 60);
 
         //DIO encoders
-        m_AbsoluteEncoder1 = new DutyCycleEncoder(1);
-        m_AbsoluteEncoder2 = new DutyCycleEncoder(0);
+        m_AbsoluteEncoder1 = new DutyCycleEncoder(9);
+        m_AbsoluteEncoder2 = new DutyCycleEncoder(8);
         m_AbsoluteEncoder1.setDistancePerRotation(-360);
         m_AbsoluteEncoder2.setDistancePerRotation(-360);
 
@@ -82,8 +82,6 @@ public class Arm extends SubsystemBase implements SubsystemLogging {
 
         last_velocity1 = 0;
         last_velocity2 = 0;
-
-        goalState = getCurrentState();
 
         setIsOpenLoop(false);
         configureDashBoard();
@@ -210,6 +208,10 @@ public class Arm extends SubsystemBase implements SubsystemLogging {
         return new ArmState(theta1, theta2, omega1, omega2, firstAlpha, secondAlpha);
     }
 
+    public boolean goalStateValid() {
+        return Math.toDegrees(goalState.getTheta1()) < 130 && Math.toDegrees(goalState.getTheta2()) < 360;
+    }
+
     /**
      * Checks wheather the arm is at the home position
      * @return boolean isArmAtHomeOrAwayOnALongJourneyToFindItself'sLifePurposeAndFulfullItsDestinyOfWorkingAtObama'sFriedChicken
@@ -265,8 +267,12 @@ public class Arm extends SubsystemBase implements SubsystemLogging {
      */
     @Override
     public void periodic() {
+
+        if (!goalStateValid()) {
+            goalState = getCurrentState();
+        }
+        ArmState goalState = getGoalState();
         if (!isOpenLoop) {
-            ArmState goalState = getGoalState();
             TrapezoidProfile.State profile1 = new TrapezoidProfile.State(goalState.getTheta1(), goalState.getOmega1());
             TrapezoidProfile.State profile2 = new TrapezoidProfile.State(goalState.getTheta2(), goalState.getOmega2());
             input1 = controller1.calculate(getCurrentState().getTheta1(), profile1);
@@ -281,6 +287,5 @@ public class Arm extends SubsystemBase implements SubsystemLogging {
         updateDashBoard();
         updateLogging();
     }
-
 
 }
