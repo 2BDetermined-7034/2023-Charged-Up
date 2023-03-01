@@ -21,6 +21,7 @@ public final class Constants {
     }
 
     public static class GravityClaw {
+        //blue
         public static final int grabberFC = 10;
         public static final int grabberRC = 11;
     }
@@ -90,6 +91,7 @@ public final class Constants {
 
         public static final double indexerSpeed = 0.4;
         public static final double intakeSpeed = 6.0;
+        //red
         public static final int intakeFC = 8;
         public static final int intakeRC = 9;
     }

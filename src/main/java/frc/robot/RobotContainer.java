@@ -115,7 +115,6 @@ public class RobotContainer {
                 false
         ));
 
-
         m_driverController.L1().onTrue(m_visionLocker.runOnce(m_visionLocker::togglePiece));
 
         // Gunner controls
