@@ -3,6 +3,7 @@ package frc.robot.util;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.numbers.N2;
 import edu.wpi.first.math.numbers.N4;
 import edu.wpi.first.math.numbers.N1;
 
@@ -30,6 +31,10 @@ public class ArmState {
         this(theta1, theta2, omega1, omega2, 0, 0);
     }
 
+    public ArmState(Rotation2d theta1, Rotation2d theta2) {
+        this(theta1, theta2, 0, 0);
+    }
+
     public ArmState(double theta1, double theta2) {this(Rotation2d.fromRadians(theta1), Rotation2d.fromRadians(theta2), 0, 0);}
 
     public ArmState(double theta1, double theta2, double omega1, double omega2, double alpha1, double alpha2) {
@@ -40,16 +45,29 @@ public class ArmState {
         this(mat.get(0,0), mat.get(1,0), mat.get(2,0), mat.get(3,0), 0, 0);
 
     }
+
+    public ArmState(double degreesToRadians, double degreesToRadians1, double omega1, double omega2) {
+        this(degreesToRadians, degreesToRadians1, omega1, omega2, 0, 0);
+    }
+
+    public ArmState() {
+
+    }
+
     /**
      * Checks if an inverse-kinematics solution exists for the given point in space
      * @param x position in space of end effector
      * @param y position in space of end effector
      * @return whether the solution exists
      */
-    public boolean solutionExists(double x, double y) {
+    private boolean solutionExists(double x, double y) {
         double sqrt = Math.sqrt(x * x + y * y);
         return !(l1 + l2 < sqrt || Math.abs(l1 - l2) > sqrt);
     }
+
+//    public static Matrix<edu.wpi.first.math.numbers.N2, N1> inverseKinematics(double x, double y) {
+//        double theta2 = Math.acos(x * x + y * y - )
+//    }
 
     /** Getter Methods */
     public double getTheta1() {
@@ -92,5 +110,7 @@ public class ArmState {
         return this;
 
     }
+
+
 
 }

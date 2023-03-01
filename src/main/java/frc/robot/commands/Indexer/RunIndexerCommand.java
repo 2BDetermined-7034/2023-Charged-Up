@@ -1,6 +1,7 @@
 package frc.robot.commands.Indexer;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.constants.Constants;
 import frc.robot.subsystems.Indexer;
 
 public class RunIndexerCommand extends CommandBase {
@@ -20,7 +21,7 @@ public class RunIndexerCommand extends CommandBase {
 
     @Override
     public void execute() {
-        m_indexer.runIndexerClockwise();
+        m_indexer.runIndexer(Constants.Intake.indexerSpeed);
     }
 
     @Override
@@ -31,6 +32,6 @@ public class RunIndexerCommand extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-
+        m_indexer.stopIndexer();
     }
 }

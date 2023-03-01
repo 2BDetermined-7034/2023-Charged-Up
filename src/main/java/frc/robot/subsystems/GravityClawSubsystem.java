@@ -10,7 +10,7 @@ public class GravityClawSubsystem extends SubsystemBase implements SubsystemLogg
     private final DoubleSolenoid sol;
 
     public GravityClawSubsystem() {
-        sol = new DoubleSolenoid(PneumaticsModuleType.REVPH, Constants.GravityClaw.forwardChannel, Constants.GravityClaw.reverseChannel);
+        sol = new DoubleSolenoid(PneumaticsModuleType.REVPH, Constants.GravityClaw.grabberFC, Constants.GravityClaw.grabberRC);
         // TODO: Set the default command, if any, for this subsystem by calling setDefaultCommand(command)
         //       in the constructor or in the robot coordination class, such as RobotContainer.
         //       Also, you can call addChild(name, sendableChild) to associate sendables with the subsystem

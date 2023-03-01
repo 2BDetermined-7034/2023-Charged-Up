@@ -9,9 +9,9 @@ import edu.wpi.first.math.MatBuilder;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.numbers.N2;
 import edu.wpi.first.math.util.Units;
+import frc.robot.util.ArmState;
 
 public final class Constants {
     public static class OperatorConstants {
@@ -21,44 +21,45 @@ public final class Constants {
     }
 
     public static class GravityClaw {
-        public static final int forwardChannel = 0;
-        public static final int reverseChannel = 1;
+        //blue
+        public static final int grabberFC = 10;
+        public static final int grabberRC = 11;
     }
 
     public static class Drivebase {
-
         public static class Measurements {
             public static final double width = Units.inchesToMeters(32);
             public static final double length = Units.inchesToMeters(32);
             public static final double driveRatio = COTSSwerveConstants.driveGearRatios.SDSMK4i_L2;
-
         }
 
         public static class MotorIDs {
-            public static final int flDrive = 3;
-            public static final int flSteer = 13;
-            public static final int flEncoder = 1;
-            //            public static final Rotation2d flOffset = Rotation2d.fromDegrees(173.1);
-            public static final Rotation2d flOffset = Rotation2d.fromDegrees(263.1 + 0); //266.6
 
-            public static final int frDrive = 12;
-            public static final int frSteer = 11;
-            public static final int frEncoder = 2;
-            //            public static final Rotation2d frOffset = Rotation2d.fromDegrees(252.8 + 0);
-            public static final Rotation2d frOffset = Rotation2d.fromDegrees(68.7 - 2);
+            // practice robot settings:
+            public static final int flDrive = 13;
+            public static final int flSteer = 14;
+            public static final int flEncoder = 3; // Done
+            public static final Rotation2d flOffset = Rotation2d.fromDegrees(-117.59); // TODO change flOffset
 
-            public static final int blDrive = 5;
-            public static final int blSteer = 14;
-            public static final int blEncoder = 4;
-//            public static final Rotation2d blOffset = Rotation2d.fromDegrees(217.3 - 0);
 
-            public static final Rotation2d blOffset = Rotation2d.fromDegrees(160.83 - 1);
+            // Practice robot settings (done):
+            public static final int frDrive = 4;
 
-            public static final int brDrive = 2;
-            public static final int brSteer = 6;
-            public static final int brEncoder = 3;
-            //            public static final Rotation2d brOffset = Rotation2d.fromDegrees(155.4 + 0);
-            public static final Rotation2d brOffset = Rotation2d.fromDegrees(266.5 + 0);
+            public static final int frSteer = 3;
+            public static final int frEncoder = 4;
+            public static final Rotation2d frOffset = Rotation2d.fromDegrees(-54.9); // TODO change frOffset
+
+            // done
+            public static final int blDrive = 8;
+            public static final int blSteer = 7;
+            public static final int blEncoder = 2;
+            public static final Rotation2d blOffset = Rotation2d.fromDegrees(71.19); // TODO change bl offset
+
+            // done
+            public static final int brDrive = 6;
+            public static final int brSteer = 5;
+            public static final int brEncoder = 1;
+            public static final Rotation2d brOffset = Rotation2d.fromDegrees(-9.3); // TODO change br offset
         }
 
         public static class MotorConfig {
@@ -83,25 +84,51 @@ public final class Constants {
 
 
     public static class Intake {
-        public static final int intakeMotor1 = 10;
-        public static final int intakeMotor2 = 11;
-        public static final int indexerMotor = 12;
+        public static final int intakeMotorLeft = 12;
+        public static final int intakeMotorRight = 1;
+        public static final int indexerMotorLeft = 11;
+        public static final int indexerMotorRight = 2;
 
-        public static final double indexerSpeed = 6.0;
+        public static final double indexerSpeed = 0.4;
         public static final double intakeSpeed = 6.0;
+        //red
+        public static final int intakeFC = 8;
+        public static final int intakeRC = 9;
     }
 
     public static class Vision {
-        public static final Transform2d camToRobot = new Transform2d(); //Irrelevent
         public static final double goalHeighInches = 30;
         public static final double limeligtLensHeighInches = 20;
         public static final double limeLightMountAngleDegrees = 0;
     }
 
     public static class ArmConstants {
+        public static class ArmSetPoints {
+            public static ArmState knock = new ArmState(Units.degreesToRadians(99), Units.degreesToRadians(240));
+            public static ArmState passThrough = new ArmState(Units.degreesToRadians(105), Units.degreesToRadians(235), 0, 0);
+            public static ArmState preIntake = new ArmState(Units.degreesToRadians(99), Units.degreesToRadians(251), 0, 0.2);
 
-        public static final int motor1ID = 15;
+            public static ArmState intake = new ArmState(Units.degreesToRadians(112), Units.degreesToRadians(264));
+            public static ArmState tuck = new ArmState(Units.degreesToRadians(91), Units.degreesToRadians(235));
+            public static ArmState mid = new ArmState(Units.degreesToRadians(95), Units.degreesToRadians(10));
+            public static ArmState frontMid = new ArmState(Units.degreesToRadians(124), Units.degreesToRadians(164));
+            public static ArmState high = new ArmState(Units.degreesToRadians(47), Units.degreesToRadians(47));
+            public static ArmState startCone = new ArmState(Units.degreesToRadians(95), Units.degreesToRadians(240));
+
+        }
+
+        public static final double kEncoder1Offset = 0.8611;
+        public static final double kEncoder2Offset = 0.6134;
+
+        public static final double kMaxArmOverrideSpeedShoulder = 1.5;
+        public static final double kMaxArmOverrideSpeedDistal = 2;
+        public static final int motor1ID = 10;
         public static final int motor2ID = 9;
+
+        public static final int EncoderChannelA1 = 0;
+        public static final int EncoderChannelB1 = 1;
+        public static final int EncoderChannelA2 = 3;
+        public static final int EncoderChannelB2 = 4;
         //Length of Segments
         public static final double l1 = Units.inchesToMeters(38.5);
         public static final double l2 = Units.inchesToMeters(33.5);
@@ -119,8 +146,8 @@ public final class Constants {
         public static final double I2 = .031;
 
         //Gearing of each segment
-        public static final double G1 = 80.;
-        public static final double G2 = 112.5;
+        public static final double G1 = 5 * 4 * 2 * 80/18;
+        public static final double G2 = 5 * 3 * 2 * 80/18;
 
         public static final double S1 = 2 * Math.PI * (1 / G1);
         public static final double S2 = 2 * Math.PI * (1 / G2);
@@ -128,6 +155,10 @@ public final class Constants {
         //Number of motors in each gearbox
         public static final int N1 = 1;
         public static final int N2 = 1;
+
+        //ArmFeedForward Gains
+        public static final double kG1 = 0.11d, kV1 = 3.46, kA1 = 0.01d;
+        public static final double kG2 = 0.07, kV2 = 2.60, kA2 = .01;
 
         //Gravity
         public static final double g = 9.81;

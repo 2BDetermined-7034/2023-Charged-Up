@@ -2,11 +2,9 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.subsystems.Arm;
+package frc.robot.subsystems;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel;
-import com.revrobotics.RelativeEncoder;
+import com.revrobotics.*;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -16,6 +14,10 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.DoublePublisher;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.CounterBase;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.SubsystemLogging;
 import frc.robot.util.ArmState;
@@ -25,6 +27,7 @@ import static frc.robot.constants.Constants.ArmConstants.*;
 public class Arm extends SubsystemBase implements SubsystemLogging {
     private final CANSparkMax m_motor1, m_motor2;
     private final RelativeEncoder m_motor1Encoder, m_motor2Encoder;
+    private final DutyCycleEncoder m_AbsoluteEncoder1, m_AbsoluteEncoder2;
     private final NetworkTable networkTable = NetworkTableInstance.getDefault().getTable("Arm");
     private final ProfiledPIDController controller1, controller2;
     private final ArmFeedforward armFeedForward1, armFeedForward2;
@@ -38,16 +41,27 @@ public class Arm extends SubsystemBase implements SubsystemLogging {
      * Creates a new Arm.
      */
     public Arm() {
-        controller2 = new ProfiledPIDController(10, 0, 0, new TrapezoidProfile.Constraints(4, 8));
-        controller1 = new ProfiledPIDController(4, 0, 0, new TrapezoidProfile.Constraints(2.5, 3));
+        controller2 = new ProfiledPIDController(10, 1, 0.05, new TrapezoidProfile.Constraints(2, 5));
+        controller1 = new ProfiledPIDController(3.5, 0.5, 0.05, new TrapezoidProfile.Constraints(4, 5));
 
-        armFeedForward2 = new ArmFeedforward(0.05, 0.25, 0.19, 0.01);
-        armFeedForward1 = new ArmFeedforward(0.0, .36, 3.9, .03);
+        controller2.setIntegratorRange(-2, 2);
+        controller1.setIntegratorRange(-2, 2);
+
+        controller1.setTolerance(Math.toRadians(5), 0.5);
+        controller2.setTolerance(Math.toRadians(5), 0.5);
+
+        armFeedForward2 = new ArmFeedforward(0.01, kG1, kV1, kA1);
+        armFeedForward1 = new ArmFeedforward(0.01, kG2, kV2, kA2);
 
         m_motor1 = new CANSparkMax(motor1ID, CANSparkMaxLowLevel.MotorType.kBrushless);
         m_motor2 = new CANSparkMax(motor2ID, CANSparkMaxLowLevel.MotorType.kBrushless);
-        m_motor1.setInverted(false);
+        m_motor1.setSmartCurrentLimit(10);
+        m_motor2.setSmartCurrentLimit(10);
+        m_motor1.setInverted(true);
         m_motor2.setInverted(false);
+
+        setModeBreak();
+
         m_motor1Encoder = m_motor1.getEncoder();
         m_motor2Encoder = m_motor2.getEncoder();
 
@@ -57,14 +71,22 @@ public class Arm extends SubsystemBase implements SubsystemLogging {
         m_motor1Encoder.setVelocityConversionFactor(S1 / 60);
         m_motor2Encoder.setVelocityConversionFactor(S2 / 60);
 
-        m_motor1Encoder.setPosition(Units.degreesToRadians(90));
-        m_motor2Encoder.setPosition(Units.degreesToRadians(270));
-        goalState = new ArmState(Rotation2d.fromDegrees(90), Rotation2d.fromDegrees(270), 0, 0, 0, 0);
+        //DIO encoders
+        m_AbsoluteEncoder1 = new DutyCycleEncoder(1);
+        m_AbsoluteEncoder2 = new DutyCycleEncoder(0);
+        m_AbsoluteEncoder1.setDistancePerRotation(-360);
+        m_AbsoluteEncoder2.setDistancePerRotation(-360);
+
+        m_AbsoluteEncoder1.setPositionOffset(kEncoder1Offset);
+        m_AbsoluteEncoder2.setPositionOffset(kEncoder2Offset);
+
         last_velocity1 = 0;
         last_velocity2 = 0;
 
+        goalState = getCurrentState();
+
+        setIsOpenLoop(false);
         configureDashBoard();
-        isOpenLoop = false;
     }
 
     /**
@@ -124,8 +146,14 @@ public class Arm extends SubsystemBase implements SubsystemLogging {
      */
     @Override
     public void updateLogging() {
-        log("theta1", getCurrentState().getTheta1());
-        log("theta2", getCurrentState().getTheta2());
+        log("theta1", Units.radiansToDegrees(getCurrentState().getTheta1()));
+        log("theta2", Units.radiansToDegrees(getCurrentState().getTheta2()));
+        log("motor theta1", m_motor1Encoder.getPosition());
+        log("motor theta2", m_motor2Encoder.getPosition());
+        log("encoder theta1", m_AbsoluteEncoder1.getDistance());
+        log("encoder theta2", m_AbsoluteEncoder2.getDistance() + m_AbsoluteEncoder1.getDistance());
+        log("Target Theta2", Units.radiansToDegrees(goalState.getTheta2()));
+        log("Target Theta1", Units.radiansToDegrees(goalState.getTheta1()));
         log("omega1", getCurrentState().getOmega1());
         log("omega2", getCurrentState().getOmega2());
         log("Applied Output1", m_motor1.getAppliedOutput());
@@ -166,17 +194,31 @@ public class Arm extends SubsystemBase implements SubsystemLogging {
      * @return Arm State
      */
     public ArmState getCurrentState() {
-        Rotation2d theta1 = Rotation2d.fromRadians(m_motor1Encoder.getPosition());
-        Rotation2d theta2 = Rotation2d.fromRadians(m_motor2Encoder.getPosition());
+
+        Rotation2d theta1 = Rotation2d.fromDegrees(m_AbsoluteEncoder1.getDistance());
+        Rotation2d theta2 = Rotation2d.fromDegrees(m_AbsoluteEncoder2.getDistance() + m_AbsoluteEncoder1.getDistance());
 
         double omega1 = m_motor1Encoder.getVelocity();
         double omega2 = m_motor2Encoder.getVelocity();
-        double firstAcceleration = (m_motor1Encoder.getVelocity() - last_velocity1) / (0.02);
-        double secondAcceleration = (m_motor2Encoder.getVelocity() - last_velocity2) / (0.02);
+
+        double firstAlpha = (m_motor1Encoder.getVelocity() - last_velocity1) / (0.02);
+        double secondAlpha = (m_motor2Encoder.getVelocity() - last_velocity2) / (0.02);
+
         last_velocity1 = m_motor1Encoder.getVelocity();
         last_velocity2 = m_motor2Encoder.getVelocity();
 
-        return new ArmState(theta1, theta2, omega1, omega2, firstAcceleration, secondAcceleration);
+        return new ArmState(theta1, theta2, omega1, omega2, firstAlpha, secondAlpha);
+    }
+
+    /**
+     * Checks wheather the arm is at the home position
+     * @return boolean isArmAtHomeOrAwayOnALongJourneyToFindItself'sLifePurposeAndFulfullItsDestinyOfWorkingAtObama'sFriedChicken
+     */
+    public boolean isArmHome() {
+        return Math.abs(getCurrentState().getTheta1() - Math.toRadians(90)) < Math.toRadians(4) && Math.abs(getCurrentState().getTheta2() - Math.toRadians(275)) < Math.toRadians(4);
+    }
+    public boolean isArmAtSetpoint() {
+        return controller1.atGoal() && controller2.atGoal();
     }
 
     /**
@@ -202,15 +244,33 @@ public class Arm extends SubsystemBase implements SubsystemLogging {
     }
 
     /**
-     * Integrates inverse kinematics, state space estimation, feedForward, PID feedback, and pathfinding to navigate to a goal set by a command
+     * Changes Idle Mode of Motors
+     */
+    public void setModeBreak() {
+        m_motor1.setIdleMode(CANSparkMax.IdleMode.kBrake);
+        m_motor2.setIdleMode(CANSparkMax.IdleMode.kBrake);
+    }
+
+    /**
+     * Changes Idle Mode of Motors
+     */
+    public void setModeCoast() {
+        m_motor1.setIdleMode(CANSparkMax.IdleMode.kCoast);
+        m_motor2.setIdleMode(CANSparkMax.IdleMode.kCoast);
+    }
+
+    /**
+     * Integrates inverse kinematics, state space estimation, feedForward, PID feedback, and A* pathfinding to navigate to a goal set by a command
      * theta time derivatives are calculated via a jacobian to the inverse kinematics function
      */
     @Override
     public void periodic() {
         if (!isOpenLoop) {
             ArmState goalState = getGoalState();
-            input1 = controller1.calculate(getCurrentState().getTheta1(), goalState.getTheta1());
-            input2 = controller2.calculate(getCurrentState().getTheta2(), goalState.getTheta2());
+            TrapezoidProfile.State profile1 = new TrapezoidProfile.State(goalState.getTheta1(), goalState.getOmega1());
+            TrapezoidProfile.State profile2 = new TrapezoidProfile.State(goalState.getTheta2(), goalState.getOmega2());
+            input1 = controller1.calculate(getCurrentState().getTheta1(), profile1);
+            input2 = controller2.calculate(getCurrentState().getTheta2(), profile2);
         }
 
         double betterFeedForward1 = armFeedForward1.calculate(controller1.getSetpoint().position, controller1.getSetpoint().velocity);

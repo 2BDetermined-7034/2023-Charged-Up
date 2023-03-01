@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.COTSSwerveConstants;
 import frc.robot.constants.Constants;
@@ -120,7 +121,7 @@ public class SwerveDrive extends SubsystemBase implements SubsystemLogging {
     }
 
     public static Rotation2d getGyroscopeRotation() {
-        return Rotation2d.fromDegrees(360 - m_navx.getYaw());
+        return Rotation2d.fromDegrees(-m_navx.getYaw());
     }
 
     public void addVisionMeasurement(Pose2d m_observed, double time) {
@@ -177,7 +178,9 @@ public class SwerveDrive extends SubsystemBase implements SubsystemLogging {
     public Rotation2d getRoll() {
         return Rotation2d.fromDegrees(m_navx.getRoll());
     }
-
+    public Rotation2d getPitch() {
+        return Rotation2d.fromDegrees(m_navx.getPitch());
+    }
 
     public void setLimeLightDriver() {
         limeLight.setModeDriver();
@@ -204,11 +207,7 @@ public class SwerveDrive extends SubsystemBase implements SubsystemLogging {
     @Override
     public void periodic() {
         SwerveDriveKinematics.desaturateWheelSpeeds(m_states, getMaxSpeed());
-
-        m_estimator.update(
-                getGyroscopeRotation(),
-                getModulePosition()
-        );
+        m_estimator.updateWithTime(Timer.getFPGATimestamp(), getGyroscopeRotation(), getModulePosition());
 
         updateOdometry();
         m_field.setRobotPose(getPosition());
@@ -218,6 +217,10 @@ public class SwerveDrive extends SubsystemBase implements SubsystemLogging {
         m_frontRightModule.setDesiredState(m_states[1], m_IsOpenLoop);
         m_backLeftModule.setDesiredState(m_states[2], m_IsOpenLoop);
         m_backRightModule.setDesiredState(m_states[3], m_IsOpenLoop);
+
+        SmartDashboard.putNumber("Pitch", m_navx.getPitch());
+        SmartDashboard.putNumber("yaw", m_navx.getYaw());
+        SmartDashboard.putNumber("roll", m_navx.getRoll());
 
         updateLogging();
 
