@@ -22,8 +22,8 @@ public final class Constants {
 
     public static class GravityClaw {
         //blue
-        public static final int grabberFC = 6;
-        public static final int grabberRC = 7;
+        public static final int grabberFC = 7;
+        public static final int grabberRC = 6;
     }
 
     public static class Drivebase {
@@ -104,32 +104,27 @@ public final class Constants {
 
     public static class ArmConstants {
         public static class ArmSetPoints {
-            //TODO: All new setpoints
-            public static ArmState knock = new ArmState(Units.degreesToRadians(99), Units.degreesToRadians(240));
-            public static ArmState passThrough = new ArmState(Units.degreesToRadians(105), Units.degreesToRadians(235), 0, 0);
-            public static ArmState preIntake = new ArmState(Units.degreesToRadians(99), Units.degreesToRadians(251), 0, 0.2);
+            public static ArmState passThrough = new ArmState(Units.degreesToRadians(125), Units.degreesToRadians(190));
+            public static ArmState preIntake = new ArmState(Units.degreesToRadians(112), Units.degreesToRadians(244), 0, 0.2);
 
-            public static ArmState intake = new ArmState(Units.degreesToRadians(112), Units.degreesToRadians(264));
-            public static ArmState tuck = new ArmState(Units.degreesToRadians(91), Units.degreesToRadians(235));
-            public static ArmState mid = new ArmState(Units.degreesToRadians(95), Units.degreesToRadians(10));
-            public static ArmState frontMid = new ArmState(Units.degreesToRadians(124), Units.degreesToRadians(164));
-            public static ArmState high = new ArmState(Units.degreesToRadians(47), Units.degreesToRadians(47));
+            public static ArmState intake = new ArmState(Units.degreesToRadians(122), Units.degreesToRadians(254));
+            public static ArmState tuck = new ArmState(Units.degreesToRadians(106), Units.degreesToRadians(223));
+            public static ArmState midBack = new ArmState(Units.degreesToRadians(132), Units.degreesToRadians(5));
+            //public static ArmState midBack = new ArmState(Units.degreesToRadians(95), Units.degreesToRadians(30));
+            public static ArmState frontMid = new ArmState(Units.degreesToRadians(138), Units.degreesToRadians(170));
+            public static ArmState high = new ArmState(Units.degreesToRadians(95), Units.degreesToRadians(30));
             public static ArmState startCone = new ArmState(Units.degreesToRadians(95), Units.degreesToRadians(240));
 
         }
 
-        public static final double kEncoder1Offset = 0.7296;
-        public static final double kEncoder2Offset = 0.5486;
+        public static final double kEncoder1Offset = 0.8018;
+        public static final double kEncoder2Offset = 0.4797;
 
-        public static final double kMaxArmOverrideSpeedShoulder = 1.5;
-        public static final double kMaxArmOverrideSpeedDistal = 2;
+        public static final double kMaxArmOverrideSpeedShoulder = 2;
+        public static final double kMaxArmOverrideSpeedDistal = 2.5;
         public static final int motor1ID = 8;
         public static final int motor2ID = 7;
 
-        public static final int EncoderChannelA1 = 0;
-        public static final int EncoderChannelB1 = 1;
-        public static final int EncoderChannelA2 = 3;
-        public static final int EncoderChannelB2 = 4;
         //Length of Segments
         public static final double l1 = Units.inchesToMeters(38.5);
         public static final double l2 = Units.inchesToMeters(33.5);
@@ -159,7 +154,7 @@ public final class Constants {
 
         //ArmFeedForward Gains
         public static final double kG1 = 0.47d, kV1 = 3.47d, kA1 = 0.03d;
-        public static final double kG2 = 0.27, kV2 = 2.60, kA2 = .03;
+        public static final double kG2 = 0.28, kV2 = 2.60, kA2 = .03;
 
         //Gravity
         public static final double g = 9.81;

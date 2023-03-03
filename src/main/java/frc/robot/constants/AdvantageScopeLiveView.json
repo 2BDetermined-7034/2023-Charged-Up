@@ -33,7 +33,18 @@
             "type": null,
             "factor": 1
           },
-          "fields": []
+          "fields": [
+            {
+              "key": "/AdvantageKit/RealOutputs/Arm omega1/0",
+              "color": "#e5b31b",
+              "show": true
+            },
+            {
+              "key": "/AdvantageKit/RealOutputs/Arm omega2/0",
+              "color": "#2b66a2",
+              "show": true
+            }
+          ]
         },
         "discrete": {
           "fields": []
@@ -47,7 +58,7 @@
           "fields": []
         }
       },
-      "title": "Line Graph"
+      "title": "Arm Omegas"
     },
     {
       "type": 1,
@@ -94,6 +105,31 @@
         }
       },
       "title": "ARM"
+    },
+    {
+      "type": 8,
+      "fields": [],
+      "listFields": [],
+      "options": {
+        "ids": [
+          0,
+          1,
+          2
+        ],
+        "layouts": [
+          "PS4 Controller",
+          "Xbox Controller (Blue)",
+          "None"
+        ]
+      },
+      "title": "Joysticks"
+    },
+    {
+      "type": 7,
+      "fields": [],
+      "listFields": [],
+      "options": {},
+      "title": "Video"
     },
     {
       "type": 5,
@@ -157,7 +193,7 @@
         "sizeFrontBack": 0.65,
         "forwardDirection": "up"
       },
-      "title": "Swerve"
+      "title": "Swerve Modules"
     }
   ]
 }

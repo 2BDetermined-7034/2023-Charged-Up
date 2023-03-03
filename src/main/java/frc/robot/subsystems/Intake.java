@@ -6,6 +6,7 @@ import com.revrobotics.CANSparkMaxLowLevel;
 import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
@@ -14,6 +15,7 @@ import frc.robot.constants.Constants;
 
 public class Intake extends SubsystemBase implements SubsystemLogging {
 
+    private final Compressor compressor;
     public CANSparkMax motor1;
     public CANSparkMax motor2;
 
@@ -26,6 +28,7 @@ public class Intake extends SubsystemBase implements SubsystemLogging {
 
 
     public Intake() {
+        compressor = new Compressor(PneumaticsModuleType.REVPH);
         motor1 = new CANSparkMax(Constants.Intake.intakeMotorLeft, CANSparkMaxLowLevel.MotorType.kBrushless);
         motor2 = new CANSparkMax(Constants.Intake.intakeMotorRight, CANSparkMaxLowLevel.MotorType.kBrushless);
         motor1.setSmartCurrentLimit(35);
@@ -98,6 +101,8 @@ public class Intake extends SubsystemBase implements SubsystemLogging {
 
     @Override
     public void updateLogging() {
+        log("PSI", compressor.getPressure());
+        log("is Full?", compressor.getPressureSwitchValue());
         log("Solenoid State", solenoid.get().equals(DoubleSolenoid.Value.kForward));
     }
 

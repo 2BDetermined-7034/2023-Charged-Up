@@ -32,6 +32,7 @@ public interface SubsystemLogging {
 
     /**
      * Where subsystems should <b><u>override</u></b> and log stuff
+     * Call as last method in Periodic
      */
     default void updateLogging() {
         Logger.getInstance().recordOutput(String.format("%s %s", this.getClass().getName().substring(21), "Default"), ("amogus"));

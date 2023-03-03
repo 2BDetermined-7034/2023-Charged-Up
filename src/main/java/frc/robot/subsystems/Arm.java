@@ -41,14 +41,14 @@ public class Arm extends SubsystemBase implements SubsystemLogging {
      * Creates a new Arm.
      */
     public Arm() {
-        controller2 = new ProfiledPIDController(10, 1, 0.05, new TrapezoidProfile.Constraints(2, 5));
+        controller2 = new ProfiledPIDController(8, 1, 0.1, new TrapezoidProfile.Constraints(2, 5));
         controller1 = new ProfiledPIDController(3.5, 0.5, 0.05, new TrapezoidProfile.Constraints(4, 5));
 
         controller2.setIntegratorRange(-2, 2);
         controller1.setIntegratorRange(-2, 2);
 
-        controller1.setTolerance(Math.toRadians(5), 0.5);
-        controller2.setTolerance(Math.toRadians(5), 0.5);
+        controller1.setTolerance(Math.toRadians(6), 1.5);
+        controller2.setTolerance(Math.toRadians(6), 1.5);
 
         armFeedForward2 = new ArmFeedforward(0.01, kG1, kV1, kA1);
         armFeedForward1 = new ArmFeedforward(0.01, kG2, kV2, kA2);
@@ -57,6 +57,10 @@ public class Arm extends SubsystemBase implements SubsystemLogging {
         m_motor2 = new CANSparkMax(motor2ID, CANSparkMaxLowLevel.MotorType.kBrushless);
         m_motor1.setSmartCurrentLimit(10);
         m_motor2.setSmartCurrentLimit(10);
+
+        m_motor1.setSecondaryCurrentLimit(40);
+        m_motor2.setSecondaryCurrentLimit(40);
+
         m_motor1.setInverted(true);
         m_motor2.setInverted(false);
 
@@ -72,8 +76,8 @@ public class Arm extends SubsystemBase implements SubsystemLogging {
         m_motor2Encoder.setVelocityConversionFactor(S2 / 60);
 
         //DIO encoders
-        m_AbsoluteEncoder1 = new DutyCycleEncoder(9);
-        m_AbsoluteEncoder2 = new DutyCycleEncoder(8);
+        m_AbsoluteEncoder1 = new DutyCycleEncoder(8);
+        m_AbsoluteEncoder2 = new DutyCycleEncoder(9);
         m_AbsoluteEncoder1.setDistancePerRotation(-360);
         m_AbsoluteEncoder2.setDistancePerRotation(-360);
 
@@ -209,7 +213,7 @@ public class Arm extends SubsystemBase implements SubsystemLogging {
     }
 
     public boolean goalStateValid() {
-        return Math.toDegrees(goalState.getTheta1()) < 130 && Math.toDegrees(goalState.getTheta2()) < 360;
+        return Math.toDegrees(goalState.getTheta1()) < 140 && Math.toDegrees(goalState.getTheta2()) < 360;
     }
 
     /**
@@ -270,6 +274,7 @@ public class Arm extends SubsystemBase implements SubsystemLogging {
 
         if (!goalStateValid()) {
             goalState = getCurrentState();
+            setVoltages(0, 0);
         }
         ArmState goalState = getGoalState();
         if (!isOpenLoop) {

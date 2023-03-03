@@ -4,8 +4,13 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -24,20 +29,25 @@ import frc.robot.constants.Constants.OperatorConstants;
 import frc.robot.subsystems.*;
 
 
-public class RobotContainer {
+public class RobotContainer implements SubsystemLogging {
+    private final SendableChooser<Command> autoMode = new SendableChooser<Command>();
     private final SwerveDrive m_swerveDrive = new SwerveDrive();
     public final Arm m_Arm = new Arm();
     private final XboxController m_operatorController = new XboxController(OperatorConstants.kOperatorControllerPort);
-
     private final CommandPS4Controller m_driverController = new CommandPS4Controller(OperatorConstants.kDriverControllerPort);
-
     private final GravityClawSubsystem gravityClawSubsystem = new GravityClawSubsystem();
     private final VisionLocking m_visionLocker = new VisionLocking();
     private final Intake intake = new Intake();
     private final Indexer m_indexer = new Indexer();
 
-
     public RobotContainer() {
+
+        autoMode.addOption("One Piece",  AutoFactory.getOneConeAuto(m_swerveDrive, intake, gravityClawSubsystem, m_Arm));
+        autoMode.addOption("One Piece Level",  AutoFactory.getOnePieceThenLevel(m_swerveDrive, intake, gravityClawSubsystem, m_Arm));
+        autoMode.addOption("One Piece Level lower",  AutoFactory.getOnePieceThenLevel(m_swerveDrive, intake, gravityClawSubsystem, m_Arm));
+        autoMode.addOption("Test auto",  AutoFactory.getTestAuto(m_swerveDrive));
+        autoMode.setDefaultOption("Do Nothing",  new WaitCommand(10));
+
         m_Arm.setGoalState(m_Arm.getCurrentState());
 
         m_driverController.share().whileTrue(m_swerveDrive.runOnce(m_swerveDrive::zeroGyroscope));
@@ -49,6 +59,8 @@ public class RobotContainer {
         ));
 
         configureBindings();
+
+        SmartDashboard.putData("Auto",autoMode);
     }
 
     private static double deadband(double value, double deadband) {
@@ -65,7 +77,7 @@ public class RobotContainer {
 
     private static double modifyAxis(double value) {
         // Deadband
-        value = deadband(value, 0.1);
+        value = deadband(value, 0.12);
         // Square the axis
         value = Math.copySign(value * value, value);
         return value;
@@ -136,17 +148,17 @@ public class RobotContainer {
         new Trigger(m_operatorController::getBButton).onTrue(ArmPathFactory.getScoreMidPath(m_Arm, intake)); // low
         new Trigger(m_operatorController::getYButton).onTrue(ArmPathFactory.getScoreHighPath(m_Arm, intake)); // low
         new Trigger(m_operatorController::getStartButton).onTrue(ArmPathFactory.getScoreMidFrontPath(m_Arm, intake)); // low
-//
+
         new Trigger(m_operatorController::getXButton).onTrue(m_visionLocker.runOnce(m_visionLocker::togglePiece));
         new Trigger((() -> Math.abs(m_operatorController.getLeftTriggerAxis()) > 0.05)).onTrue(
-                ArmPathFactory.getKnockPath(m_Arm, gravityClawSubsystem, intake));
+                new SetArmCommand(m_Arm, Constants.ArmConstants.ArmSetPoints.tuck, false));
         new Trigger((() -> Math.abs(m_operatorController.getRightTriggerAxis()) > 0.05)).onTrue(
                 new ArmOverride(m_Arm, m_operatorController::getLeftX, m_operatorController::getRightY, m_operatorController::getRightTriggerAxis));
     }
 
     public Command getAutonomousCommand() {
         // An example command will be run in autonomous
-        return AutoFactory.getOnePieceThenLevel(m_swerveDrive, intake, gravityClawSubsystem, m_Arm);
+        return autoMode.getSelected();
 
     }
 
