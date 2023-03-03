@@ -13,22 +13,19 @@ import frc.robot.commands.Drive.PathFactory;
 import frc.robot.commands.clob.GravityClawCommand;
 import frc.robot.commands.clob.GravityClawToggleCommand;
 import frc.robot.constants.Constants;
-import frc.robot.subsystems.Arm;
-import frc.robot.subsystems.GravityClawSubsystem;
-import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.SwerveDrive;
+import frc.robot.subsystems.*;
 
 import static frc.robot.constants.Constants.ArmConstants.ArmSetPoints.preIntake;
 
 public class AutoFactory {
 
-    public static Command getOneConeAuto(SwerveDrive drive, Intake intake, GravityClawSubsystem claw, Arm arm) {
+    public static Command getOneConeAuto(SwerveDrive drive, Intake intake, Indexer indexer, GravityClawSubsystem claw, Arm arm) {
         PathPlannerTrajectory path = PathPlanner.loadPath("exit", new PathConstraints(3, 3));
 
         return new SequentialCommandGroup(
                 new GravityClawCommand(claw, false),
                 new SetArmCommand(arm, Constants.ArmConstants.ArmSetPoints.intake, false),
-                ArmPathFactory.getScoreHighPath(arm, intake),
+                ArmPathFactory.getScoreHighPath(arm, intake, indexer),
                 new GravityClawToggleCommand(claw),
                 new WaitCommand(0.5),
                 ArmPathFactory.getIntakePath(arm, claw, intake),
@@ -36,13 +33,32 @@ public class AutoFactory {
         );
     }
 
-    public static Command getOnePieceThenLevel(SwerveDrive drive, Intake intake, GravityClawSubsystem claw, Arm arm) {
+    public static Command getLevelTop(SwerveDrive drive) {
+        PathPlannerTrajectory path = PathPlanner.loadPath("exitLevel", new PathConstraints(3, 3));
+
+        return new SequentialCommandGroup(
+                new PathFactory(drive, path, true, true).getCommand(),
+                new AutoBalance(drive)
+        );
+    }
+
+    public static Command getLevelBot(SwerveDrive drive) {
+        PathPlannerTrajectory path = PathPlanner.loadPath("exitLevelLower", new PathConstraints(3, 3));
+
+        return new SequentialCommandGroup(
+                new PathFactory(drive, path, true, true).getCommand(),
+                new AutoBalance(drive)
+        );
+    }
+
+
+    public static Command getOnePieceThenLevel(SwerveDrive drive, Intake intake, Indexer indexer, GravityClawSubsystem claw, Arm arm) {
         PathPlannerTrajectory path = PathPlanner.loadPath("exitLevel", new PathConstraints(3, 3));
 
         return new SequentialCommandGroup(
                 new GravityClawCommand(claw, false),
                 new SetArmCommand(arm, Constants.ArmConstants.ArmSetPoints.intake, false),
-                ArmPathFactory.getScoreHighPath(arm, intake),
+                ArmPathFactory.getScoreHighPath(arm, intake, indexer),
                 new GravityClawToggleCommand(claw),
                 new WaitCommand(0.5),
                 ArmPathFactory.getIntakePath(arm, claw, intake),
@@ -50,13 +66,13 @@ public class AutoFactory {
         );
     }
 
-    public static Command getOnePieceThenLevelLower(SwerveDrive drive, Intake intake, GravityClawSubsystem claw, Arm arm) {
+    public static Command getOnePieceThenLevelLower(SwerveDrive drive, Intake intake, Indexer indexer,  GravityClawSubsystem claw, Arm arm) {
         PathPlannerTrajectory path = PathPlanner.loadPath("exitLevelLower", new PathConstraints(3, 3));
 
         return new SequentialCommandGroup(
                 new GravityClawCommand(claw, false),
                 new SetArmCommand(arm, Constants.ArmConstants.ArmSetPoints.intake, false),
-                ArmPathFactory.getScoreHighPath(arm, intake),
+                ArmPathFactory.getScoreHighPath(arm, intake, indexer),
                 new GravityClawToggleCommand(claw),
                 new WaitCommand(0.5),
                 ArmPathFactory.getIntakePath(arm, claw, intake),

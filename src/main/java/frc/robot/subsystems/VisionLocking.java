@@ -82,7 +82,7 @@ public class VisionLocking extends SubsystemBase implements SubsystemLogging {
         gridLocationLayout.addBoolean("BM", () -> gridLocation[1][2]).withProperties(coneSlotProperties).withPosition(1, 2);
 
         // Cone/cube selector
-        driverTab.addBoolean("Cone-Cube", () -> coneCube).withProperties(Map.of("colorWhenFalse", "#FDDA0D", "colorWhenTrue", "#5D3FD3")).withPosition(3, 0);
+        driverTab.addBoolean("Cone-Cube", () -> coneCube).withProperties(Map.of("colorWhenFalse", "#FDDA0D", "colorWhenTrue", "#5D3FD3")).withPosition(3, 0).withSize(1, 4);
 
         // Initialize the two boolean arrays to have base values.
         updateGridArray();

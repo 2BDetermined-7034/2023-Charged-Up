@@ -4,21 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="452aa9b7-8048-422e-bff9-c7f331f820f3" name="Changes" comment="works">
+    <list default="true" id="452aa9b7-8048-422e-bff9-c7f331f820f3" name="Changes" comment="fuck">
+      <change afterPath="$PROJECT_DIR$/src/main/deploy/pathplanner/exitLevelLower.path" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/shuffleboard.json" beforeDir="false" afterPath="$PROJECT_DIR$/shuffleboard.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/deploy/pathplanner/path.path" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/deploy/pathplanner/path.path" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/Robot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/Robot.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/RobotContainer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/RobotContainer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/commands/Arm/ArmPathFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/commands/Arm/ArmPathFactory.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/commands/Auto/AutoFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/commands/Auto/AutoFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/commands/clob/GravityClawCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/commands/clob/GravityClawCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/constants/AdvantageScopeLiveView.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/constants/AdvantageScopeLiveView.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/constants/Constants.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/constants/Constants.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/subsystems/Arm.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/subsystems/Arm.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/subsystems/Intake.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/subsystems/Intake.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/subsystems/LimeLight.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/subsystems/LimeLight.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/subsystems/SubsystemLogging.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/subsystems/SubsystemLogging.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/subsystems/VisionLocking.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/subsystems/VisionLocking.java" afterDir="false" />
     </list>
     <list id="da014224-40a7-4142-88d2-2a73b4eadd3e" name="Changes by Blake" comment="" />
     <list id="b16ebefe-fc4a-49f6-a9fc-970fc4659a09" name="Changes by wlhsf" comment="" />
@@ -189,7 +182,9 @@
       <workItem from="1674085459703" duration="16010000" />
       <workItem from="1676432179895" duration="1693000" />
       <workItem from="1677713523419" duration="4122000" />
-      <workItem from="1677723462261" duration="22301000" />
+      <workItem from="1677723462261" duration="22479000" />
+      <workItem from="1677862287599" duration="267000" />
+      <workItem from="1677868958963" duration="3592000" />
     </task>
     <task id="LOCAL-00001" summary="askdnasl">
       <created>1673225455965</created>
@@ -331,7 +326,14 @@
       <option name="project" value="LOCAL" />
       <updated>1677713090456</updated>
     </task>
-    <option name="localTasksCounter" value="21" />
+    <task id="LOCAL-00021" summary="fuck">
+      <created>1677810513626</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1677810513626</updated>
+    </task>
+    <option name="localTasksCounter" value="22" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -378,10 +380,11 @@
     <MESSAGE value="boowomp" />
     <MESSAGE value="good!" />
     <MESSAGE value="works" />
-    <option name="LAST_COMMIT_MESSAGE" value="works" />
+    <MESSAGE value="fuck" />
+    <option name="LAST_COMMIT_MESSAGE" value="fuck" />
   </component>
   <component name="WpiLibVersionService">
-    <option name="lastChecked" value="20230302162839" />
+    <option name="lastChecked" value="20230303104248" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

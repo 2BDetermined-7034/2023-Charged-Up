@@ -42,9 +42,12 @@ public class RobotContainer implements SubsystemLogging {
 
     public RobotContainer() {
 
-        autoMode.addOption("One Piece",  AutoFactory.getOneConeAuto(m_swerveDrive, intake, gravityClawSubsystem, m_Arm));
-        autoMode.addOption("One Piece Level",  AutoFactory.getOnePieceThenLevel(m_swerveDrive, intake, gravityClawSubsystem, m_Arm));
-        autoMode.addOption("One Piece Level lower",  AutoFactory.getOnePieceThenLevel(m_swerveDrive, intake, gravityClawSubsystem, m_Arm));
+        autoMode.addOption("One Piece",  AutoFactory.getOneConeAuto(m_swerveDrive, intake, m_indexer, gravityClawSubsystem, m_Arm));
+        autoMode.addOption("One Piece Level",  AutoFactory.getOnePieceThenLevel(m_swerveDrive, intake, m_indexer, gravityClawSubsystem, m_Arm));
+        autoMode.addOption("One Piece Level lower",  AutoFactory.getOnePieceThenLevel(m_swerveDrive, intake, m_indexer, gravityClawSubsystem, m_Arm));
+        autoMode.addOption("Exit Top", AutoFactory.getLevelTop(m_swerveDrive));
+        autoMode.addOption("Exit Bot", AutoFactory.getLevelBot(m_swerveDrive));
+
         autoMode.addOption("Test auto",  AutoFactory.getTestAuto(m_swerveDrive));
         autoMode.setDefaultOption("Do Nothing",  new WaitCommand(10));
 
@@ -145,9 +148,9 @@ public class RobotContainer implements SubsystemLogging {
        new Trigger(m_operatorController::getBackButton).onTrue(new GravityClawToggleCommand(gravityClawSubsystem));
 
         new Trigger(m_operatorController::getAButton).onTrue(ArmPathFactory.getIntakePath(m_Arm, gravityClawSubsystem, intake)); // high// med
-        new Trigger(m_operatorController::getBButton).onTrue(ArmPathFactory.getScoreMidPath(m_Arm, intake)); // low
-        new Trigger(m_operatorController::getYButton).onTrue(ArmPathFactory.getScoreHighPath(m_Arm, intake)); // low
-        new Trigger(m_operatorController::getStartButton).onTrue(ArmPathFactory.getScoreMidFrontPath(m_Arm, intake)); // low
+        new Trigger(m_operatorController::getBButton).onTrue(ArmPathFactory.getScoreMidPath(m_Arm, intake, m_indexer)); // low
+        new Trigger(m_operatorController::getYButton).onTrue(ArmPathFactory.getScoreHighPath(m_Arm, intake, m_indexer)); // low
+        new Trigger(m_operatorController::getStartButton).onTrue(ArmPathFactory.getScoreMidFrontPath(m_Arm, intake, m_indexer)); // low
 
         new Trigger(m_operatorController::getXButton).onTrue(m_visionLocker.runOnce(m_visionLocker::togglePiece));
         new Trigger((() -> Math.abs(m_operatorController.getLeftTriggerAxis()) > 0.05)).onTrue(
