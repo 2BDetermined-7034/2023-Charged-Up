@@ -10,6 +10,10 @@ import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.numbers.N4;
 import edu.wpi.first.math.system.NumericalIntegration;
 
+import java.util.function.BiFunction;
+
+import static frc.robot.constants.Constants.ArmConstants.dynamics;
+
 /**
  * Converts between the system state and motor voltages for a double jointed arm.
  *
@@ -21,6 +25,7 @@ public class ArmDynamics {
     private static final double g = 9.80665;
     private final ArmConfig.JointConfig shoulder;
     private final ArmConfig.JointConfig elbow;
+
 
     public ArmDynamics(ArmConfig config) {
         shoulder = config.shoulder();
@@ -246,4 +251,88 @@ public class ArmDynamics {
                 elbow.mass() * elbow.cgRadius() * g * Math.cos(position.get(0, 0) + position.get(1, 0)));
         return Tg;
     }
+
+    public BiFunction<Matrix<N4, N1>, Matrix<N2, N1>, Matrix<N4, N1>> accelFunction() {
+        return (Matrix<N4, N1> x, Matrix<N2, N1> u) -> {
+            // x = current state, u = voltages, return = state derivatives
+
+            // Get vectors from state
+            var position = VecBuilder.fill(x.get(0, 0), x.get(1, 0));
+            var velocity = VecBuilder.fill(x.get(2, 0), x.get(3, 0));
+
+            // Calculate torque
+            var shoulderTorque =
+                    shoulder
+                            .motor()
+                            .physics()
+                            .getTorque(
+                                    shoulder.motor().physics().getCurrent(velocity.get(0, 0), u.get(0, 0)));
+            var elbowTorque =
+                    elbow
+                            .motor()
+                            .physics()
+                            .getTorque(
+                                    elbow.motor().physics().getCurrent(velocity.get(1, 0), u.get(1, 0)));
+            var torque = VecBuilder.fill(shoulderTorque, elbowTorque);
+
+            // Apply limits
+            if (position.get(0, 0) < shoulder.minAngle()) {
+                position.set(0, 0, shoulder.minAngle());
+                if (velocity.get(0, 0) < 0.0) {
+                    velocity.set(0, 0, 0.0);
+                }
+                if (torque.get(0, 0) < 0.0) {
+                    torque.set(0, 0, 0.0);
+                }
+            }
+            if (position.get(0, 0) > shoulder.maxAngle()) {
+                position.set(0, 0, shoulder.maxAngle());
+                if (velocity.get(0, 0) > 0.0) {
+                    velocity.set(0, 0, 0.0);
+                }
+                if (torque.get(0, 0) > 0.0) {
+                    torque.set(0, 0, 0.0);
+                }
+            }
+            if (position.get(1, 0) < elbow.minAngle()) {
+                position.set(1, 0, elbow.minAngle());
+                if (velocity.get(1, 0) < 0.0) {
+                    velocity.set(1, 0, 0.0);
+                }
+                if (torque.get(1, 0) < 0.0) {
+                    torque.set(1, 0, 0.0);
+                }
+            }
+            if (position.get(1, 0) > elbow.maxAngle()) {
+                position.set(1, 0, elbow.maxAngle());
+                if (velocity.get(1, 0) > 0.0) {
+                    velocity.set(1, 0, 0.0);
+                }
+                if (torque.get(1, 0) > 0.0) {
+                    torque.set(1, 0, 0.0);
+                }
+            }
+
+            // Calculate acceleration
+            var acceleration =
+                    M(position)
+                            .inv()
+                            .times(
+                                    torque.minus(C(position, velocity).times(velocity)).minus(Tg(position)));
+
+            // Return state vector
+            return (Vector<N4>) new MatBuilder<>(Nat.N4(), Nat.N1())
+                    .fill(
+                            velocity.get(0, 0),
+                            velocity.get(1, 0),
+                            acceleration.get(0, 0),
+                            acceleration.get(1, 0));
+        };
+    }
+
+    public BiFunction<Matrix<N4, N1>, Matrix<N2, N1>, Matrix<N4, edu.wpi.first.math.numbers.N1>> simulateStepFunc() {
+        return (Matrix<N4, N1> x, Matrix<N2, N1> u) -> dynamics.simulate((Vector<N4>) x, (Vector<edu.wpi.first.math.numbers.N2>) u, 0.02).extractColumnVector(0);
+    }
+
+
 }

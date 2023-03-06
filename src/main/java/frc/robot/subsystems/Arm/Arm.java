@@ -5,13 +5,15 @@
 package frc.robot.subsystems.Arm;
 
 import com.revrobotics.*;
-import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.Vector;
+import edu.wpi.first.math.*;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.estimator.ExtendedKalmanFilter;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N2;
+import edu.wpi.first.math.numbers.N4;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
@@ -25,6 +27,7 @@ import frc.robot.util.ArmState;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.BiFunction;
 
 import static frc.robot.constants.Constants.ArmConstants.*;
 
@@ -40,6 +43,19 @@ public class Arm extends SubsystemBase implements SubsystemLogging {
     private double last_velocity1, last_velocity2;
     private DoublePublisher currentTheta1, currentTheta2, omega1, omega2, alpha1, alpha2, targetTheta1, targetTheta2, error2, appliedOutput1, appliedOutput2, feedForwardOutput1, feedForwardOutput2;
     private boolean isOpenLoop;
+    public final BiFunction<Matrix<N4, N1>, Matrix<N2, N1>, Matrix<N4, edu.wpi.first.math.numbers.N1>> simulateFunc = (Matrix<N4, N1> x, Matrix<N2, N1> u) -> dynamics.simulate((Vector<N4>) x, (Vector<edu.wpi.first.math.numbers.N2>) u, 0.02).extractColumnVector(0);
+    private final ExtendedKalmanFilter<N4, N2, N4> kFilter =
+            new ExtendedKalmanFilter<>(
+            Nat.N4(),
+            Nat.N2(),
+            Nat.N4(),
+            dynamics.accelFunction(),
+            dynamics.simulateStepFunc(),
+            VecBuilder.fill(0.1, 0.1, 0.2, 0.2),
+            VecBuilder.fill(0.02, 0.02, 0.03, 0.03),
+            Matrix::plus,
+            Matrix::minus,
+            0.02);
 
 
     /**
@@ -169,6 +185,9 @@ public class Arm extends SubsystemBase implements SubsystemLogging {
         log("error2", controller2.getPositionError());
         log("newFF1", dynamics.feedforward(getCurrentState().getPositionVector(), getCurrentState().getOmegaVector()).get(0,1));
         log("newFF2", dynamics.feedforward(getCurrentState().getPositionVector(), getCurrentState().getOmegaVector()).get(0,1));
+        log("kFilter Theta1", kFilter.getXhat(0));
+        log("kFilter Theta2", kFilter.getXhat(1));
+
 
     }
 
@@ -299,6 +318,8 @@ public class Arm extends SubsystemBase implements SubsystemLogging {
 
         setVoltages(MathUtil.clamp(input1 + feedForwardShoulder, -12, 12), MathUtil.clamp(input2 + feedForwardElbow, -12, 12));
 
+
+        kFilter.correct(VecBuilder.fill(input1 + feedForwardShoulder, input2 + feedForwardElbow), getCurrentState().getStateMatrix4());
         updateDashBoard();
         updateLogging();
     }
