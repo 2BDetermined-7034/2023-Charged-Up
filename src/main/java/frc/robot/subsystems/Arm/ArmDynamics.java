@@ -13,9 +13,9 @@ import edu.wpi.first.math.system.NumericalIntegration;
 /**
  * Converts between the system state and motor voltages for a double jointed arm.
  *
- * <p>https://www.chiefdelphi.com/t/whitepaper-two-jointed-arm-dynamics/423060
+ * <p><a href="https://www.chiefdelphi.com/t/whitepaper-two-jointed-arm-dynamics/423060">...</a>
  *
- * <p>https://www.chiefdelphi.com/t/double-jointed-arm-physics-control-simulator/424307
+ * <p><a href="https://www.chiefdelphi.com/t/double-jointed-arm-physics-control-simulator/424307">...</a>
  */
 public class ArmDynamics {
     private static final double g = 9.80665;
@@ -28,17 +28,16 @@ public class ArmDynamics {
         // Combine elbow and wrist constants
         var elbowCgRadius =
                 (config.elbow().cgRadius() * config.elbow().mass()
-                        + (config.elbow().length() + config.wrist().cgRadius()) * config.wrist().mass())
-                        / (config.elbow().mass() + config.wrist().mass());
+                        + (config.elbow().length()))
+                        / (config.elbow().mass());
         var elbowMoi =
                 config.elbow().mass() * Math.pow(config.elbow().cgRadius() - elbowCgRadius, 2.0)
-                        + config.wrist().mass()
                         * Math.pow(
-                        config.elbow().length() + config.wrist().cgRadius() - elbowCgRadius, 2.0);
+                        config.elbow().length() - elbowCgRadius, 2.0);
         elbow =
                 new ArmConfig.JointConfig(
-                        config.elbow().mass() + config.wrist().mass(),
-                        config.elbow().length() + config.wrist().length(),
+                        config.elbow().mass(),
+                        config.elbow().length(),
                         elbowMoi,
                         elbowCgRadius,
                         config.elbow().minAngle(),

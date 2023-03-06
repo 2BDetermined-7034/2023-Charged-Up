@@ -9,7 +9,6 @@ package frc.robot.subsystems.Arm;
 
 
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -17,10 +16,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.DoubleNode;
-import com.fasterxml.jackson.databind.node.IntNode;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
@@ -30,12 +28,11 @@ public record ArmConfig(
         Translation2d origin,
         JointConfig shoulder,
         JointConfig elbow,
-        JointConfig wrist,
         SolverConfig solver,
         Map<String, Constraint> constraints) {
 
 /** Physics constants for a single joint. */
-public static record JointConfig(
+public record JointConfig(
         double mass,
         double length,
         double moi,
@@ -45,14 +42,14 @@ public static record JointConfig(
         MotorConfig motor) {}
 
 /** Physics constants for a joint motor. */
-public static record MotorConfig(DCMotor physics, double reduction) {}
+public record MotorConfig(DCMotor physics, double reduction) {}
 
 /** Config fields for solver. */
-public static record SolverConfig(
+public record SolverConfig(
         int interiorPoints, double maxVoltageShoulder, double maxVoltageElbow, double maxJerk) {}
 
 /** Arbitrary solver constraint. */
-public static record Constraint(String type, double[] args) {}
+public record Constraint(String type, double[] args) {}
 
 /** Converts double array to Translation2d instance. */
 private static class Translation2dDeserializer extends StdDeserializer<Translation2d> {
@@ -66,7 +63,7 @@ private static class Translation2dDeserializer extends StdDeserializer<Translati
 
     @Override
     public Translation2d deserialize(JsonParser jp, DeserializationContext ctxt)
-            throws IOException, JsonProcessingException {
+            throws IOException {
         ArrayNode node = jp.getCodec().readTree(jp);
         double x = (Double) node.get(0).numberValue();
         double y = (Double) node.get(1).numberValue();
@@ -86,20 +83,17 @@ private static class MotorConfigDeserializer extends StdDeserializer<MotorConfig
 
     @Override
     public MotorConfig deserialize(JsonParser jp, DeserializationContext ctxt)
-            throws IOException, JsonProcessingException {
+            throws IOException {
         JsonNode node = jp.getCodec().readTree(jp);
         String type = node.get("type").asText();
-        int count = (Integer) ((IntNode) node.get("count")).numberValue();
-        double reduction = (Double) ((DoubleNode) node.get("reduction")).numberValue();
+        int count = (Integer) node.get("count").numberValue();
+        double reduction = (Double) node.get("reduction").numberValue();
 
-        switch (type) {
-            case "neo":
-                return new MotorConfig(DCMotor.getNEO(count).withReduction(reduction), reduction);
-            case "neo550":
-                return new MotorConfig(DCMotor.getNeo550(count).withReduction(reduction), reduction);
-            default:
-                return null;
-        }
+        return switch (type) {
+            case "neo" -> new MotorConfig(DCMotor.getNEO(count).withReduction(reduction), reduction);
+            case "neo550" -> new MotorConfig(DCMotor.getNeo550(count).withReduction(reduction), reduction);
+            default -> null;
+        };
     }
 }
 

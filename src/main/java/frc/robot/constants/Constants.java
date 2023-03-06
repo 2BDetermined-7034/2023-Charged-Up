@@ -5,12 +5,8 @@
 package frc.robot.constants;
 
 import com.revrobotics.CANSparkMax;
-import edu.wpi.first.math.MatBuilder;
-import edu.wpi.first.math.Matrix;
-import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.numbers.N2;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
 import frc.robot.subsystems.Arm.ArmConfig;
@@ -171,7 +167,7 @@ public final class Constants {
          * TODO move these to JSON files
          * Also I have no idea what "interior points" is for the Solver Config :/
          */
-        public static final HashMap<String, ArmConfig.Constraint> constraintHashMap = new HashMap<String, ArmConfig.Constraint>();
+        public static final HashMap<String, ArmConfig.Constraint> constraintHashMap = new HashMap<>();
         public static final ArmConfig armConfig = new ArmConfig(
                 new Translation2d(),
                 new ArmConfig.JointConfig(
@@ -197,9 +193,6 @@ public final class Constants {
                                 DCMotor.getNeo550(N2),
                                 133.78
                         )
-                ),
-                new ArmConfig.JointConfig(
-                        0, 0, 0, 0, 0, 0, new ArmConfig.MotorConfig(DCMotor.getNeo550(0), 0)
                 ),
 
                 new ArmConfig.SolverConfig(
