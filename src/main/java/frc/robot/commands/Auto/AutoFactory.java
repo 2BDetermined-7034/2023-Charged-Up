@@ -14,8 +14,7 @@ import frc.robot.commands.clob.GravityClawCommand;
 import frc.robot.commands.clob.GravityClawToggleCommand;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.*;
-
-import static frc.robot.constants.Constants.ArmConstants.ArmSetPoints.preIntake;
+import frc.robot.subsystems.Arm.Arm;
 
 public class AutoFactory {
 

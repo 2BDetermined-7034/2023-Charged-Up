@@ -4,8 +4,6 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.Compressor;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -18,15 +16,14 @@ import frc.robot.commands.Arm.ArmOverride;
 import frc.robot.commands.Arm.ArmPathFactory;
 import frc.robot.commands.Arm.SetArmCommand;
 import frc.robot.commands.Auto.AutoFactory;
-import frc.robot.commands.Drive.AutoBalance;
 import frc.robot.commands.Drive.DefaultDriveCommand;
 import frc.robot.commands.Drive.HeadingDriveCommand;
 import frc.robot.commands.Intake.RunIntakeCommand;
-import frc.robot.commands.clob.GravityClawCommand;
 import frc.robot.commands.clob.GravityClawToggleCommand;
 import frc.robot.constants.Constants;
 import frc.robot.constants.Constants.OperatorConstants;
 import frc.robot.subsystems.*;
+import frc.robot.subsystems.Arm.Arm;
 
 
 public class RobotContainer implements SubsystemLogging {

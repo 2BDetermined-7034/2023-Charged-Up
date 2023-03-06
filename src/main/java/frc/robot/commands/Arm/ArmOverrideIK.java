@@ -1,7 +1,6 @@
 package frc.robot.commands.Arm;
 
-import frc.robot.subsystems.Arm;
-import frc.robot.util.ArmState;
+import frc.robot.subsystems.Arm.Arm;
 
 import java.util.function.DoubleSupplier;
 

@@ -2,6 +2,7 @@ package frc.robot.util;
 
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.numbers.N2;
 import edu.wpi.first.math.numbers.N4;
@@ -48,10 +49,6 @@ public class ArmState {
 
     public ArmState(double degreesToRadians, double degreesToRadians1, double omega1, double omega2) {
         this(degreesToRadians, degreesToRadians1, omega1, omega2, 0, 0);
-    }
-
-    public ArmState() {
-
     }
 
     /**
@@ -109,6 +106,13 @@ public class ArmState {
         this.theta2 = Rotation2d.fromDegrees(this.theta2.getDegrees() + theta2);
         return this;
 
+    }
+
+    public Vector<N2> getPositionVector() {
+        return VecBuilder.fill(getTheta1(), getTheta2());
+    }
+    public Vector<N2> getOmegaVector() {
+        return VecBuilder.fill(omega1, omega2);
     }
 
 

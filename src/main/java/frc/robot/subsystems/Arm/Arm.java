@@ -2,25 +2,29 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.subsystems;
+package frc.robot.subsystems.Arm;
 
 import com.revrobotics.*;
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.numbers.N2;
+import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.DoublePublisher;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.CounterBase;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
-import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.SubsystemLogging;
 import frc.robot.util.ArmState;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static frc.robot.constants.Constants.ArmConstants.*;
 
@@ -36,6 +40,7 @@ public class Arm extends SubsystemBase implements SubsystemLogging {
     private double last_velocity1, last_velocity2;
     private DoublePublisher currentTheta1, currentTheta2, omega1, omega2, alpha1, alpha2, targetTheta1, targetTheta2, error2, appliedOutput1, appliedOutput2, feedForwardOutput1, feedForwardOutput2;
     private boolean isOpenLoop;
+
 
     /**
      * Creates a new Arm.
@@ -162,6 +167,9 @@ public class Arm extends SubsystemBase implements SubsystemLogging {
         log("Applied Output2", m_motor2.getAppliedOutput());
         log("error1", controller1.getPositionError());
         log("error2", controller2.getPositionError());
+        log("newFF1", dynamics.feedforward(getCurrentState().getPositionVector(), getCurrentState().getOmegaVector()).get(0,1));
+        log("newFF2", dynamics.feedforward(getCurrentState().getPositionVector(), getCurrentState().getOmegaVector()).get(0,1));
+
     }
 
     /**
@@ -284,10 +292,12 @@ public class Arm extends SubsystemBase implements SubsystemLogging {
             input2 = controller2.calculate(getCurrentState().getTheta2(), profile2);
         }
 
-        double betterFeedForward1 = armFeedForward1.calculate(controller1.getSetpoint().position, controller1.getSetpoint().velocity);
-        double betterFeedForward2 = armFeedForward2.calculate(controller2.getSetpoint().position, controller2.getSetpoint().velocity);
+        double feedForwardShoulder = armFeedForward1.calculate(controller1.getSetpoint().position, controller1.getSetpoint().velocity);
+        double feedForwardElbow = armFeedForward2.calculate(controller2.getSetpoint().position, controller2.getSetpoint().velocity);
 
-        setVoltages(MathUtil.clamp(input1 + betterFeedForward1, -12, 12), MathUtil.clamp(input2 + betterFeedForward2, -12, 12));
+        //Vector<edu.wpi.first.math.numbers.N2> ff = dynamics.feedforward(getCurrentState().getPositionVector(), getCurrentState().getOmegaVector());
+
+        setVoltages(MathUtil.clamp(input1 + feedForwardShoulder, -12, 12), MathUtil.clamp(input2 + feedForwardElbow, -12, 12));
 
         updateDashBoard();
         updateLogging();

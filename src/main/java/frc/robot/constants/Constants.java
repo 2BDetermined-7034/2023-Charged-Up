@@ -9,9 +9,15 @@ import edu.wpi.first.math.MatBuilder;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.numbers.N2;
+import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
+import frc.robot.subsystems.Arm.ArmConfig;
+import frc.robot.subsystems.Arm.ArmDynamics;
 import frc.robot.util.ArmState;
+
+import java.util.HashMap;
 
 public final class Constants {
     public static class OperatorConstants {
@@ -103,6 +109,9 @@ public final class Constants {
     }
 
     public static class ArmConstants {
+        /**
+         * TODO redo all constants here, probably from fusion 360, make angles line up with new classes, set proper minMax angles, etc
+         */
         public static class ArmSetPoints {
             public static ArmState passThrough = new ArmState(Units.degreesToRadians(125), Units.degreesToRadians(190));
             public static ArmState preIntake = new ArmState(Units.degreesToRadians(112), Units.degreesToRadians(244), 0, 0.2);
@@ -156,40 +165,49 @@ public final class Constants {
         public static final double kG1 = 0.47d, kV1 = 3.47d, kA1 = 0.03d;
         public static final double kG2 = 0.28, kV2 = 2.60, kA2 = .03;
 
-        //Gravity
-        public static final double g = 9.81;
 
-        public static final double stall_torque = 2.6;
-        public static final double free_speed = 5676 * 2.0 * Math.PI / 60.0;
-        public static final double stall_current = 105;
+        /**
+         * These are Mechanical Advantage Arm Config Classes
+         * TODO move these to JSON files
+         * Also I have no idea what "interior points" is for the Solver Config :/
+         */
+        public static final HashMap<String, ArmConfig.Constraint> constraintHashMap = new HashMap<String, ArmConfig.Constraint>();
+        public static final ArmConfig armConfig = new ArmConfig(
+                new Translation2d(),
+                new ArmConfig.JointConfig(
+                        m1,
+                        l1,
+                        I1,
+                        r1,
+                        0,
+                        Units.degreesToRadians(140),
+                        new ArmConfig.MotorConfig(
+                                DCMotor.getNeo550(N1),
+                                177.78
+                        )
+                ),
+                new ArmConfig.JointConfig(
+                        m2,
+                        l2,
+                        I2,
+                        r2,
+                        0,
+                        Units.degreesToRadians(360),
+                        new ArmConfig.MotorConfig(
+                                DCMotor.getNeo550(N2),
+                                133.78
+                        )
+                ),
+                new ArmConfig.JointConfig(
+                        0, 0, 0, 0, 0, 0, new ArmConfig.MotorConfig(DCMotor.getNeo550(0), 0)
+                ),
 
-        public static final double Rm = 12.0 / stall_current;
-
-        public static final double Kv = free_speed / 12.0;
-        public static final double Kt = stall_torque / stall_current;
-
-        //K3*Voltage - K4*velocity = motor torque
-        public static final Matrix<N2, edu.wpi.first.math.numbers.N2> K3 = new MatBuilder<>(Nat.N2(), Nat.N2()).fill(
-                N1 * G1,
-                0,
-                0,
-                N2 * G2
-        ).times(Kt / Rm);
-
-        public static final Matrix<N2, N2> K4 = new MatBuilder<>(Nat.N2(), Nat.N2()).fill(
-                G1 * G1 * N1,
-                0,
-                0,
-                G2 * G2 * N2
-        ).times(Kt / Kv / Rm);
-
-        final static double B1 = G1 * N1 * Kt / Rm;
-        final static double B4 = G2 * N2 * Kt / Rm;
-        public static final Matrix<N2, N2> B = new MatBuilder<>(Nat.N2(), Nat.N2()).fill(
-                B1,
-                0,
-                0,
-                B4
+                new ArmConfig.SolverConfig(
+                        15, 12, 12, 30
+                ),
+                constraintHashMap
         );
+
+        public static final ArmDynamics dynamics = new ArmDynamics(armConfig);
     }
 }

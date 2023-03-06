@@ -1,19 +1,14 @@
 package frc.robot.commands.Arm;
 
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.commands.Indexer.RunIndexerCommand;
 import frc.robot.commands.Intake.RunIntakeCommand;
 import frc.robot.commands.clob.GravityClawCommand;
-import frc.robot.constants.Constants;
-import frc.robot.subsystems.Arm;
+import frc.robot.subsystems.Arm.Arm;
 import frc.robot.subsystems.GravityClawSubsystem;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
-import frc.robot.util.ArmState;
 
 import static frc.robot.constants.Constants.ArmConstants.ArmSetPoints.*;
 
