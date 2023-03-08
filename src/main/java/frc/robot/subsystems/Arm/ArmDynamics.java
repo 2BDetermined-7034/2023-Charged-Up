@@ -1,4 +1,5 @@
 package frc.robot.subsystems.Arm;
+
 import edu.wpi.first.math.MatBuilder;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.Nat;
@@ -17,15 +18,14 @@ import static frc.robot.constants.Constants.ArmConstants.dynamics;
 /**
  * Converts between the system state and motor voltages for a double jointed arm.
  *
- * <p><a href="https://www.chiefdelphi.com/t/whitepaper-two-jointed-arm-dynamics/423060">...</a>
+ * <p>https://www.chiefdelphi.com/t/whitepaper-two-jointed-arm-dynamics/423060
  *
- * <p><a href="https://www.chiefdelphi.com/t/double-jointed-arm-physics-control-simulator/424307">...</a>
+ * <p>https://www.chiefdelphi.com/t/double-jointed-arm-physics-control-simulator/424307
  */
 public class ArmDynamics {
     private static final double g = 9.80665;
     private final ArmConfig.JointConfig shoulder;
     private final ArmConfig.JointConfig elbow;
-
 
     public ArmDynamics(ArmConfig config) {
         shoulder = config.shoulder();
@@ -33,16 +33,17 @@ public class ArmDynamics {
         // Combine elbow and wrist constants
         var elbowCgRadius =
                 (config.elbow().cgRadius() * config.elbow().mass()
-                        + (config.elbow().length()))
-                        / (config.elbow().mass());
+                        + (config.elbow().length() + config.wrist().cgRadius()) * config.wrist().mass())
+                        / (config.elbow().mass() + config.wrist().mass());
         var elbowMoi =
                 config.elbow().mass() * Math.pow(config.elbow().cgRadius() - elbowCgRadius, 2.0)
+                        + config.wrist().mass()
                         * Math.pow(
-                        config.elbow().length() - elbowCgRadius, 2.0);
+                        config.elbow().length() + config.wrist().cgRadius() - elbowCgRadius, 2.0);
         elbow =
                 new ArmConfig.JointConfig(
-                        config.elbow().mass(),
-                        config.elbow().length(),
+                        config.elbow().mass() + config.wrist().mass(),
+                        config.elbow().length() + config.wrist().length(),
                         elbowMoi,
                         elbowCgRadius,
                         config.elbow().minAngle(),
@@ -251,6 +252,7 @@ public class ArmDynamics {
                 elbow.mass() * elbow.cgRadius() * g * Math.cos(position.get(0, 0) + position.get(1, 0)));
         return Tg;
     }
+
 
     public BiFunction<Matrix<N4, N1>, Matrix<N2, N1>, Matrix<N4, N1>> accelFunction() {
         return (Matrix<N4, N1> x, Matrix<N2, N1> u) -> {

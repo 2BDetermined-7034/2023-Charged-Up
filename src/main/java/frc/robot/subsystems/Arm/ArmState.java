@@ -1,4 +1,4 @@
-package frc.robot.util;
+package frc.robot.subsystems.Arm;
 
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;

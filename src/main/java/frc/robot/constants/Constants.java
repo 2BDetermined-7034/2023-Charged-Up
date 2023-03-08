@@ -11,7 +11,7 @@ import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
 import frc.robot.subsystems.Arm.ArmConfig;
 import frc.robot.subsystems.Arm.ArmDynamics;
-import frc.robot.util.ArmState;
+import frc.robot.subsystems.Arm.ArmState;
 
 import java.util.HashMap;
 
@@ -194,6 +194,7 @@ public final class Constants {
                                 133.78
                         )
                 ),
+                new ArmConfig.JointConfig(0,0,0,0,0,0,new ArmConfig.MotorConfig(DCMotor.getNeo550(1), 0)),
 
                 new ArmConfig.SolverConfig(
                         15, 12, 12, 30
