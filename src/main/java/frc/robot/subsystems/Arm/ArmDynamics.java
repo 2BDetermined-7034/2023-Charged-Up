@@ -180,57 +180,32 @@ public class ArmDynamics {
         M.set(
                 0,
                 0,
-                shoulder.mass() * Math.pow(shoulder.cgRadius(), 2.0)
-                        + elbow.mass() * (Math.pow(shoulder.length(), 2.0) + Math.pow(elbow.cgRadius(), 2.0))
-                        + shoulder.moi()
-                        + elbow.moi()
-                        + 2
-                        * elbow.mass()
-                        * shoulder.length()
-                        * elbow.cgRadius()
-                        * Math.cos(position.get(1, 0)));
+                elbow.mass() * shoulder.length() * shoulder.length() + shoulder.mass() * shoulder.cgRadius() * shoulder.cgRadius() + shoulder.moi());
         M.set(
                 1,
                 0,
-                elbow.mass() * Math.pow(elbow.cgRadius(), 2.0)
-                        + elbow.moi()
-                        + elbow.mass() * shoulder.length() * elbow.cgRadius() * Math.cos(position.get(1, 0)));
+                shoulder.length() * elbow.mass() * elbow.cgRadius() * Math.cos(position.get(0,0) - position.get(1,0)));
         M.set(
                 0,
                 1,
-                elbow.mass() * Math.pow(elbow.cgRadius(), 2.0)
-                        + elbow.moi()
-                        + elbow.mass() * shoulder.length() * elbow.cgRadius() * Math.cos(position.get(1, 0)));
-        M.set(1, 1, elbow.mass() * Math.pow(elbow.cgRadius(), 2.0) + elbow.moi());
+                shoulder.length() * elbow.mass() * elbow.cgRadius() * Math.cos(position.get(0,0) - position.get(1,0)));
+        M.set(
+                1,
+                1,
+                elbow.mass() * elbow.cgRadius() * elbow.cgRadius() + elbow.moi());
         return M;
     }
 
     private Matrix<N2, N2> C(Vector<N2> position, Vector<N2> velocity) {
         var C = new Matrix<>(N2.instance, N2.instance);
         C.set(
-                0,
-                0,
-                -elbow.mass()
-                        * shoulder.length()
-                        * elbow.cgRadius()
-                        * Math.sin(position.get(1, 0))
-                        * velocity.get(1, 0));
-        C.set(
                 1,
                 0,
-                elbow.mass()
-                        * shoulder.length()
-                        * elbow.cgRadius()
-                        * Math.sin(position.get(1, 0))
-                        * velocity.get(0, 0));
+                shoulder.length() * elbow.mass() * elbow.cgRadius() * Math.sin(position.get(1,0) - position.get(0,0)) * velocity.get(0,0));
         C.set(
                 0,
                 1,
-                -elbow.mass()
-                        * shoulder.length()
-                        * elbow.cgRadius()
-                        * Math.sin(position.get(1, 0))
-                        * (velocity.get(0, 0) + velocity.get(1, 0)));
+                shoulder.length() * elbow.mass() * elbow.cgRadius() * Math.sin(position.get(0,0) - position.get(1,0)) * velocity.get(1,0));
         return C;
     }
 
@@ -239,17 +214,12 @@ public class ArmDynamics {
         Tg.set(
                 0,
                 0,
-                (shoulder.mass() * shoulder.cgRadius() + elbow.mass() * shoulder.length())
-                        * g
-                        * Math.cos(position.get(0, 0))
-                        + elbow.mass()
-                        * elbow.cgRadius()
-                        * g
-                        * Math.cos(position.get(0, 0) + position.get(1, 0)));
+                g * Math.cos(position.get(0,0)) * (shoulder.length() * elbow.mass() + shoulder.mass() * shoulder.cgRadius())
+                );
         Tg.set(
                 1,
                 0,
-                elbow.mass() * elbow.cgRadius() * g * Math.cos(position.get(0, 0) + position.get(1, 0)));
+                g * elbow.mass() * elbow.cgRadius() * Math.cos(position.get(1,0)));
         return Tg;
     }
 
