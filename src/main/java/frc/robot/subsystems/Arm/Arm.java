@@ -19,6 +19,7 @@ import edu.wpi.first.networktables.DoublePublisher;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.SubsystemLogging;
 
@@ -34,6 +35,7 @@ public class Arm extends SubsystemBase implements SubsystemLogging {
     private final ProfiledPIDController controller1, controller2;
     private final ArmFeedforward armFeedForward1, armFeedForward2;
     private ArmState goalState;
+    private ArmState homeState;
     private double input1, input2;
     private double last_velocity1, last_velocity2;
     private DoublePublisher currentTheta1, currentTheta2, omega1, omega2, alpha1, alpha2, targetTheta1, targetTheta2, error2, appliedOutput1, appliedOutput2, feedForwardOutput1, feedForwardOutput2;
@@ -178,8 +180,8 @@ public class Arm extends SubsystemBase implements SubsystemLogging {
         log("Applied Output2", m_motor2.getAppliedOutput());
         log("error1", controller1.getPositionError());
         log("error2", controller2.getPositionError());
-        log("newFF1", dynamics.feedforward(getCurrentState().getPositionVector(), getCurrentState().getOmegaVector()).get(0,1));
-        log("newFF2", dynamics.feedforward(getCurrentState().getPositionVector(), getCurrentState().getOmegaVector()).get(0,1));
+        log("newFF1", dynamics.feedforward(getCurrentState().getPositionVector(), getCurrentState().getOmegaVector()).get(0,0));
+        log("newFF2", dynamics.feedforward(getCurrentState().getPositionVector(), getCurrentState().getOmegaVector()).get(1,0));
         log("kFilter Theta1", kFilter.getXhat(0));
         log("kFilter Theta2", kFilter.getXhat(1));
 

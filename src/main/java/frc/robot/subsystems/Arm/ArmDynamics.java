@@ -92,7 +92,7 @@ public class ArmDynamics {
      * @param dt The step length in seconds.
      * @return The new state of the arm as (position_0, position_1, velocity_0, velocity_1)
      */
-    public Vector<N4> simulate(Vector<N4> state, Vector<N2> voltage, double dt) {
+    public Vector<N4> simulate(Matrix<N4, N1> state, Matrix<N2, N1> voltage, double dt) {
         return new Vector<>(
                 NumericalIntegration.rkdp(
                         (Matrix<N4, N1> x, Matrix<N2, N1> u) -> {
@@ -293,7 +293,7 @@ public class ArmDynamics {
                                     torque.minus(C(position, velocity).times(velocity)).minus(Tg(position)));
 
             // Return state vector
-            return (Vector<N4>) new MatBuilder<>(Nat.N4(), Nat.N1())
+            return new MatBuilder<>(Nat.N4(), Nat.N1())
                     .fill(
                             velocity.get(0, 0),
                             velocity.get(1, 0),
@@ -303,7 +303,7 @@ public class ArmDynamics {
     }
 
     public BiFunction<Matrix<N4, N1>, Matrix<N2, N1>, Matrix<N4, edu.wpi.first.math.numbers.N1>> simulateStepFunc() {
-        return (Matrix<N4, N1> x, Matrix<N2, N1> u) -> dynamics.simulate((Vector<N4>) x, (Vector<edu.wpi.first.math.numbers.N2>) u, 0.02).extractColumnVector(0);
+        return (Matrix<N4, N1> x, Matrix<N2, N1> u) -> dynamics.simulate( x, u, 0.02).extractColumnVector(0);
     }
 
 

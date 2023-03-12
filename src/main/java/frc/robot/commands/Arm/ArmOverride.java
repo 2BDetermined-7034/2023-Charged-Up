@@ -1,8 +1,10 @@
 package frc.robot.commands.Arm;
 
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Arm.Arm;
 
+import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
 import static frc.robot.constants.Constants.ArmConstants.*;
@@ -31,7 +33,13 @@ public class ArmOverride extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        arm.setInput(getx1.getAsDouble() * kMaxArmOverrideSpeedShoulder, gety1.getAsDouble() * kMaxArmOverrideSpeedDistal);
+        double input1 = getx1.getAsDouble() * kMaxArmOverrideSpeedShoulder;
+        double input2 = gety1.getAsDouble() * kMaxArmOverrideSpeedDistal;
+        if(arm.getCurrentState().getTheta1() > Units.degreesToRadians(100) || arm.getCurrentState().getTheta2() < 200) {
+            input1 /=2;
+            input2 /=2;
+        }
+        arm.setInput(input1, input2);
         arm.setGoalState(arm.getCurrentState().clear());
     }
 
