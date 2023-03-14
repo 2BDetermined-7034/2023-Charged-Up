@@ -149,7 +149,6 @@ public final class Constants {
         //Gearing of each segment
         public static final double G1 = 5 * 4 * 2 * (80d/18d);
         public static final double G2 = 5 * 3 * 2 * (80d/18d);
-
         public static final double S1 = 2 * Math.PI * (1 / G1);
         public static final double S2 = 2 * Math.PI * (1 / G2);
 
@@ -179,7 +178,7 @@ public final class Constants {
                         Units.degreesToRadians(140),
                         new ArmConfig.MotorConfig(
                                 DCMotor.getNeo550(N1),
-                                177.78
+                                G1
                         )
                 ),
                 new ArmConfig.JointConfig(
@@ -191,7 +190,7 @@ public final class Constants {
                         Units.degreesToRadians(360),
                         new ArmConfig.MotorConfig(
                                 DCMotor.getNeo550(N2),
-                                133.78
+                                G2
                         )
                 ),
                 new ArmConfig.JointConfig(0,0,0,0,0,0,new ArmConfig.MotorConfig(DCMotor.getNeo550(1), 0)),

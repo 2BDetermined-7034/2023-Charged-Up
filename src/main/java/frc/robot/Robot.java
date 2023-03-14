@@ -95,7 +95,7 @@ public class Robot extends LoggedRobot  implements SubsystemLogging {
         // This must be called from the robot's periodic block in order for anything in
         // the Command-based framework to work.
         CommandScheduler.getInstance().run();
-        //NetworkTableInstance.getDefault().flush();
+        NetworkTableInstance.getDefault().flush();
 
 
     }

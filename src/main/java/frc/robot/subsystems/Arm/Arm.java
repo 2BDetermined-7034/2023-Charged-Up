@@ -38,6 +38,7 @@ public class Arm extends SubsystemBase implements SubsystemLogging {
     private ArmState homeState;
     private double input1, input2;
     private double last_velocity1, last_velocity2;
+    private Vector<N2> ff = new Vector<>(Nat.N2());
     private DoublePublisher currentTheta1, currentTheta2, omega1, omega2, alpha1, alpha2, targetTheta1, targetTheta2, error2, appliedOutput1, appliedOutput2, feedForwardOutput1, feedForwardOutput2;
     private boolean isOpenLoop;
     public final BiFunction<Matrix<N4, N1>, Matrix<N2, N1>, Matrix<N4, edu.wpi.first.math.numbers.N1>> simulateFunc = (Matrix<N4, N1> x, Matrix<N2, N1> u) -> dynamics.simulate((Vector<N4>) x, (Vector<edu.wpi.first.math.numbers.N2>) u, 0.02).extractColumnVector(0);
@@ -48,7 +49,7 @@ public class Arm extends SubsystemBase implements SubsystemLogging {
             Nat.N4(),
             dynamics.accelFunction(),
             dynamics.simulateStepFunc(),
-            VecBuilder.fill(0.1, 0.1, 0.2, 0.2),
+            VecBuilder.fill(0.05, 0.05, 0.1, 0.1),
             VecBuilder.fill(0.02, 0.02, 0.03, 0.03),
             Matrix::plus,
             Matrix::minus,
@@ -82,7 +83,7 @@ public class Arm extends SubsystemBase implements SubsystemLogging {
         m_motor1.setInverted(true);
         m_motor2.setInverted(false);
 
-        setModeBreak();
+        setModeCoast();
 
         m_motor1Encoder = m_motor1.getEncoder();
         m_motor2Encoder = m_motor2.getEncoder();
@@ -180,10 +181,10 @@ public class Arm extends SubsystemBase implements SubsystemLogging {
         log("Applied Output2", m_motor2.getAppliedOutput());
         log("error1", controller1.getPositionError());
         log("error2", controller2.getPositionError());
-        log("newFF1", dynamics.feedforward(getCurrentState().getPositionVector(), getCurrentState().getOmegaVector()).get(0,0));
-        log("newFF2", dynamics.feedforward(getCurrentState().getPositionVector(), getCurrentState().getOmegaVector()).get(1,0));
-        log("kFilter Theta1", kFilter.getXhat(0));
-        log("kFilter Theta2", kFilter.getXhat(1));
+        log("newFF1", ff.get(0, 0));
+        log("newFF2", ff.get(1,0));
+        log("kFilter Theta1", Units.radiansToDegrees(kFilter.getXhat(0)));
+        log("kFilter Theta2",Units.radiansToDegrees(kFilter.getXhat(1)));
 
 
     }
@@ -311,7 +312,8 @@ public class Arm extends SubsystemBase implements SubsystemLogging {
         double feedForwardShoulder = armFeedForward1.calculate(controller1.getSetpoint().position, controller1.getSetpoint().velocity);
         double feedForwardElbow = armFeedForward2.calculate(controller2.getSetpoint().position, controller2.getSetpoint().velocity);
 
-        //Vector<edu.wpi.first.math.numbers.N2> ff = dynamics.feedforward(getCurrentState().getPositionVector(), getCurrentState().getOmegaVector());
+        ArmState setPointState = new ArmState(controller1.getSetpoint(), controller2.getSetpoint());
+        ff = dynamics.feedforward(getCurrentState().getPositionVector(), getCurrentState().getOmegaVector());
 
         setVoltages(MathUtil.clamp(input1 + feedForwardShoulder, -12, 12), MathUtil.clamp(input2 + feedForwardElbow, -12, 12));
 

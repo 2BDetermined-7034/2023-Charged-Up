@@ -7,6 +7,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.numbers.N2;
 import edu.wpi.first.math.numbers.N4;
 import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 
 import static frc.robot.constants.Constants.ArmConstants.*;
 
@@ -49,6 +50,10 @@ public class ArmState {
 
     public ArmState(double degreesToRadians, double degreesToRadians1, double omega1, double omega2) {
         this(degreesToRadians, degreesToRadians1, omega1, omega2, 0, 0);
+    }
+
+    public ArmState(TrapezoidProfile.State joint1, TrapezoidProfile.State joint2) {
+        this(joint1.position, joint2.position, joint1.velocity, joint2.velocity);
     }
 
     /**
@@ -114,6 +119,8 @@ public class ArmState {
     public Vector<N2> getOmegaVector() {
         return VecBuilder.fill(omega1, omega2);
     }
+
+    public Vector<N2> getAlphaVector() {return VecBuilder.fill(accel1, accel2);}
 
 
 
