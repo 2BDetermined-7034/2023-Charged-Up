@@ -107,7 +107,7 @@ public final class Constants {
             public static ArmState passThrough = new ArmState(Units.degreesToRadians(125), Units.degreesToRadians(190));
             public static ArmState preIntake = new ArmState(Units.degreesToRadians(112), Units.degreesToRadians(244), 0, 0.2);
 
-            public static ArmState intake = new ArmState(Units.degreesToRadians(122), Units.degreesToRadians(254));
+            public static ArmState intake = new ArmState(Units.degreesToRadians(124), Units.degreesToRadians(255));
             public static ArmState tuck = new ArmState(Units.degreesToRadians(106), Units.degreesToRadians(223));
             public static ArmState midBack = new ArmState(Units.degreesToRadians(132), Units.degreesToRadians(5));
             //public static ArmState midBack = new ArmState(Units.degreesToRadians(95), Units.degreesToRadians(30));
