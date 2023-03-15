@@ -2,6 +2,7 @@ package frc.robot.util;
 
 import com.ctre.phoenix.sensors.*;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -23,7 +24,6 @@ public class SwerveModule {
     public final COTSSwerveConstants cotsSwerveConstants;
     private final Rotation2d angleOffset;
     private Rotation2d lastAngle;
-
     private final CANSparkMax mAngleMotor;
     private final CANSparkMax mDriveMotor;
     private final CANCoder absoluteEncoder;

@@ -25,7 +25,7 @@ public class AutoFactory {
         return new SequentialCommandGroup(
                 new GravityClawCommand(claw, false),
                 new SetArmCommand(arm, Constants.ArmConstants.ArmSetPoints.intake, false),
-                ArmPathFactory.getScoreHighPath(arm, intake, indexer),
+                ArmPathFactory.getScoreHighPath(drive, claw, arm, intake, indexer),
                 new GravityClawToggleCommand(claw),
                 new WaitCommand(0.5),
                 ArmPathFactory.getIntakePath(arm, claw, intake),
@@ -58,7 +58,7 @@ public class AutoFactory {
         return new SequentialCommandGroup(
                 new GravityClawCommand(claw, false),
                 new SetArmCommand(arm, Constants.ArmConstants.ArmSetPoints.intake, false),
-                ArmPathFactory.getScoreHighPath(arm, intake, indexer),
+                ArmPathFactory.getScoreHighPath(drive, claw, arm, intake, indexer),
                 new GravityClawToggleCommand(claw),
                 new WaitCommand(0.5),
                 ArmPathFactory.getIntakePath(arm, claw, intake),
@@ -72,7 +72,7 @@ public class AutoFactory {
         return new SequentialCommandGroup(
                 new GravityClawCommand(claw, false),
                 new SetArmCommand(arm, Constants.ArmConstants.ArmSetPoints.intake, false),
-                ArmPathFactory.getScoreHighPath(arm, intake, indexer),
+                ArmPathFactory.getScoreHighPath(drive, claw, arm, intake, indexer),
                 new GravityClawToggleCommand(claw),
                 new WaitCommand(0.5),
                 ArmPathFactory.getIntakePath(arm, claw, intake),

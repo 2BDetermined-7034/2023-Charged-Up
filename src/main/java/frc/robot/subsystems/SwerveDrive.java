@@ -46,6 +46,7 @@ public class SwerveDrive extends SubsystemBase implements SubsystemLogging {
     ChassisSpeeds m_speeds;
     private final LimeLight limeLight = new LimeLight();
 
+    private double speedMulti = 1;
     public SwerveDrive() {
         ShuffleboardTab tab = Shuffleboard.getTab("Drivetrain");
         zeroGyroscope();
@@ -137,6 +138,11 @@ public class SwerveDrive extends SubsystemBase implements SubsystemLogging {
         return m_estimator.getEstimatedPosition();
     }
 
+    public void setSpeedMulti(double speed) {
+        if (speed > 1) speedMulti = 1;
+        else if (speed < 0) speedMulti = 0;
+        else speedMulti = speed;
+    }
     public void setPosition(Pose2d m_position) {
         zeroGyroscope();
         m_estimator.resetPosition(
@@ -213,6 +219,12 @@ public class SwerveDrive extends SubsystemBase implements SubsystemLogging {
         m_field.setRobotPose(getPosition());
 
         boolean m_IsOpenLoop = false;
+
+        m_states[0].speedMetersPerSecond *= speedMulti;
+        m_states[1].speedMetersPerSecond *= speedMulti;
+        m_states[2].speedMetersPerSecond *= speedMulti;
+        m_states[3].speedMetersPerSecond *= speedMulti;
+
         m_frontLeftModule.setDesiredState(m_states[0], m_IsOpenLoop);
         m_frontRightModule.setDesiredState(m_states[1], m_IsOpenLoop);
         m_backLeftModule.setDesiredState(m_states[2], m_IsOpenLoop);

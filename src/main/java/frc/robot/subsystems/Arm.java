@@ -41,8 +41,8 @@ public class Arm extends SubsystemBase implements SubsystemLogging {
      * Creates a new Arm.
      */
     public Arm() {
-        controller2 = new ProfiledPIDController(10, 1, 0.1, new TrapezoidProfile.Constraints(1.5, 3));
-        controller1 = new ProfiledPIDController(3.5, 0.5, 0.05, new TrapezoidProfile.Constraints(4, 5));
+        controller2 = new ProfiledPIDController(10, 1, 0.1, new TrapezoidProfile.Constraints(2, 1));
+        controller1 = new ProfiledPIDController(3.5, 0.5, 0.05, new TrapezoidProfile.Constraints(4, 4));
 
         controller2.setIntegratorRange(-2, 2);
         controller1.setIntegratorRange(-2, 2);
@@ -55,6 +55,7 @@ public class Arm extends SubsystemBase implements SubsystemLogging {
 
         m_motor1 = new CANSparkMax(motor1ID, CANSparkMaxLowLevel.MotorType.kBrushless);
         m_motor2 = new CANSparkMax(motor2ID, CANSparkMaxLowLevel.MotorType.kBrushless);
+
         m_motor1.setSmartCurrentLimit(10);
         m_motor2.setSmartCurrentLimit(10);
 
@@ -65,7 +66,6 @@ public class Arm extends SubsystemBase implements SubsystemLogging {
         m_motor2.setInverted(false);
 
         setModeBreak();
-
         m_motor1Encoder = m_motor1.getEncoder();
         m_motor2Encoder = m_motor2.getEncoder();
 
