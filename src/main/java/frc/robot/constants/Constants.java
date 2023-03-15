@@ -131,20 +131,20 @@ public final class Constants {
         public static final int motor2ID = 7;
 
         //Length of Segments
-        public static final double l1 = Units.inchesToMeters(38.5);
-        public static final double l2 = Units.inchesToMeters(33.5);
+        public static final double l1 = Units.inchesToMeters(35.75);
+        public static final double l2 = Units.inchesToMeters(20);
 
         //Mass of segments
-        public static final double m1 = 1.3;
-        public static final double m2 = 0.53 + 0.9;
+        public static final double m1 = 1.11;
+        public static final double m2 = 0.3149;
 
         //Distance from pivot to CG for each segment
-        public static final double r1 = l1 / 2;
-        public static final double r2 = l2 / 2;
+        public static final double r1 = Units.inchesToMeters(17.816);
+        public static final double r2 = Units.inchesToMeters(8.93);
 
         //Moment of inertia about CG for each segment
-        public static final double I1 = .118;
-        public static final double I2 = .031;
+        public static final double I1 = .302;
+        public static final double I2 = .0266;
 
         //Gearing of each segment
         public static final double G1 = 5 * 4 * 2 * (80d/18d);
