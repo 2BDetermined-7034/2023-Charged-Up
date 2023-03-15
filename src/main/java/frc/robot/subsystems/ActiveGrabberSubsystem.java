@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
@@ -16,6 +17,7 @@ public class ActiveGrabberSubsystem extends SubsystemBase {
         //       such as SpeedControllers, Encoders, DigitalInputs, etc.
         mmFunnyMotor = new WPI_TalonSRX(Constants.GravityClaw.activeGrabberMotor);
 
+        mmFunnyMotor.setNeutralMode(NeutralMode.Brake);
     }
 
 
