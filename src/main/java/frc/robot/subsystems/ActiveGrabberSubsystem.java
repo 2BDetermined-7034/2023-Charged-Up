@@ -26,7 +26,7 @@ public class ActiveGrabberSubsystem extends SubsystemBase {
     }
 
     public void stopGrabberMotor() {
-        mmFunnyMotor.setVoltage(0);
+        mmFunnyMotor.set(0);
     }
 
 
