@@ -37,6 +37,7 @@ public class ActiveGrabberMotor extends CommandBase {
     @Override
     public void end(boolean interrupted) {
 
+        activeGrabberSubsystem.stopGrabberMotor();
 
     }
 }
