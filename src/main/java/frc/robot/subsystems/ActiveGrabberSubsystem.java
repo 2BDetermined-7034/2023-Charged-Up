@@ -17,7 +17,6 @@ public class ActiveGrabberSubsystem extends SubsystemBase {
         //       such as SpeedControllers, Encoders, DigitalInputs, etc.
         mmFunnyMotor = new WPI_TalonSRX(Constants.GravityClaw.activeGrabberMotor);
 
-        mmFunnyMotor.setNeutralMode(NeutralMode.Brake);
     }
 
 
