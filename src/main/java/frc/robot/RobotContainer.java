@@ -135,8 +135,9 @@ public class RobotContainer {
        new Trigger(m_operatorController::getLeftBumper).whileTrue(m_visionLocker.runOnce(m_visionLocker::gridLeft));
        new Trigger(m_operatorController::getRightBumper).whileTrue(m_visionLocker.runOnce(m_visionLocker::gridRight));
 
-//       new Trigger(m_operatorController::getBackButton).onTrue(new GravityClawToggleCommand(gravityClawSubsystem));
-        new JoystickButton(m_operatorController, XboxController.Button.kA.value).whileTrue(new ActiveGrabberMotor(ags, 0.5));
+       new Trigger(m_operatorController::getBackButton).onTrue(new GravityClawToggleCommand(gravityClawSubsystem));
+       new JoystickButton(m_operatorController, XboxController.Button.kA.value).whileTrue(new ActiveGrabberMotor(ags, 0.5));
+
 //        new Trigger(m_operatorController::getAButton).onTrue(ArmPathFactory.getIntakePath(m_Arm, gravityClawSubsystem, intake)); // high// med
 //        new Trigger(m_operatorController::getBButton).onTrue(ArmPathFactory.getScoreMidPath(m_Arm, intake)); // low
 //        new Trigger(m_operatorController::getYButton).onTrue(ArmPathFactory.getScoreHighPath(m_Arm, intake)); // low
