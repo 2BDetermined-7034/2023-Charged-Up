@@ -46,12 +46,12 @@ public class RobotContainer {
 //        m_Arm.setGoalState(m_Arm.getCurrentState());
 
         m_driverController.share().whileTrue(m_swerveDrive.runOnce(m_swerveDrive::zeroGyroscope));
-        m_swerveDrive.setDefaultCommand(new DefaultDriveCommand(
-                m_swerveDrive,
-                () -> -square(modifyAxis(m_driverController.getLeftY()) * m_swerveDrive.getMaxSpeed()),
-                () -> -square(modifyAxis(m_driverController.getLeftX()) * m_swerveDrive.getMaxSpeed()),
-                () -> -square(modifyAxis(m_driverController.getRightX()) * m_swerveDrive.getMaxSpeed())
-        ));
+//        m_swerveDrive.setDefaultCommand(new DefaultDriveCommand(
+//                m_swerveDrive,
+//                () -> -square(modifyAxis(m_driverController.getLeftY()) * m_swerveDrive.getMaxSpeed()),
+//                () -> -square(modifyAxis(m_driverController.getLeftX()) * m_swerveDrive.getMaxSpeed()),
+//                () -> -square(modifyAxis(m_driverController.getRightX()) * m_swerveDrive.getMaxSpeed())
+//        ));
 
         configureBindings();
     }
