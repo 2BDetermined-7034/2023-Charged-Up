@@ -136,7 +136,7 @@ public class RobotContainer {
 
 //       new Trigger(m_operatorController::getBackButton).onTrue(new GravityClawToggleCommand(gravityClawSubsystem));
 
-       new Trigger(m_operatorController::getAButton).whileTrue(new ActiveGrabberMotor(ags, 6));
+       new Trigger(m_operatorController::getAButton).whileTrue(new ActiveGrabberMotor(ags, .4));
 
 //        new Trigger(m_operatorController::getAButton).onTrue(ArmPathFactory.getIntakePath(m_Arm, gravityClawSubsystem, intake)); // high// med
 //        new Trigger(m_operatorController::getBButton).onTrue(ArmPathFactory.getScoreMidPath(m_Arm, intake)); // low
