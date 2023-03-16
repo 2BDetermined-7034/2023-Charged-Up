@@ -32,7 +32,6 @@ public class SetArmCommand extends CommandBase {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-
         arm.setGoalState(goalState);
     }
 

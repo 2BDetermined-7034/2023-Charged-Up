@@ -28,24 +28,23 @@ public class Arm extends SubsystemBase implements SubsystemLogging {
     private final CANSparkMax m_motor1, m_motor2;
     private final RelativeEncoder m_motor1Encoder, m_motor2Encoder;
     private final DutyCycleEncoder m_AbsoluteEncoder1, m_AbsoluteEncoder2;
-    private final NetworkTable networkTable = NetworkTableInstance.getDefault().getTable("Arm");
     private final ProfiledPIDController controller1, controller2;
     private final ArmFeedforward armFeedForward1, armFeedForward2;
     private ArmState goalState;
     private double input1, input2;
     private double last_velocity1, last_velocity2;
-    private DoublePublisher currentTheta1, currentTheta2, omega1, omega2, alpha1, alpha2, targetTheta1, targetTheta2, error2, appliedOutput1, appliedOutput2, feedForwardOutput1, feedForwardOutput2;
     private boolean isOpenLoop;
 
     /**
      * Creates a new Arm.
      */
     public Arm() {
-        controller2 = new ProfiledPIDController(10, 1, 0.1, new TrapezoidProfile.Constraints(2, 1));
-        controller1 = new ProfiledPIDController(3.5, 0.5, 0.05, new TrapezoidProfile.Constraints(4, 4));
+        controller1 = new ProfiledPIDController(4, 0.5, 0.05, new TrapezoidProfile.Constraints(5, 4));
+        controller2 = new ProfiledPIDController(10, 1, 0.1, new TrapezoidProfile.Constraints(4, 2));
 
-        controller2.setIntegratorRange(-2, 2);
+
         controller1.setIntegratorRange(-2, 2);
+        controller2.setIntegratorRange(-2, 2);
 
         controller1.setTolerance(Math.toRadians(6), 1.5);
         controller2.setTolerance(Math.toRadians(6), 1.5);
@@ -56,8 +55,8 @@ public class Arm extends SubsystemBase implements SubsystemLogging {
         m_motor1 = new CANSparkMax(motor1ID, CANSparkMaxLowLevel.MotorType.kBrushless);
         m_motor2 = new CANSparkMax(motor2ID, CANSparkMaxLowLevel.MotorType.kBrushless);
 
-        m_motor1.setSmartCurrentLimit(10);
-        m_motor2.setSmartCurrentLimit(10);
+        m_motor1.setSmartCurrentLimit(15);
+        m_motor2.setSmartCurrentLimit(15);
 
         m_motor1.setSecondaryCurrentLimit(40);
         m_motor2.setSecondaryCurrentLimit(40);
@@ -75,7 +74,6 @@ public class Arm extends SubsystemBase implements SubsystemLogging {
         m_motor1Encoder.setVelocityConversionFactor(S1 / 60);
         m_motor2Encoder.setVelocityConversionFactor(S2 / 60);
 
-        //DIO encoders
         m_AbsoluteEncoder1 = new DutyCycleEncoder(8);
         m_AbsoluteEncoder2 = new DutyCycleEncoder(9);
         m_AbsoluteEncoder1.setDistancePerRotation(-360);
@@ -84,64 +82,15 @@ public class Arm extends SubsystemBase implements SubsystemLogging {
         m_AbsoluteEncoder1.setPositionOffset(kEncoder1Offset);
         m_AbsoluteEncoder2.setPositionOffset(kEncoder2Offset);
 
+        m_motor1Encoder.setPosition(m_AbsoluteEncoder1.getAbsolutePosition());
+        m_motor2Encoder.setPosition(m_AbsoluteEncoder2.getDistance() + m_AbsoluteEncoder1.getDistance());
+
         last_velocity1 = 0;
         last_velocity2 = 0;
 
         setIsOpenLoop(false);
-        configureDashBoard();
     }
 
-    /**
-     * Configures NetworkTables Publishers and Subscribers
-     */
-    public void configureDashBoard() {
-        currentTheta1 = networkTable.getDoubleTopic("Current theta1").publish();
-        currentTheta2 = networkTable.getDoubleTopic("Current theta2").publish();
-
-        omega1 = networkTable.getDoubleTopic("Current omega1").publish();
-        omega2 = networkTable.getDoubleTopic("Current omega2").publish();
-
-        alpha1 = networkTable.getDoubleTopic("Current alpha").publish();
-        alpha2 = networkTable.getDoubleTopic("Current alpha2").publish();
-
-        targetTheta1 = networkTable.getDoubleTopic("targetTheta1").publish();
-        targetTheta2 = networkTable.getDoubleTopic("Target Theta2").publish();
-
-        error2 = networkTable.getDoubleTopic("Error 2").publish();
-
-        appliedOutput1 = networkTable.getDoubleTopic("Current appliedOutput1").publish();
-        appliedOutput2 = networkTable.getDoubleTopic("Current appliedOutput2").publish();
-
-        feedForwardOutput1 = networkTable.getDoubleTopic("Feed Forward1").publish();
-        feedForwardOutput2 = networkTable.getDoubleTopic("FeedForward2").publish();
-    }
-
-
-    /**
-     * Updates NetworkTables Publishers
-     */
-    public void updateDashBoard() {
-        currentTheta1.set(Units.radiansToDegrees(getCurrentState().getTheta1()));
-        currentTheta2.set(Units.radiansToDegrees(getCurrentState().getTheta2()));
-
-
-        omega1.set(Units.radiansToDegrees(getCurrentState().getOmega1()));
-        omega2.set(Units.radiansToDegrees(getCurrentState().getOmega2()));
-
-        alpha1.set(Units.radiansToDegrees(getCurrentState().getAlpha1()));
-        alpha2.set(Units.radiansToDegrees(getCurrentState().getAlpha2()));
-
-        targetTheta1.set(Units.radiansToDegrees(getGoalState().getTheta1()));
-        targetTheta2.set(Units.radiansToDegrees(getGoalState().getTheta2()));
-
-        error2.set(Units.radiansToDegrees(controller2.getPositionError()));
-
-        appliedOutput1.set(m_motor1.getAppliedOutput());
-        appliedOutput2.set(m_motor2.getAppliedOutput());
-
-        feedForwardOutput1.set(armFeedForward1.calculate(controller1.getSetpoint().position, controller1.getSetpoint().velocity, 0));
-        feedForwardOutput2.set(armFeedForward2.calculate(controller2.getSetpoint().position, controller2.getSetpoint().velocity, 0));
-    }
 
     /**
      * AdvantageKit Logging
@@ -179,13 +128,13 @@ public class Arm extends SubsystemBase implements SubsystemLogging {
      * @param goalState ArmState to which the arm will go to
      */
     public void setGoalState(ArmState goalState) {
+        controller1.reset(new TrapezoidProfile.State(getCurrentState().getTheta1(), getCurrentState().getOmega1()));
+        controller2.reset(new TrapezoidProfile.State(getCurrentState().getTheta2(), getCurrentState().getOmega2()));
         this.goalState = goalState;
     }
 
     public void setIsOpenLoop(boolean condition) {
         this.isOpenLoop = condition;
-        controller1.reset(new TrapezoidProfile.State(getCurrentState().getTheta1(), getCurrentState().getOmega1()));
-        controller2.reset(new TrapezoidProfile.State(getCurrentState().getTheta2(), getCurrentState().getOmega2()));
     }
 
     /**
@@ -289,7 +238,6 @@ public class Arm extends SubsystemBase implements SubsystemLogging {
 
         setVoltages(MathUtil.clamp(input1 + betterFeedForward1, -12, 12), MathUtil.clamp(input2 + betterFeedForward2, -12, 12));
 
-        updateDashBoard();
         updateLogging();
     }
 
