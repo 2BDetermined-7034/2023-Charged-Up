@@ -25,7 +25,7 @@ public final class Constants {
         public static final int grabberFC = 10;
         public static final int grabberRC = 11;
 
-        public static final int activeGrabberMotor = 23;
+        public static final int activeGrabberMotor = 13;
     }
 
     public static class Drivebase {
