@@ -41,27 +41,31 @@ public class Arm extends SubsystemBase implements SubsystemLogging {
      * Creates a new Arm.
      */
     public Arm() {
-        controller2 = new ProfiledPIDController(10, 1, 0.05, new TrapezoidProfile.Constraints(2, 5));
-        controller1 = new ProfiledPIDController(3.5, 0.5, 0.05, new TrapezoidProfile.Constraints(4, 5));
+        controller2 = new ProfiledPIDController(10, 1, 0.1, new TrapezoidProfile.Constraints(2, 1));
+        controller1 = new ProfiledPIDController(3.5, 0.5, 0.05, new TrapezoidProfile.Constraints(4, 4));
 
         controller2.setIntegratorRange(-2, 2);
         controller1.setIntegratorRange(-2, 2);
 
-        controller1.setTolerance(Math.toRadians(5), 0.5);
-        controller2.setTolerance(Math.toRadians(5), 0.5);
+        controller1.setTolerance(Math.toRadians(6), 1.5);
+        controller2.setTolerance(Math.toRadians(6), 1.5);
 
         armFeedForward2 = new ArmFeedforward(0.01, kG1, kV1, kA1);
         armFeedForward1 = new ArmFeedforward(0.01, kG2, kV2, kA2);
 
         m_motor1 = new CANSparkMax(motor1ID, CANSparkMaxLowLevel.MotorType.kBrushless);
         m_motor2 = new CANSparkMax(motor2ID, CANSparkMaxLowLevel.MotorType.kBrushless);
+
         m_motor1.setSmartCurrentLimit(10);
         m_motor2.setSmartCurrentLimit(10);
+
+        m_motor1.setSecondaryCurrentLimit(40);
+        m_motor2.setSecondaryCurrentLimit(40);
+
         m_motor1.setInverted(true);
         m_motor2.setInverted(false);
 
         setModeBreak();
-
         m_motor1Encoder = m_motor1.getEncoder();
         m_motor2Encoder = m_motor2.getEncoder();
 
@@ -72,8 +76,8 @@ public class Arm extends SubsystemBase implements SubsystemLogging {
         m_motor2Encoder.setVelocityConversionFactor(S2 / 60);
 
         //DIO encoders
-        m_AbsoluteEncoder1 = new DutyCycleEncoder(1);
-        m_AbsoluteEncoder2 = new DutyCycleEncoder(0);
+        m_AbsoluteEncoder1 = new DutyCycleEncoder(8);
+        m_AbsoluteEncoder2 = new DutyCycleEncoder(9);
         m_AbsoluteEncoder1.setDistancePerRotation(-360);
         m_AbsoluteEncoder2.setDistancePerRotation(-360);
 
@@ -82,8 +86,6 @@ public class Arm extends SubsystemBase implements SubsystemLogging {
 
         last_velocity1 = 0;
         last_velocity2 = 0;
-
-        goalState = getCurrentState();
 
         setIsOpenLoop(false);
         configureDashBoard();
@@ -210,6 +212,10 @@ public class Arm extends SubsystemBase implements SubsystemLogging {
         return new ArmState(theta1, theta2, omega1, omega2, firstAlpha, secondAlpha);
     }
 
+    public boolean goalStateValid() {
+        return Math.toDegrees(goalState.getTheta1()) < 140 && Math.toDegrees(goalState.getTheta2()) < 360;
+    }
+
     /**
      * Checks wheather the arm is at the home position
      * @return boolean isArmAtHomeOrAwayOnALongJourneyToFindItself'sLifePurposeAndFulfullItsDestinyOfWorkingAtObama'sFriedChicken
@@ -265,8 +271,13 @@ public class Arm extends SubsystemBase implements SubsystemLogging {
      */
     @Override
     public void periodic() {
+
+        if (!goalStateValid()) {
+            goalState = getCurrentState();
+            setVoltages(0, 0);
+        }
+        ArmState goalState = getGoalState();
         if (!isOpenLoop) {
-            ArmState goalState = getGoalState();
             TrapezoidProfile.State profile1 = new TrapezoidProfile.State(goalState.getTheta1(), goalState.getOmega1());
             TrapezoidProfile.State profile2 = new TrapezoidProfile.State(goalState.getTheta2(), goalState.getOmega2());
             input1 = controller1.calculate(getCurrentState().getTheta1(), profile1);
@@ -281,6 +292,5 @@ public class Arm extends SubsystemBase implements SubsystemLogging {
         updateDashBoard();
         updateLogging();
     }
-
 
 }
