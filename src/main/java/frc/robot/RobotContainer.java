@@ -7,6 +7,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.ActiveGrabber.ActiveGrabberMotor;
@@ -136,7 +137,7 @@ public class RobotContainer {
 
 //       new Trigger(m_operatorController::getBackButton).onTrue(new GravityClawToggleCommand(gravityClawSubsystem));
 
-       new Trigger(m_operatorController::getAButton).whileTrue(new ActiveGrabberMotor(ags, .4));
+        new JoystickButton(m_operatorController, XboxController.Button.kA.value).whileTrue(new ActiveGrabberMotor(ags, 0.5));
 
 //        new Trigger(m_operatorController::getAButton).onTrue(ArmPathFactory.getIntakePath(m_Arm, gravityClawSubsystem, intake)); // high// med
 //        new Trigger(m_operatorController::getBButton).onTrue(ArmPathFactory.getScoreMidPath(m_Arm, intake)); // low
