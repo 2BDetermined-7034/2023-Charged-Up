@@ -58,7 +58,6 @@ public class ArmPathFactory {
         return new SequentialCommandGroup(
                 new GravityClawCommand(claw, false),
                 new SetArmCommand(m_arm, drive,  passThrough, false),
-                new SetArmCommand(m_arm, drive,tuck, false),
                 new GravityClawCommand(claw, true),
                 new SetArmCommand(m_arm, drive,preIntake, false),
                 new SetArmCommand(m_arm, drive, intake, false)

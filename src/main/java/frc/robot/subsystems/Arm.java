@@ -64,7 +64,7 @@ public class Arm extends SubsystemBase implements SubsystemLogging {
         m_motor1.setInverted(true);
         m_motor2.setInverted(false);
 
-        setModeBreak();
+        setModeCoast();
         m_motor1Encoder = m_motor1.getEncoder();
         m_motor2Encoder = m_motor2.getEncoder();
 
