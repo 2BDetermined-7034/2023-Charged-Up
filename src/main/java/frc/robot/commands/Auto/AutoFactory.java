@@ -24,11 +24,11 @@ public class AutoFactory {
 
         return new SequentialCommandGroup(
                 new GravityClawCommand(claw, false),
-                new SetArmCommand(arm, Constants.ArmConstants.ArmSetPoints.intake, false),
+                new SetArmCommand(arm, drive, Constants.ArmConstants.ArmSetPoints.intake, false),
                 ArmPathFactory.getScoreHighPath(drive, claw, arm, intake, indexer),
                 new GravityClawToggleCommand(claw),
                 new WaitCommand(0.5),
-                ArmPathFactory.getIntakePath(arm, claw, intake),
+                ArmPathFactory.getIntakePath(arm, drive, claw),
                 new PathFactory(drive, path, true, true).getCommand()
         );
     }
@@ -57,11 +57,11 @@ public class AutoFactory {
 
         return new SequentialCommandGroup(
                 new GravityClawCommand(claw, false),
-                new SetArmCommand(arm, Constants.ArmConstants.ArmSetPoints.intake, false),
+                new SetArmCommand(arm, drive, Constants.ArmConstants.ArmSetPoints.intake, false),
                 ArmPathFactory.getScoreHighPath(drive, claw, arm, intake, indexer),
                 new GravityClawToggleCommand(claw),
                 new WaitCommand(0.5),
-                ArmPathFactory.getIntakePath(arm, claw, intake),
+                ArmPathFactory.getIntakePath(arm, drive, claw),
                 new PathFactory(drive, path, true, true).getCommand()
         );
     }
@@ -71,11 +71,11 @@ public class AutoFactory {
 
         return new SequentialCommandGroup(
                 new GravityClawCommand(claw, false),
-                new SetArmCommand(arm, Constants.ArmConstants.ArmSetPoints.intake, false),
+                new SetArmCommand(arm, drive, Constants.ArmConstants.ArmSetPoints.intake, false),
                 ArmPathFactory.getScoreHighPath(drive, claw, arm, intake, indexer),
                 new GravityClawToggleCommand(claw),
                 new WaitCommand(0.5),
-                ArmPathFactory.getIntakePath(arm, claw, intake),
+                ArmPathFactory.getIntakePath(arm, drive, claw),
                 new PathFactory(drive, path, true, true).getCommand()
         );
     }

@@ -4,26 +4,25 @@
 
 package frc.robot.commands.Arm;
 
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Arm;
-import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.SwerveDrive;
 import frc.robot.util.ArmState;
-
-import java.util.function.BooleanSupplier;
 
 public class SetArmCommand extends CommandBase {
     private final ArmState goalState;
     private final Arm arm;
-    private final boolean toggleIntakeOnEnd;
+    private final SwerveDrive drive;
+    private final boolean toggleSpeedOnEnd;
 
     /**
      * Creates a new ArmCommand.
      */
-    public SetArmCommand(Arm arm, ArmState goalState, boolean toggleIntakeOnEnd) {
+    public SetArmCommand(Arm arm, SwerveDrive drive, ArmState goalState, boolean toggleSpeedOnEnd) {
         this.goalState = goalState;
         this.arm = arm;
-        this.toggleIntakeOnEnd = toggleIntakeOnEnd;
+        this.toggleSpeedOnEnd = toggleSpeedOnEnd;
+        this.drive = drive;
 
         // Use addRequirements() here to declare subsystem dependencies.
         addRequirements(arm);
@@ -32,6 +31,7 @@ public class SetArmCommand extends CommandBase {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
+        drive.setSpeedMulti(0.2);
         arm.setGoalState(goalState);
     }
 
@@ -42,6 +42,9 @@ public class SetArmCommand extends CommandBase {
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
+        if(toggleSpeedOnEnd) {
+            drive.setSpeedMulti(1);
+        }
     }
 
     // Returns true when the command should end.

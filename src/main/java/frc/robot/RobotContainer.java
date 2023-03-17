@@ -165,14 +165,14 @@ public class RobotContainer implements SubsystemLogging {
 
        new Trigger(m_operatorController::getBackButton).onTrue(new GravityClawToggleCommand(gravityClawSubsystem));
 
-        new Trigger(m_operatorController::getAButton).onTrue(ArmPathFactory.getIntakePath(m_Arm, gravityClawSubsystem, intake)); // high// med
+        new Trigger(m_operatorController::getAButton).onTrue(ArmPathFactory.getIntakePath(m_Arm, m_swerveDrive, gravityClawSubsystem)); // high// med
         new Trigger(m_operatorController::getBButton).onTrue(ArmPathFactory.getScoreMidPath(m_swerveDrive, gravityClawSubsystem, m_Arm, intake, m_indexer)); // low
         new Trigger(m_operatorController::getYButton).onTrue(ArmPathFactory.getScoreHighPath(m_swerveDrive, gravityClawSubsystem, m_Arm, intake, m_indexer)); // low
         new Trigger(m_operatorController::getStartButton).onTrue(ArmPathFactory.getScoreMidFrontPath(m_swerveDrive, gravityClawSubsystem, m_Arm, intake, m_indexer)); // low
 
         new Trigger(m_operatorController::getXButton).onTrue(m_visionLocker.runOnce(m_visionLocker::togglePiece));
         new Trigger((() -> Math.abs(m_operatorController.getLeftTriggerAxis()) > 0.05)).onTrue(
-                new SetArmCommand(m_Arm, Constants.ArmConstants.ArmSetPoints.tuck, false));
+                new SetArmCommand(m_Arm, m_swerveDrive, Constants.ArmConstants.ArmSetPoints.tuck, false));
         new Trigger((() -> Math.abs(m_operatorController.getRightTriggerAxis()) > 0.05)).onTrue(
                 new ArmOverride(m_Arm, m_swerveDrive, m_operatorController::getLeftX, m_operatorController::getRightY, m_operatorController::getRightTriggerAxis));
     }
