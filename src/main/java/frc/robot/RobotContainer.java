@@ -120,23 +120,24 @@ public class RobotContainer {
                 false
         ));
 
-        m_driverController.L1().onTrue(m_visionLocker.runOnce(m_visionLocker::togglePiece));
+        //m_driverController.L1().onTrue(m_visionLocker.runOnce(m_visionLocker::togglePiece));
 
         // Gunner controls
-        new POVButton(m_operatorController, 180).whileTrue(m_visionLocker.runOnce(() -> m_visionLocker.setSide(VisionLocking.Side.LEFT)));
+        /*new POVButton(m_operatorController, 180).whileTrue(m_visionLocker.runOnce(() -> m_visionLocker.setSide(VisionLocking.Side.LEFT)));
         new POVButton(m_operatorController, 0).whileTrue(m_visionLocker.runOnce(() -> m_visionLocker.setSide(VisionLocking.Side.RIGHT)));
         new POVButton(m_operatorController, 90).whileTrue(m_visionLocker.runOnce(m_visionLocker::levelUp));
-        new POVButton(m_operatorController, 270).whileTrue(m_visionLocker.runOnce(m_visionLocker::levelDown));
+        new POVButton(m_operatorController, 270).whileTrue(m_visionLocker.runOnce(m_visionLocker::levelDown));*/
 
 
 //        new Trigger(m_operatorController::getRightStickButton).whileTrue(m_Arm.runOnce(
 //                () -> m_Arm.setGoalState(m_Arm.getCurrentState().clear())
 //        ));
-       new Trigger(m_operatorController::getLeftBumper).whileTrue(m_visionLocker.runOnce(m_visionLocker::gridLeft));
-       new Trigger(m_operatorController::getRightBumper).whileTrue(m_visionLocker.runOnce(m_visionLocker::gridRight));
+       //new Trigger(m_operatorController::getLeftBumper).whileTrue(m_visionLocker.runOnce(m_visionLocker::gridLeft));
+       //new Trigger(m_operatorController::getRightBumper).whileTrue(m_visionLocker.runOnce(m_visionLocker::gridRight));
 
-       new Trigger(m_operatorController::getBackButton).onTrue(new GravityClawToggleCommand(gravityClawSubsystem));
-       new JoystickButton(m_operatorController, XboxController.Button.kA.value).whileTrue(new ActiveGrabberMotor(ags, 0.5));
+       //new Trigger(m_operatorController::getBackButton).onTrue(new GravityClawToggleCommand(gravityClawSubsystem));
+       new JoystickButton(m_operatorController, XboxController.Button.kA.value).whileTrue(new ActiveGrabberMotor(ags, .75));
+        new JoystickButton(m_operatorController, XboxController.Button.kB.value).whileTrue(new ActiveGrabberMotor(ags, -.75));
 
 //        new Trigger(m_operatorController::getAButton).onTrue(ArmPathFactory.getIntakePath(m_Arm, gravityClawSubsystem, intake)); // high// med
 //        new Trigger(m_operatorController::getBButton).onTrue(ArmPathFactory.getScoreMidPath(m_Arm, intake)); // low
