@@ -155,8 +155,7 @@ public class Arm extends SubsystemBase implements SubsystemLogging {
         double firstAlpha = (m_motor1Encoder.getVelocity() - last_velocity1) / (0.02);
         double secondAlpha = (m_motor2Encoder.getVelocity() - last_velocity2) / (0.02);
 
-        last_velocity1 = m_motor1Encoder.getVelocity();
-        last_velocity2 = m_motor2Encoder.getVelocity();
+
 
         return new ArmState(theta1, theta2, omega1, omega2, firstAlpha, secondAlpha);
     }
@@ -238,6 +237,8 @@ public class Arm extends SubsystemBase implements SubsystemLogging {
 
         setVoltages(MathUtil.clamp(input1 + betterFeedForward1, -12, 12), MathUtil.clamp(input2 + betterFeedForward2, -12, 12));
 
+        last_velocity1 = m_motor1Encoder.getVelocity();
+        last_velocity2 = m_motor2Encoder.getVelocity();
         updateLogging();
     }
 
