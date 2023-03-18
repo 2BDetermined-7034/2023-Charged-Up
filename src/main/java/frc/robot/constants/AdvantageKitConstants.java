@@ -6,10 +6,11 @@ import frc.robot.util.Alert;
 import java.util.Map;
 
 public class AdvantageKitConstants {
+    public static final Mode currentMode = Mode.REAL;
     public static final double loopPeriodSecs = 0.02;
     public static final boolean tuningMode = false;
     public static final Map<RobotType, String> logFolders =
-            Map.of(RobotType.ROBOT_2023P, "/media/sda2/");
+            Map.of(RobotType.ROBOT_2023P, "/media/sda1/");
     private static final RobotType robot = RobotType.ROBOT_2023C;
     private static final Alert invalidRobotAlert =
             new Alert("Invalid robot selected, using competition robot as default.", Alert.AlertType.ERROR);

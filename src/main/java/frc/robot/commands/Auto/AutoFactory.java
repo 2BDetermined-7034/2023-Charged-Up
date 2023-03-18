@@ -3,57 +3,109 @@ package frc.robot.commands.Auto;
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.commands.Arm.ArmPathFactory;
+import frc.robot.commands.Arm.SetArmCommand;
+import frc.robot.commands.Drive.AutoBalance;
 import frc.robot.commands.Drive.PathFactory;
-import frc.robot.commands.Drive.SetPosition;
-import frc.robot.subsystems.Arm.Arm;
-import frc.robot.subsystems.SwerveDrive;
-import frc.robot.subsystems.VisionLocking;
+import frc.robot.commands.clob.GravityClawCommand;
+import frc.robot.commands.clob.GravityClawToggleCommand;
+import frc.robot.constants.Constants;
+import frc.robot.subsystems.*;
+
+import static frc.robot.constants.Constants.ArmConstants.ArmSetPoints.preIntake;
 
 public class AutoFactory {
-    SendableChooser<Command> startingPosition;
-    AutoAction firstAction;
-    AutoAction secondAction;
-    SwerveDrive m_drive;
-    Arm m_arm;
 
-    VisionLocking m_visionlocker;
+    public static Command getOneConeAuto(SwerveDrive drive, Intake intake, Indexer indexer, GravityClawSubsystem claw, Arm arm) {
+        PathPlannerTrajectory path = PathPlanner.loadPath("exit", new PathConstraints(3, 3));
 
-    public AutoFactory(SwerveDrive drive, Arm arm, VisionLocking vision){
-        m_drive = drive;
-        m_arm = arm;
-        m_visionlocker = vision;
-
-        configureDashboard();
+        return new SequentialCommandGroup(
+                new GravityClawCommand(claw, false),
+                new SetArmCommand(arm, drive, Constants.ArmConstants.ArmSetPoints.intake, false),
+                ArmPathFactory.getScoreHighPath(drive, claw, arm, intake, indexer),
+                new GravityClawToggleCommand(claw),
+                new WaitCommand(0.5),
+                ArmPathFactory.getIntakePath(arm, drive, claw),
+                new PathFactory(drive, path, true, true).getCommand()
+        );
     }
 
-    public void configureDashboard(){
-        ShuffleboardTab tab = Shuffleboard.getTab("Auto");
+    public static Command getLevelTop(SwerveDrive drive) {
+        PathPlannerTrajectory path = PathPlanner.loadPath("exitLevel", new PathConstraints(3, 3));
 
-        startingPosition = new SendableChooser<>();
-        startingPosition.addOption("1", new SetPosition(m_drive, new Pose2d(2, 4.5, new Rotation2d(180))));
-        startingPosition.addOption("2",  new SetPosition(m_drive, new Pose2d(2, 2.8, new Rotation2d(180))));
-        startingPosition.addOption("3",  new SetPosition(m_drive, new Pose2d(2, 1, new Rotation2d(180))));
-
-        firstAction = new AutoAction("First", m_drive, m_arm);
-        secondAction = new AutoAction("Second", m_drive, m_arm);
-
-        tab.add("Starting", startingPosition);
-    }
-    public Command getAuto() {
-
-        return startingPosition.getSelected().andThen(firstAction.getSelected());
+        return new SequentialCommandGroup(
+                new PathFactory(drive, path, true, true).getCommand(),
+                new AutoBalance(drive)
+        );
     }
 
+    public static Command getLevelBot(SwerveDrive drive) {
+        PathPlannerTrajectory path = PathPlanner.loadPath("exitLevelLower", new PathConstraints(3, 3));
 
-    static Command getTwoPiece(SwerveDrive m_drive) {
-        PathPlannerTrajectory path = PathPlanner.loadPath("", new PathConstraints(2, 3));
-
-        return new PathFactory(m_drive, path, true, true).getCommand();
+        return new SequentialCommandGroup(
+                new PathFactory(drive, path, true, true).getCommand(),
+                new AutoBalance(drive)
+        );
     }
+
+
+    public static Command getOnePieceThenLevel(SwerveDrive drive, Intake intake, Indexer indexer, GravityClawSubsystem claw, Arm arm) {
+        PathPlannerTrajectory path = PathPlanner.loadPath("exitLevel", new PathConstraints(3, 3));
+
+        return new SequentialCommandGroup(
+                new GravityClawCommand(claw, false),
+                new SetArmCommand(arm, drive, Constants.ArmConstants.ArmSetPoints.intake, false),
+                ArmPathFactory.getScoreHighPath(drive, claw, arm, intake, indexer),
+                new GravityClawToggleCommand(claw),
+                new WaitCommand(0.5),
+                ArmPathFactory.getIntakePath(arm, drive, claw),
+                new PathFactory(drive, path, true, true).getCommand()
+        );
+    }
+
+    public static Command getOnePieceThenLevelLower(SwerveDrive drive, Intake intake, Indexer indexer,  GravityClawSubsystem claw, Arm arm) {
+        PathPlannerTrajectory path = PathPlanner.loadPath("exitLevelLower", new PathConstraints(3, 3));
+
+        return new SequentialCommandGroup(
+                new GravityClawCommand(claw, false),
+                new SetArmCommand(arm, drive, Constants.ArmConstants.ArmSetPoints.intake, false),
+                ArmPathFactory.getScoreHighPath(drive, claw, arm, intake, indexer),
+                new GravityClawToggleCommand(claw),
+                new WaitCommand(0.5),
+                ArmPathFactory.getIntakePath(arm, drive, claw),
+                new PathFactory(drive, path, true, true).getCommand()
+        );
+    }
+
+    public static Command getTestAuto(SwerveDrive drive) {
+        PathPlannerTrajectory path = PathPlanner.loadPath("path", new PathConstraints(3, 3));
+        return new PathFactory(drive, path,true, true).getCommand();
+    }
+
+    public static Command getSpinAuto(SwerveDrive drive) {
+        PathPlannerTrajectory path = PathPlanner.loadPath("Spin", new PathConstraints(Constants.Drivebase.Auto.maxVelocity, Constants.Drivebase.Auto.maxAcceleration));
+
+        return new PathFactory(drive, path, true, true).getCommand();
+    }
+
+    public static Command getSquareAuto(SwerveDrive drive) {
+        PathPlannerTrajectory path = PathPlanner.loadPath("square", new PathConstraints(Constants.Drivebase.Auto.maxVelocity, Constants.Drivebase.Auto.maxAcceleration));
+        return new PathFactory(drive, path,true, true).getCommand();
+    }
+
+    public static Command getSmallSquare(SwerveDrive drive) {
+        PathPlannerTrajectory path = PathPlanner.loadPath("smallSquare", new PathConstraints(Constants.Drivebase.Auto.maxVelocity, Constants.Drivebase.Auto.maxAcceleration));
+
+        return new PathFactory(drive, path,true, true).getCommand();
+    }
+
+    public static Command getSmallSquareSpin(SwerveDrive drive) {
+        PathPlannerTrajectory path = PathPlanner.loadPath("smallSquareSpin", new PathConstraints(Constants.Drivebase.Auto.maxVelocity, Constants.Drivebase.Auto.maxAcceleration));
+
+        return new PathFactory(drive, path,true, true).getCommand();
+    }
+
 }

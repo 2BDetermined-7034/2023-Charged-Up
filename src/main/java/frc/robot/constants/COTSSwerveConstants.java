@@ -78,7 +78,7 @@ public class COTSSwerveConstants {
         double angleKD = 0.0;
         double angleKF = 0.0;
 
-        double driveKP = 0;
+        double driveKP = 0.0000;
         double driveKI = 0.0;
         double driveKD = 0.0;
         double driveKF = 0.0;

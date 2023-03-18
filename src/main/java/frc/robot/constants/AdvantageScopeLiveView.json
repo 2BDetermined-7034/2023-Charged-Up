@@ -1,0 +1,251 @@
+{
+  "version": "2.2.2",
+  "layout": [
+    {
+      "type": 3,
+      "field": "/AdvantageKit/RealOutputs/Console",
+      "title": "RobotRIO Logs"
+    },
+    {
+      "type": 4,
+      "fields": [
+        null,
+        null,
+        null
+      ],
+      "selectionType": "full",
+      "selectionRangeMin": 0,
+      "selectionRangeMax": 10,
+      "measurementType": "independent",
+      "measurementSampling": "fixed",
+      "measurementSamplingPeriod": 20,
+      "histogramMin": 0,
+      "histogramMax": 10,
+      "histogramStep": 1,
+      "title": "Statistics"
+    },
+    {
+      "type": 1,
+      "legends": {
+        "left": {
+          "lockedRange": null,
+          "unitConversion": {
+            "type": null,
+            "factor": 1
+          },
+          "fields": [
+            {
+              "key": "/AdvantageKit/RealOutputs/Arm omega1/0",
+              "color": "#e5b31b",
+              "show": true
+            },
+            {
+              "key": "/AdvantageKit/RealOutputs/Arm omega2/0",
+              "color": "#2b66a2",
+              "show": true
+            }
+          ]
+        },
+        "discrete": {
+          "fields": []
+        },
+        "right": {
+          "lockedRange": null,
+          "unitConversion": {
+            "type": null,
+            "factor": 1
+          },
+          "fields": []
+        }
+      },
+      "title": "Arm Omegas"
+    },
+    {
+      "type": 1,
+      "legends": {
+        "left": {
+          "lockedRange": null,
+          "unitConversion": {
+            "type": null,
+            "factor": 1
+          },
+          "fields": [
+            {
+              "key": "/AdvantageKit/RealOutputs/Arm theta1/0",
+              "color": "#e5b31b",
+              "show": true
+            },
+            {
+              "key": "/AdvantageKit/RealOutputs/Arm theta2/0",
+              "color": "#2b66a2",
+              "show": true
+            },
+            {
+              "key": "/AdvantageKit/RealOutputs/Arm Target Theta1/0",
+              "color": "#af2437",
+              "show": true
+            },
+            {
+              "key": "/AdvantageKit/RealOutputs/Arm Target Theta2/0",
+              "color": "#80588e",
+              "show": true
+            },
+            {
+              "key": "/AdvantageKit/RealOutputs/Arm Applied Output1/0",
+              "color": "#e48b32",
+              "show": true
+            },
+            {
+              "key": "/AdvantageKit/RealOutputs/Arm Applied Output2/0",
+              "color": "#aacaee",
+              "show": true
+            }
+          ]
+        },
+        "discrete": {
+          "fields": []
+        },
+        "right": {
+          "lockedRange": null,
+          "unitConversion": {
+            "type": null,
+            "factor": 1
+          },
+          "fields": []
+        }
+      },
+      "title": "ARM"
+    },
+    {
+      "type": 1,
+      "legends": {
+        "left": {
+          "lockedRange": null,
+          "unitConversion": {
+            "type": null,
+            "factor": 1
+          },
+          "fields": [
+            {
+              "key": "/AdvantageKit/SystemStats/CANBus/Utilization",
+              "color": "#e5b31b",
+              "show": true
+            },
+            {
+              "key": "/AdvantageKit/SystemStats/BatteryCurrent",
+              "color": "#2b66a2",
+              "show": true
+            }
+          ]
+        },
+        "discrete": {
+          "fields": [
+            {
+              "key": "/AdvantageKit/SystemStats/BrownedOut",
+              "color": "#af2437",
+              "show": true
+            }
+          ]
+        },
+        "right": {
+          "lockedRange": null,
+          "unitConversion": {
+            "type": null,
+            "factor": 1
+          },
+          "fields": []
+        }
+      },
+      "title": "CAN"
+    },
+    {
+      "type": 8,
+      "fields": [],
+      "listFields": [],
+      "options": {
+        "ids": [
+          0,
+          1,
+          2
+        ],
+        "layouts": [
+          "PS4 Controller",
+          "Xbox Controller (Blue)",
+          "None"
+        ]
+      },
+      "title": "Joysticks"
+    },
+    {
+      "type": 7,
+      "fields": [],
+      "listFields": [],
+      "options": {},
+      "title": "Video"
+    },
+    {
+      "type": 5,
+      "fields": [],
+      "listFields": [
+        [
+          {
+            "type": "Robot",
+            "key": "/AdvantageKit/RealOutputs/SwerveDrive Pose2D",
+            "fieldTypeIndex": 0
+          }
+        ]
+      ],
+      "options": {
+        "game": "2023",
+        "unitDistance": "meters",
+        "unitRotation": "radians",
+        "origin": "right",
+        "size": 0.75,
+        "allianceBumpers": "auto",
+        "allianceOrigin": "blue",
+        "orientation": "blue left, red right"
+      },
+      "title": "Odometry"
+    },
+    {
+      "type": 6,
+      "fields": [],
+      "listFields": [
+        [],
+        [
+          {
+            "type": "Robot",
+            "key": "/AdvantageKit/RealOutputs/SwerveDrive Pose2D",
+            "fieldTypeIndex": 0
+          }
+        ]
+      ],
+      "options": {
+        "field": "2023",
+        "alliance": "blue",
+        "robot": "KitBot",
+        "unitDistance": "meters",
+        "unitRotation": "radians"
+      },
+      "title": "3D Field"
+    },
+    {
+      "type": 9,
+      "fields": [
+        "/AdvantageKit/RealOutputs/SwerveDrive Swerve Module States",
+        null,
+        null
+      ],
+      "listFields": [],
+      "options": {
+        "maxSpeed": 4.5,
+        "rotationUnits": "radians",
+        "arrangement": "0,1,2,3",
+        "sizeLeftRight": 0.65,
+        "sizeFrontBack": 0.65,
+        "forwardDirection": "up"
+      },
+      "title": "Swerve Modules"
+    }
+  ]
+}
