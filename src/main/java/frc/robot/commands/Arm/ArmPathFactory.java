@@ -60,8 +60,8 @@ public class ArmPathFactory {
                 new SetArmCommand(m_arm, drive,  passThrough, false),
                 new GravityClawCommand(claw, true),
                 new SetArmCommand(m_arm, drive,preIntake, false),
-                new SetArmCommand(m_arm, drive, intake, false)
-
+                new SetArmCommand(m_arm, drive, intake, false),
+                drive.runOnce(() -> drive.setSpeedMulti(1))
         );
     }
 }

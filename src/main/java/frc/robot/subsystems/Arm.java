@@ -40,7 +40,7 @@ public class Arm extends SubsystemBase implements SubsystemLogging {
      */
     public Arm() {
         controller1 = new ProfiledPIDController(4, 0.5, 0.05, new TrapezoidProfile.Constraints(5, 4));
-        controller2 = new ProfiledPIDController(10, 1, 0.1, new TrapezoidProfile.Constraints(4, 2));
+        controller2 = new ProfiledPIDController(10, 1, 0.1, new TrapezoidProfile.Constraints(5, 2.5));
 
 
         controller1.setIntegratorRange(-2, 2);
@@ -165,9 +165,11 @@ public class Arm extends SubsystemBase implements SubsystemLogging {
     }
 
     /**
+     * @deprecated
      * Checks wheather the arm is at the home position
-     * @return boolean isArmAtHomeOrAwayOnALongJourneyToFindItself'sLifePurposeAndFulfullItsDestinyOfWorkingAtObama'sFriedChicken
+     * @return boolean
      */
+    @Deprecated
     public boolean isArmHome() {
         return Math.abs(getCurrentState().getTheta1() - Math.toRadians(90)) < Math.toRadians(4) && Math.abs(getCurrentState().getTheta2() - Math.toRadians(275)) < Math.toRadians(4);
     }

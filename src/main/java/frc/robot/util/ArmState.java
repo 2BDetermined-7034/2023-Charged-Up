@@ -46,8 +46,8 @@ public class ArmState {
 
     }
 
-    public ArmState(double degreesToRadians, double degreesToRadians1, double omega1, double omega2) {
-        this(degreesToRadians, degreesToRadians1, omega1, omega2, 0, 0);
+    public ArmState(double rad1, double rad2, double omega1, double omega2) {
+        this(rad1, rad2, omega1, omega2, 0, 0);
     }
 
     public ArmState() {

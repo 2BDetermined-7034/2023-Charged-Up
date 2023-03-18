@@ -104,21 +104,21 @@ public final class Constants {
 
     public static class ArmConstants {
         public static class ArmSetPoints {
-            public static ArmState passThrough = new ArmState(Units.degreesToRadians(89), Units.degreesToRadians(226));
+            public static ArmState passThrough = new ArmState(Units.degreesToRadians(106), Units.degreesToRadians(223));
             public static ArmState preIntake = new ArmState(Units.degreesToRadians(86), Units.degreesToRadians(245), 0, 0.2);
 
             public static ArmState intake = new ArmState(Units.degreesToRadians(100), Units.degreesToRadians(255));
             public static ArmState tuck = new ArmState(Units.degreesToRadians(93), Units.degreesToRadians(193));
-            public static ArmState midBack = new ArmState(Units.degreesToRadians(132), Units.degreesToRadians(5));
+            public static ArmState midBack = new ArmState(Units.degreesToRadians(109), Units.degreesToRadians(5));
             //public static ArmState midBack = new ArmState(Units.degreesToRadians(95), Units.degreesToRadians(30));
             public static ArmState frontMid = new ArmState(Units.degreesToRadians(138), Units.degreesToRadians(170));
-            public static ArmState high = new ArmState(Units.degreesToRadians(95), Units.degreesToRadians(30));
+            public static ArmState high = new ArmState(Units.degreesToRadians(73), Units.degreesToRadians(30));
             public static ArmState startCone = new ArmState(Units.degreesToRadians(95), Units.degreesToRadians(240));
 
         }
 
-        public static final double kEncoder1Offset =( 171.7065  + 90)/ 360;
-        public static final double kEncoder2Offset = 198.676 / 360;
+        public static final double kEncoder1Offset = (175.2735 + 90)/360;
+        public static final double kEncoder2Offset = 313.8125/360;
 
         public static final double kMaxArmOverrideSpeedShoulder = 2;
         public static final double kMaxArmOverrideSpeedDistal = 2.5;

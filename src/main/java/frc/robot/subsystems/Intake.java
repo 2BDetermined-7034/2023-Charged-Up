@@ -34,6 +34,9 @@ public class Intake extends SubsystemBase implements SubsystemLogging {
         motor1.setSmartCurrentLimit(35);
         motor2.setSmartCurrentLimit(35);
 
+        //motor1.setCANTimeout(500);
+        //motor2.setCANTimeout(500);
+
         motor2.setInverted(true);
         motor1.setInverted(false);
 

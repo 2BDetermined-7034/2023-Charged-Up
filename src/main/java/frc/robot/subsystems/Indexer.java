@@ -21,6 +21,9 @@ public class Indexer extends SubsystemBase implements SubsystemLogging {
         indexerMotorLeft = new CANSparkMax(Constants.Intake.indexerMotorLeft, CANSparkMaxLowLevel.MotorType.kBrushless);
         indexerMotorRight = new CANSparkMax(Constants.Intake.indexerMotorRight, CANSparkMaxLowLevel.MotorType.kBrushless);
 
+        //indexerMotorLeft.setCANTimeout(500);
+        //indexerMotorRight.setCANTimeout(500);
+
         indexerMotorLeft.setSmartCurrentLimit(15);
         indexerMotorRight.setSmartCurrentLimit(15);
 
