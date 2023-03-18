@@ -112,6 +112,10 @@ public class VisionLocking extends SubsystemBase {
     public Team getTeam(){
         return m_team;
     }
+    public PieceType getPieceType(){
+        return m_pieceType;
+    }
+
     public void gridRight(){
         if (m_grid < 2) {
             m_grid += 1;

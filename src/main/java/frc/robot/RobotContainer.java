@@ -21,6 +21,7 @@ import frc.robot.commands.Arm.SetArmCommand;
 import frc.robot.commands.Auto.AutoFactory;
 import frc.robot.commands.Drive.AutoBalance;
 import frc.robot.commands.Drive.DefaultDriveCommand;
+import frc.robot.commands.Drive.DriveToTarget;
 import frc.robot.commands.Drive.HeadingDriveCommand;
 import frc.robot.commands.Intake.RunIntakeCommand;
 import frc.robot.commands.clob.GravityClawCommand;
@@ -151,6 +152,8 @@ public class RobotContainer implements SubsystemLogging {
         ));
 
         m_driverController.L1().onTrue(m_visionLocker.runOnce(m_visionLocker::togglePiece));
+
+        m_driverController.L3().onTrue(new DriveToTarget(m_swerveDrive, m_visionLocker));
 
         // Gunner controls
         new POVButton(m_operatorController, 180).whileTrue(m_visionLocker.runOnce(() -> m_visionLocker.setSide(VisionLocking.Side.LEFT)));
