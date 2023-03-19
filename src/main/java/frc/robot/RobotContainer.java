@@ -19,10 +19,7 @@ import frc.robot.commands.Arm.ArmOverride;
 import frc.robot.commands.Arm.ArmPathFactory;
 import frc.robot.commands.Arm.SetArmCommand;
 import frc.robot.commands.Auto.AutoFactory;
-import frc.robot.commands.Drive.AutoBalance;
-import frc.robot.commands.Drive.DefaultDriveCommand;
-import frc.robot.commands.Drive.DriveToTarget;
-import frc.robot.commands.Drive.HeadingDriveCommand;
+import frc.robot.commands.Drive.*;
 import frc.robot.commands.Intake.RunIntakeCommand;
 import frc.robot.commands.clob.GravityClawCommand;
 import frc.robot.commands.clob.GravityClawToggleCommand;
@@ -153,13 +150,18 @@ public class RobotContainer implements SubsystemLogging {
 
         m_driverController.L1().onTrue(m_visionLocker.runOnce(m_visionLocker::togglePiece));
 
-        m_driverController.L3().onTrue(new DriveToTarget(m_swerveDrive, m_visionLocker));
+        m_driverController.touchpad().whileTrue(
+                new ChaseTagCommand(m_swerveDrive, m_visionLocker).andThen(
+                        new GravityClawCommand(gravityClawSubsystem, false).andThen(
+                        m_visionLocker.getArmCommand(m_swerveDrive, gravityClawSubsystem, m_Arm, intake, m_indexer))
+                )
+        );
 
         // Gunner controls
-        new POVButton(m_operatorController, 180).whileTrue(m_visionLocker.runOnce(() -> m_visionLocker.setSide(VisionLocking.Side.LEFT)));
-        new POVButton(m_operatorController, 0).whileTrue(m_visionLocker.runOnce(() -> m_visionLocker.setSide(VisionLocking.Side.RIGHT)));
-        new POVButton(m_operatorController, 90).whileTrue(m_visionLocker.runOnce(m_visionLocker::levelUp));
-        new POVButton(m_operatorController, 270).whileTrue(m_visionLocker.runOnce(m_visionLocker::levelDown));
+        new POVButton(m_operatorController, 270).whileTrue(m_visionLocker.runOnce(() -> m_visionLocker.setSide(VisionLocking.Side.LEFT)));
+        new POVButton(m_operatorController, 90).whileTrue(m_visionLocker.runOnce(() -> m_visionLocker.setSide(VisionLocking.Side.RIGHT)));
+        new POVButton(m_operatorController, 0).whileTrue(m_visionLocker.runOnce(m_visionLocker::levelUp));
+        new POVButton(m_operatorController, 180).whileTrue(m_visionLocker.runOnce(m_visionLocker::levelDown));
 
 
         new Trigger(m_operatorController::getRightStickButton).whileTrue(m_Arm.runOnce(

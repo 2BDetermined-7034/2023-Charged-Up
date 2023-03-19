@@ -53,7 +53,7 @@ public class LimeLight extends SubsystemBase implements SubsystemLogging {
         camTran = limeLightTable.getDoubleArrayTopic("camTran").subscribe(new double[]{});
         ledModeSub = limeLightTable.getIntegerTopic("ledMode").subscribe(0); // limelight's LED state (0-3).
         camModeSub = limeLightTable.getIntegerTopic("camMode").subscribe(0); // limelight's operation mode (0-1).
-        botpose = limeLightTable.getDoubleArrayTopic("botpose_wpired").subscribe(new double[]{});
+        botpose = limeLightTable.getDoubleArrayTopic("botpose").subscribe(new double[]{});
 
 
         ledModePub = limeLightTable.getIntegerTopic("ledMode").publish();

@@ -14,14 +14,14 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.Arm.SetArmCommand;
 import frc.robot.commands.AutoBalance;
 import frc.robot.commands.Drive.PathFactory;
-import frc.robot.subsystems.Arm.Arm;
+import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.SwerveDrive;
 import frc.robot.subsystems.VisionLocking;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static frc.robot.constants.Constants.ArmConstants.ArmSetpoints.*;
+import static frc.robot.constants.Constants.ArmConstants.ArmSetPoints.*;
 
 public class AutoAction {
     ShuffleboardLayout tab;
@@ -52,9 +52,9 @@ public class AutoAction {
         actionChooser.addOption("Do Nothing", new WaitCommand(0));
 
         heightChooser = new SendableChooser<>();
-        heightChooser.addOption("L1", new SetArmCommand(arm, low[0], low[1]));
-        heightChooser.addOption("L2", new SetArmCommand(arm, medium[0], medium[1]));
-        heightChooser.addOption("L3", new SetArmCommand(arm, high[0], high[1]));
+        //heightChooser.addOption("L1", new SetArmCommand(arm, low[0], low[1]));
+        //heightChooser.addOption("L2", new SetArmCommand(arm, medium[0], medium[1]));
+        //heightChooser.addOption("L3", new SetArmCommand(arm, high[0], high[1]));
 
         tab.add(name + " Action", actionChooser);
         tab.add(name + " Height", heightChooser);

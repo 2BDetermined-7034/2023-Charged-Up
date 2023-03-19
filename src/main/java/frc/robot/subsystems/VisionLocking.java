@@ -13,13 +13,16 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.commands.Arm.ArmPathFactory;
 import frc.robot.constants.FieldConstants;
 
 import java.util.Arrays;
 import java.util.Map;
 
-public class VisionLocking extends SubsystemBase {
+public class VisionLocking extends SubsystemBase implements SubsystemLogging{
 
     public enum Team {
         RED, BLUE
@@ -75,8 +78,8 @@ public class VisionLocking extends SubsystemBase {
         gridSelectionLayout.addBoolean("Right", () -> gridSelection[2]).withProperties(selectProperties).withPosition(2, 0);
 
         // Grid location layout config
-        Map coneSlotProperties = Map.of("colorWhenFalse", "#000000", "colorWhenTrue", "#FDDA0D");
-        Map cubeSlotProperties = Map.of("colorWhenFalse", "#000000", "colorWhenTrue", "#5D3FD3");
+        Map coneSlotProperties = Map.of("colorWhenFalse", "#000000", "colorWhenTrue", "#5D3FD3");
+        Map cubeSlotProperties = Map.of("colorWhenFalse", "#000000", "colorWhenTrue", "#FDDA0D");
         // Cube slots
         gridLocationLayout.addBoolean("TL", () -> gridLocation[0][0]).withProperties(cubeSlotProperties).withPosition(0, 0);
         gridLocationLayout.addBoolean("ML", () -> gridLocation[0][1]).withProperties(cubeSlotProperties).withPosition(0, 1);
@@ -91,7 +94,7 @@ public class VisionLocking extends SubsystemBase {
         gridLocationLayout.addBoolean("BM", () -> gridLocation[1][2]).withProperties(coneSlotProperties).withPosition(1, 2);
 
         // Cone/cube selector
-        driverTab.addBoolean("Cone-Cube", () -> coneCube).withProperties(Map.of("colorWhenFalse", "#FDDA0D", "colorWhenTrue", "#5D3FD3")).withPosition(3, 0);
+        driverTab.addBoolean("Cone-Cube", () -> coneCube).withProperties(Map.of("colorWhenFalse", "#FDDA0D", "colorWhenTrue", "#5D3FD3")).withPosition(3, 0).withSize(1, 4);
 
         // Initialize the two boolean arrays to have base values.
         updateGridArray();
@@ -172,30 +175,27 @@ public class VisionLocking extends SubsystemBase {
 
 
     public static Pose2d getPosition(Team team, int grid, PieceType piece, Side side){
-        Pose2d position;
+        Pose2d position = FieldConstants.aprilTags.get(1).toPose2d();
+        double xVal = 0.95;
+        double yVal = 0.6;
 
-        if (team.equals(Team.BLUE)) {
-            position = FieldConstants.aprilTags.get(blueTags[grid - 1]).toPose2d();
-            if (piece.equals(PieceType.CUBES)){
-                position.transformBy(new Transform2d(new Translation2d(1.1, 0), new Rotation2d()));
-            } else if (piece.equals(PieceType.CONES)&&side.equals(Side.LEFT)) {
-                position.transformBy(new Transform2d(new Translation2d(1.1 , -.6), new Rotation2d()));
-            } else {
-                position.transformBy(new Transform2d(new Translation2d(1.1 , .6), new Rotation2d()));
-            }
-
-        } else {
-            position = FieldConstants.aprilTags.get(redTags[grid - 1]).toPose2d();
-            if (piece.equals(PieceType.CUBES)){
-                position.transformBy(new Transform2d(new Translation2d(-1.1, 0), new Rotation2d()));
-            } else if (piece.equals(PieceType.CONES)&&side.equals(Side.LEFT)) {
-                position.transformBy(new Transform2d(new Translation2d(-1.1 , -.6), new Rotation2d()));
-            } else {
-                position.transformBy(new Transform2d(new Translation2d(-1.1 , .6), new Rotation2d()));
-            }
-
+        if(piece.equals(PieceType.CUBES)){
+            yVal = 0;
         }
-        return position;
+        if (team.equals(Team.BLUE)) {
+            //position = FieldConstants.aprilTags.get(blueTags[grid - 1]).toPose2d();
+            xVal *= -1;
+            if(piece.equals(PieceType.CONES)){
+                 if(side.equals(Side.LEFT)) yVal *= -1;
+            }
+        } else {
+            //position = FieldConstants.aprilTags.get(redTags[grid - 1]).toPose2d();
+            if(piece.equals(PieceType.CONES)){
+                if(!side.equals(Side.LEFT)) yVal *= -1;
+            }
+        }
+
+        return position.transformBy(new Transform2d(new Translation2d(xVal, yVal), new Rotation2d()));
     }
 
     /**
@@ -205,6 +205,16 @@ public class VisionLocking extends SubsystemBase {
     public Pose2d getLockedPosition() {
         return getPosition(m_team, m_grid, m_pieceType, m_side);
     }
+
+    public Command getArmCommand(SwerveDrive m_swerveDrive, GravityClawSubsystem gravityClawSubsystem, Arm m_Arm, Intake intake, Indexer m_indexer) {
+        if (m_level.equals(Level.HIGH)) {
+            return ArmPathFactory.getScoreHighPath(m_swerveDrive, gravityClawSubsystem, m_Arm, intake, m_indexer);
+        } else if (m_level.equals(Level.MID)){
+            return ArmPathFactory.getScoreMidPath(m_swerveDrive, gravityClawSubsystem, m_Arm, intake, m_indexer);
+        }
+        return new WaitCommand(0);
+    }
+
 
     public void updateLocationArray(){
         gridLocation = new boolean[3][3];
@@ -235,6 +245,9 @@ public class VisionLocking extends SubsystemBase {
 
     @Override
     public void periodic() {
+
+        log("Locked Pose", getLockedPosition());
+
         if(DriverStation.getAlliance().equals(DriverStation.Alliance.Blue)) {
             m_team = VisionLocking.Team.BLUE;
         } else {
