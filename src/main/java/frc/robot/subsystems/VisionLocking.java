@@ -67,6 +67,12 @@ public class VisionLocking extends SubsystemBase implements SubsystemLogging{
         gridSelection = new boolean[3];
         coneCube = false;
 
+        if(DriverStation.getAlliance().equals(DriverStation.Alliance.Blue)) {
+            m_team = VisionLocking.Team.BLUE;
+        } else {
+            m_team = VisionLocking.Team.RED;
+        }
+
         configureDashboard();
     }
 
@@ -246,12 +252,14 @@ public class VisionLocking extends SubsystemBase implements SubsystemLogging{
     @Override
     public void periodic() {
 
-        log("Locked Pose", getLockedPosition());
 
-        if(DriverStation.getAlliance().equals(DriverStation.Alliance.Blue)) {
-            m_team = VisionLocking.Team.BLUE;
-        } else {
-            m_team = VisionLocking.Team.RED;
-        }
+
+
+        updateLogging();
+    }
+
+    @Override
+    public void updateLogging() {
+        log("Locked Pose", getLockedPosition());
     }
 }
