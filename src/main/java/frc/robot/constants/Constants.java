@@ -10,6 +10,7 @@ import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.numbers.N2;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import frc.robot.util.ArmState;
 
@@ -103,6 +104,8 @@ public final class Constants {
     }
 
     public static class ArmConstants {
+        public static final TrapezoidProfile.Constraints shoulderConstraints = new TrapezoidProfile.Constraints(5, 4);
+        public static final TrapezoidProfile.Constraints elbowConstraints = new TrapezoidProfile.Constraints(5, 2.5);
         public static class ArmSetPoints {
             public static ArmState passThrough = new ArmState(Units.degreesToRadians(106), Units.degreesToRadians(223));
             public static ArmState preIntake = new ArmState(Units.degreesToRadians(86), Units.degreesToRadians(245), 0, 0.2);
