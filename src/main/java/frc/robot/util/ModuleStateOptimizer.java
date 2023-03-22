@@ -35,7 +35,7 @@ public class ModuleStateOptimizer {
 
     /**
      * @param scopeReference Current Angle
-     * @param newAngle Target Angle
+     * @param newAngle       Target Angle
      * @return Closest angle within scope
      */
     private static double placeInAppropriate0To360Scope(double scopeReference, double newAngle) {

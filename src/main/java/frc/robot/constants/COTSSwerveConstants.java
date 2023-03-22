@@ -73,7 +73,7 @@ public class COTSSwerveConstants {
         double angleGearRatio = ((150.0 / 7.0));
 
         //TODO: Tune all of these gains
-        double angleKP = 0.01;
+        double angleKP = 0.005;
         double angleKI = 0.0000;
         double angleKD = 0.0;
         double angleKF = 0.0;

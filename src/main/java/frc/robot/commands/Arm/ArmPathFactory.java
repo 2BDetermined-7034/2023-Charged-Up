@@ -15,7 +15,7 @@ public class ArmPathFactory {
         return new SequentialCommandGroup(
                 new GravityClawCommand(m_claw, false),
                 new ParallelRaceGroup(
-                            new SetArmCommand(m_arm, m_swerve, preIntake, false),
+                            new SetArmCommand(m_arm, preIntake),
                             new RunIntakeCommand(
                                     m_swerve,
                                     m_intake,
@@ -32,8 +32,8 @@ public class ArmPathFactory {
     public static Command getScoreHighPath(SwerveDrive m_swerve, GravityClawSubsystem m_claw, Arm m_arm, Intake m_intake, Indexer m_indexer){
         return new SequentialCommandGroup(
                 getOut(m_swerve, m_claw, m_arm, m_intake, m_indexer),
-                new SetArmCommand(m_arm, m_swerve, passThrough, false),
-                new SetArmCommand(m_arm, m_swerve,  high, false)
+                new SetArmCommand(m_arm, passThrough),
+                new SetArmCommand(m_arm, high)
 
         );
     }
@@ -41,8 +41,8 @@ public class ArmPathFactory {
     public static Command getScoreMidPath(SwerveDrive m_swerve, GravityClawSubsystem m_claw, Arm m_arm, Intake m_intake, Indexer m_indexer) {
         return new SequentialCommandGroup(
                 getOut(m_swerve, m_claw, m_arm, m_intake, m_indexer),
-                new SetArmCommand(m_arm, m_swerve, passThrough, false),
-                new SetArmCommand(m_arm, m_swerve, midBack, false)
+                new SetArmCommand(m_arm, passThrough),
+                new SetArmCommand(m_arm, midBack)
 
         );
     }
@@ -50,18 +50,17 @@ public class ArmPathFactory {
     public static Command getScoreMidFrontPath(SwerveDrive m_swerve, GravityClawSubsystem m_claw, Arm m_arm, Intake m_intake, Indexer indexer) {
         return new SequentialCommandGroup(
                 getOut(m_swerve, m_claw, m_arm, m_intake, indexer),
-                new SetArmCommand(m_arm, m_swerve, frontMid, false)
+                new SetArmCommand(m_arm, frontMid)
 
         );
     }
-    public static Command getIntakePath(Arm m_arm, SwerveDrive drive, GravityClawSubsystem claw){
+    public static Command getIntakePath(Arm m_arm, GravityClawSubsystem claw){
         return new SequentialCommandGroup(
                 new GravityClawCommand(claw, false),
-                new SetArmCommand(m_arm, drive,  passThrough, false),
+                new SetArmCommand(m_arm,  passThrough),
                 new GravityClawCommand(claw, true),
-                new SetArmCommand(m_arm, drive,preIntake, false),
-                new SetArmCommand(m_arm, drive, intake, false),
-                drive.runOnce(() -> drive.setSpeedMulti(1))
+                new SetArmCommand(m_arm,preIntake),
+                new SetArmCommand(m_arm, intake)
         );
     }
 }

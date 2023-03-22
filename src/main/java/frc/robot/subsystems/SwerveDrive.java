@@ -103,8 +103,8 @@ public class SwerveDrive extends SubsystemBase implements SubsystemLogging {
                 getGyroscopeRotation(),
                 getModulePosition(),
                 new Pose2d(),
-                VecBuilder.fill(0.1, 0.1, 0.1), // estimator values (x, y, rotation) std-devs
-                VecBuilder.fill(0.5, 0.5, 0.5)
+                VecBuilder.fill(0.01, 0.01, 0.01), // estimator values (x, y, rotation) std-devs
+                VecBuilder.fill(0.2, 0.2, 0.01)
         );
 
 
@@ -123,10 +123,6 @@ public class SwerveDrive extends SubsystemBase implements SubsystemLogging {
 
     public static Rotation2d getGyroscopeRotation() {
         return Rotation2d.fromDegrees(-m_navx.getYaw());
-    }
-
-    public void addVisionMeasurement(Pose2d m_observed, double time) {
-        m_estimator.addVisionMeasurement(m_observed, time);
     }
 
     public double getMaxSpeed() {
@@ -213,8 +209,6 @@ public class SwerveDrive extends SubsystemBase implements SubsystemLogging {
     @Override
     public void periodic() {
         SwerveDriveKinematics.desaturateWheelSpeeds(m_states, getMaxSpeed());
-        m_estimator.updateWithTime(Timer.getFPGATimestamp(), getGyroscopeRotation(), getModulePosition());
-
         updateOdometry();
         m_field.setRobotPose(getPosition());
 
@@ -239,9 +233,11 @@ public class SwerveDrive extends SubsystemBase implements SubsystemLogging {
     }
 
     private void updateOdometry() {
+        m_estimator.updateWithTime(Timer.getFPGATimestamp(), getGyroscopeRotation(), getModulePosition());
+
         if (limeLight.isTargetAvailable() && limeLight.getBotPose() != null) {
-            addVisionMeasurement(limeLight.getBotPose().toPose2d(), Timer.getFPGATimestamp());
-        } else {
+            log("Vision pose", limeLight.getBotPose().toPose2d());
+            m_estimator.addVisionMeasurement(limeLight.getBotPose().toPose2d(), Timer.getFPGATimestamp());
         }
     }
 

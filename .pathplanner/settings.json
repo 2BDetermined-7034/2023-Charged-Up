@@ -1,0 +1,7 @@
+{
+  "robotWidth": 0.56,
+  "robotLength": 0.56,
+  "holonomicMode": true,
+  "generateJSON": false,
+  "generateCSV": false
+}
