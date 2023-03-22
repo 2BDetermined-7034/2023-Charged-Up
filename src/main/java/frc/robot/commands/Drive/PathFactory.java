@@ -11,15 +11,17 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.constants.Constants;
-import frc.robot.subsystems.SwerveDrive;
+import frc.robot.subsystems.YAGSLswerve;
+import swervelib.math.SwerveModuleState2;
+
 import java.util.HashMap;
 import java.util.List;
 
 public class PathFactory {
     private final Command followTrajectoryCommand;
-    SwerveDrive m_swerveDrive;
+    YAGSLswerve m_swerveDrive;
 
-    public PathFactory(SwerveDrive drive, PathPlannerTrajectory path, boolean useAlliance, boolean isFirstPath, HashMap<String, Command> eventMap) {
+    public PathFactory(YAGSLswerve drive, PathPlannerTrajectory path, boolean useAlliance, boolean isFirstPath, HashMap<String, Command> eventMap) {
 
         m_swerveDrive = drive;
         m_swerveDrive.addTrajectory(path);

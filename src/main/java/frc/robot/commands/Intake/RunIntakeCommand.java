@@ -18,7 +18,7 @@ public class RunIntakeCommand extends CommandBase {
     private final Indexer index;
     private final boolean fireSolenoid;
 
-    public RunIntakeCommand(SwerveDrive drive, Intake intake, Indexer index, DoubleSupplier intakeSpeed, DoubleSupplier indexerSpeed, boolean fireSoelenoid) {
+    public RunIntakeCommand(YAGSLswerve drive, Intake intake, Indexer index, DoubleSupplier intakeSpeed, DoubleSupplier indexerSpeed, boolean fireSoelenoid) {
         this.m_drive = drive;
         m_intake = intake;
         this.index = index;

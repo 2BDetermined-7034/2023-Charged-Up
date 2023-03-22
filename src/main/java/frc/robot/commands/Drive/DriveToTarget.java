@@ -28,7 +28,7 @@ public class DriveToTarget extends CommandBase {
     PathPlannerTrajectory m_trajectory;
 
 
-    public DriveToTarget(SwerveDrive m_swerve, VisionLocking m_locker) {
+    public DriveToTarget(YAGSLswerve m_swerve, VisionLocking m_locker) {
         this.m_swerve = m_swerve;
         this.m_locker = m_locker;
         this.poseSupplier = m_swerve::getPosition;
@@ -38,7 +38,7 @@ public class DriveToTarget extends CommandBase {
                 new PIDController(0.1, 0.00, 0), // Y controller (usually the same values as X controller)
                 new PIDController(0.0, 0, 0)
         );
-        this.outputModuleStates = m_swerve::setModuleStates;
+        this.outputModuleStates = (u) -> m_swerve.setModuleStates((SwerveModuleState2[]) u, false);
         addRequirements(m_swerve, m_locker);
     }
 

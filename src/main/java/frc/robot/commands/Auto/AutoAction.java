@@ -17,6 +17,7 @@ import frc.robot.commands.Drive.PathFactory;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.SwerveDrive;
 import frc.robot.subsystems.VisionLocking;
+import frc.robot.subsystems.YAGSLswerve;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,11 +28,11 @@ public class AutoAction {
     ShuffleboardLayout tab;
     SendableChooser<Command> actionChooser;
     SendableChooser<Command> heightChooser;
-    SwerveDrive drive;
+    YAGSLswerve drive;
     Arm arm;
     double timeElapsed;
     String name;
-    public AutoAction(String name, SwerveDrive swerve, Arm arm){
+    public AutoAction(String name, YAGSLswerve swerve, Arm arm){
         this.name = name;
         timeElapsed = -1;
         this.arm = arm;

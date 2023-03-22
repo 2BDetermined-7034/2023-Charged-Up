@@ -31,7 +31,7 @@ public class ChaseTagCommand extends CommandBase {
     private final ProfiledPIDController omegaController = new ProfiledPIDController(1, 0, 0, OMEGA_CONSTRAINTS);
 
     public ChaseTagCommand(
-            SwerveDrive swerveDrive,
+            YAGSLswerve swerveDrive,
             VisionLocking visionLocking
     ) {
         this.swerveDrive = swerveDrive;

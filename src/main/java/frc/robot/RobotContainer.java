@@ -24,6 +24,8 @@ import frc.robot.constants.Constants;
 import frc.robot.constants.Constants.OperatorConstants;
 import frc.robot.subsystems.*;
 
+import java.io.IOException;
+
 
 public class RobotContainer implements SubsystemLogging {
     private final SendableChooser<Command> autoMode = new SendableChooser<Command>();
@@ -36,7 +38,7 @@ public class RobotContainer implements SubsystemLogging {
     private final Intake intake = new Intake();
     private final Indexer m_indexer = new Indexer();
 
-    public RobotContainer() {
+    public RobotContainer() throws IOException {
 
         autoMode.addOption("One Piece",  AutoFactory.getOnePieceAuto(m_swerveDrive, intake, m_indexer, gravityClawSubsystem, m_Arm));
         autoMode.addOption("One Piece Exit",  AutoFactory.getOnePieceExit(m_swerveDrive, intake, m_indexer, gravityClawSubsystem, m_Arm));

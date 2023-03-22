@@ -25,6 +25,7 @@ import frc.robot.constants.Constants;
 import frc.robot.constants.SwerveModuleConstants;
 import frc.robot.util.SwerveModule;
 
+
 public class SwerveDrive extends SubsystemBase implements SubsystemLogging {
 
     private static final AHRS m_navx = new AHRS(SPI.Port.kMXP, (byte) 200);
@@ -250,8 +251,7 @@ public class SwerveDrive extends SubsystemBase implements SubsystemLogging {
         return new Transform2d();
     }
 
-    public void lockModules() {
-    }
+
 
     @Override
     public void updateLogging() {
