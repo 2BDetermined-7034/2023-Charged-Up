@@ -11,15 +11,8 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.networktables.DoublePublisher;
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.CounterBase;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
-import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.subsystems.SubsystemLogging;
 import frc.robot.util.ArmState;
 
 import static frc.robot.constants.Constants.ArmConstants.*;
@@ -29,6 +22,8 @@ public class Arm extends SubsystemBase implements SubsystemLogging {
     private final RelativeEncoder m_motor1Encoder, m_motor2Encoder;
     private final DutyCycleEncoder m_AbsoluteEncoder1, m_AbsoluteEncoder2;
     private final ProfiledPIDController controller1, controller2;
+    private TrapezoidProfile.Constraints constraint1;
+    private TrapezoidProfile.Constraints constraint2;
     private final ArmFeedforward armFeedForward1, armFeedForward2;
     private ArmState goalState;
     private double input1, input2;
@@ -39,8 +34,10 @@ public class Arm extends SubsystemBase implements SubsystemLogging {
      * Creates a new Arm.
      */
     public Arm() {
-        controller1 = new ProfiledPIDController(4, 0.5, 0.05, new TrapezoidProfile.Constraints(5, 4));
-        controller2 = new ProfiledPIDController(10, 1, 0.1, new TrapezoidProfile.Constraints(5, 2.5));
+        constraint1 = shoulderConstraints;
+        constraint2 = elbowConstraints;
+        controller1 = new ProfiledPIDController(4, 0.5, 0.05, constraint1);
+        controller2 = new ProfiledPIDController(10, 1, 0.1, constraint2);
 
 
         controller1.setIntegratorRange(-2, 2);
@@ -164,6 +161,11 @@ public class Arm extends SubsystemBase implements SubsystemLogging {
         return Math.toDegrees(goalState.getTheta1()) < 140 && Math.toDegrees(goalState.getTheta2()) < 360;
     }
 
+    public void setConstraints(TrapezoidProfile.Constraints constraint1, TrapezoidProfile.Constraints constraint2) {
+        this.constraint1 = constraint1;
+        this.constraint2 = constraint2;
+    }
+
     /**
      * @deprecated
      * Checks wheather the arm is at the home position
@@ -230,8 +232,8 @@ public class Arm extends SubsystemBase implements SubsystemLogging {
         if (!isOpenLoop) {
             TrapezoidProfile.State profile1 = new TrapezoidProfile.State(goalState.getTheta1(), goalState.getOmega1());
             TrapezoidProfile.State profile2 = new TrapezoidProfile.State(goalState.getTheta2(), goalState.getOmega2());
-            input1 = controller1.calculate(getCurrentState().getTheta1(), profile1);
-            input2 = controller2.calculate(getCurrentState().getTheta2(), profile2);
+            input1 = controller1.calculate(getCurrentState().getTheta1(), profile1, constraint1);
+            input2 = controller2.calculate(getCurrentState().getTheta2(), profile2, constraint2);
         }
 
         double betterFeedForward1 = armFeedForward1.calculate(controller1.getSetpoint().position, controller1.getSetpoint().velocity);

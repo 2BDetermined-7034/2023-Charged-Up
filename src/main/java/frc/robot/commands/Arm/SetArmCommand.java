@@ -10,8 +10,10 @@ import frc.robot.subsystems.SwerveDrive;
 import frc.robot.util.ArmState;
 
 public class SetArmCommand extends CommandBase {
-    private final ArmState goalState;
-    private final Arm arm;
+
+    protected final ArmState goalState;
+    protected final Arm arm;
+
 
     /**
      * Creates a new ArmCommand.
