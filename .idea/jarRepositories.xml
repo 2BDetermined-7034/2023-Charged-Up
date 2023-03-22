@@ -96,5 +96,10 @@
       <option name="name" value="maven" />
       <option name="url" value="https://maven.pkg.github.com/Mechanical-Advantage/AdvantageKit" />
     </remote-repository>
+    <remote-repository>
+      <option name="id" value="WPI1ccce5a4-acd2-4d18-bca3-4b8047188400_0Release" />
+      <option name="name" value="WPI1ccce5a4-acd2-4d18-bca3-4b8047188400_0Release" />
+      <option name="url" value="https://broncbotz3481.github.io/YAGSL-Lib/yagsl/repos" />
+    </remote-repository>
   </component>
 </project>

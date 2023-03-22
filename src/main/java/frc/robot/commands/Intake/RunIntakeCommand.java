@@ -5,12 +5,13 @@ import frc.robot.constants.Constants;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.SwerveDrive;
+import frc.robot.subsystems.YAGSLswerve;
 
 import java.util.function.DoubleSupplier;
 
 
 public class RunIntakeCommand extends CommandBase {
-    private final SwerveDrive m_drive;
+    private final YAGSLswerve m_drive;
     private final Intake m_intake;
     private final DoubleSupplier intakeSpeed;
     private final DoubleSupplier indexerSpeed;

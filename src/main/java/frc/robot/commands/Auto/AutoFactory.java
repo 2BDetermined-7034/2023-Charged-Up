@@ -15,7 +15,7 @@ import frc.robot.subsystems.*;
 
 public class AutoFactory {
 
-    public static Command getOnePieceAuto(SwerveDrive drive, Intake intake, Indexer indexer, GravityClawSubsystem claw, Arm arm) {
+    public static Command getOnePieceAuto(YAGSLswerve drive, Intake intake, Indexer indexer, GravityClawSubsystem claw, Arm arm) {
         return new SequentialCommandGroup(
                 new GravityClawCommand(claw, false),
                 new SetArmCommand(arm, Constants.ArmConstants.ArmSetPoints.intake),
@@ -25,7 +25,7 @@ public class AutoFactory {
         );
     }
 
-    public static Command getLevelOpen(SwerveDrive drive) {
+    public static Command getLevelOpen(YAGSLswerve drive) {
         PathPlannerTrajectory path = PathPlanner.loadPath("exitLevel", new PathConstraints(3, 3));
 
         return new SequentialCommandGroup(
@@ -33,7 +33,7 @@ public class AutoFactory {
                 new AutoBalance(drive)
         );
     }
-    public static Command getOnePieceExit(SwerveDrive drive, Intake intake, Indexer indexer, GravityClawSubsystem claw, Arm arm) {
+    public static Command getOnePieceExit(YAGSLswerve drive, Intake intake, Indexer indexer, GravityClawSubsystem claw, Arm arm) {
         PathPlannerTrajectory path = PathPlanner.loadPath("exit", new PathConstraints(2, 3));
 
         return new SequentialCommandGroup(
@@ -44,7 +44,7 @@ public class AutoFactory {
         );
     }
 
-    public static Command getOnePieceThenLevelMid(SwerveDrive drive, Intake intake, Indexer indexer, GravityClawSubsystem claw, Arm arm) {
+    public static Command getOnePieceThenLevelMid(YAGSLswerve drive, Intake intake, Indexer indexer, GravityClawSubsystem claw, Arm arm) {
         PathPlannerTrajectory path = PathPlanner.loadPath("exitLevelMid", new PathConstraints(2, 3));
 
         return new SequentialCommandGroup(
@@ -60,7 +60,7 @@ public class AutoFactory {
     }
 
 
-    public static Command getLevelBotCable(SwerveDrive drive) {
+    public static Command getLevelBotCable(YAGSLswerve drive) {
         PathPlannerTrajectory path = PathPlanner.loadPath("exitLevelCable", new PathConstraints(3, 3));
 
         return new SequentialCommandGroup(
@@ -70,7 +70,7 @@ public class AutoFactory {
     }
 
 
-    public static Command getOnePieceThenLevelOpen(SwerveDrive drive, Intake intake, Indexer indexer, GravityClawSubsystem claw, Arm arm) {
+    public static Command getOnePieceThenLevelOpen(YAGSLswerve drive, Intake intake, Indexer indexer, GravityClawSubsystem claw, Arm arm) {
         PathPlannerTrajectory path = PathPlanner.loadPath("exitLevelOpen", new PathConstraints(3, 3));
 
         return new SequentialCommandGroup(
@@ -84,7 +84,7 @@ public class AutoFactory {
         );
     }
 
-    public static Command getOnePieceThenLevelCable(SwerveDrive drive, Intake intake, Indexer indexer, GravityClawSubsystem claw, Arm arm) {
+    public static Command getOnePieceThenLevelCable(YAGSLswerve drive, Intake intake, Indexer indexer, GravityClawSubsystem claw, Arm arm) {
         PathPlannerTrajectory path = PathPlanner.loadPath("exitLevelCable", new PathConstraints(3, 3));
 
         return new SequentialCommandGroup(
@@ -97,7 +97,7 @@ public class AutoFactory {
         );
     }
 
-    public static Command getTestAuto(SwerveDrive drive) {
+    public static Command getTestAuto(YAGSLswerve drive) {
         PathPlannerTrajectory path = PathPlanner.loadPath("path", new PathConstraints(3, 3));
         return new PathFactory(drive, path,true, true).getCommand();
     }

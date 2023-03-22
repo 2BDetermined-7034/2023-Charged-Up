@@ -51,7 +51,7 @@ public class PathFactory {
         );
     }
 
-    public PathFactory(SwerveDrive drive, PathPlannerTrajectory path, boolean useAlliance, boolean isFirstPath){
+    public PathFactory(YAGSLswerve drive, PathPlannerTrajectory path, boolean useAlliance, boolean isFirstPath){
         this(drive, path, useAlliance, isFirstPath, new HashMap<>());
     }
 

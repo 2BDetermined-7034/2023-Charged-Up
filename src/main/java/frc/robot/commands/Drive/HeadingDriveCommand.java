@@ -6,18 +6,19 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.SwerveDrive;
+import frc.robot.subsystems.YAGSLswerve;
 
 import java.util.function.DoubleSupplier;
 
 public class HeadingDriveCommand extends CommandBase {
-    private final SwerveDrive m_swerveDrive;
+    private final YAGSLswerve m_swerveDrive;
     private final double heading;
     private final PIDController m_pidController;
     private final DoubleSupplier m_translationXSupplier;
     private final DoubleSupplier m_translationYSupplier;
     private final DoubleSupplier m_rotationSupplier;
 
-    public HeadingDriveCommand(SwerveDrive drivetrainSubsystem,
+    public HeadingDriveCommand(YAGSLswerve drivetrainSubsystem,
                                double heading,
                                DoubleSupplier translationXSupplier,
                                DoubleSupplier translationYSupplier,

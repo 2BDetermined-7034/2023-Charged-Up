@@ -6,13 +6,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.SubsystemLogging;
 import frc.robot.subsystems.SwerveDrive;
+import frc.robot.subsystems.YAGSLswerve;
 
 public class AutoBalance extends CommandBase implements SubsystemLogging {
-    private final SwerveDrive m_swerveDrive;
+    private final YAGSLswerve m_swerveDrive;
 
     PIDController pid = new PIDController(1.2, 0, 0.1);
 
-    public AutoBalance(SwerveDrive swerveDrive) {
+    public AutoBalance(YAGSLswerve swerveDrive) {
         m_swerveDrive = swerveDrive;
         pid.setTolerance(Math.toRadians(5));
         pid.setIntegratorRange(-3, 3);

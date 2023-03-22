@@ -11,7 +11,7 @@ import static frc.robot.constants.Constants.ArmConstants.ArmSetPoints.*;
 
 
 public class ArmPathFactory {
-    public static Command getOut(SwerveDrive m_swerve, GravityClawSubsystem m_claw, Arm m_arm, Intake m_intake, Indexer m_indexer) {
+    public static Command getOut(YAGSLswerve m_swerve, GravityClawSubsystem m_claw, Arm m_arm, Intake m_intake, Indexer m_indexer) {
         return new SequentialCommandGroup(
                 new GravityClawCommand(m_claw, false),
                 new ParallelRaceGroup(
@@ -29,7 +29,7 @@ public class ArmPathFactory {
         );
     }
 
-    public static Command getScoreHighPath(SwerveDrive m_swerve, GravityClawSubsystem m_claw, Arm m_arm, Intake m_intake, Indexer m_indexer){
+    public static Command getScoreHighPath(YAGSLswerve m_swerve, GravityClawSubsystem m_claw, Arm m_arm, Intake m_intake, Indexer m_indexer){
         return new SequentialCommandGroup(
                 getOut(m_swerve, m_claw, m_arm, m_intake, m_indexer),
                 new SetArmCommand(m_arm, passThrough),
@@ -38,7 +38,7 @@ public class ArmPathFactory {
         );
     }
 
-    public static Command getScoreMidPath(SwerveDrive m_swerve, GravityClawSubsystem m_claw, Arm m_arm, Intake m_intake, Indexer m_indexer) {
+    public static Command getScoreMidPath(YAGSLswerve m_swerve, GravityClawSubsystem m_claw, Arm m_arm, Intake m_intake, Indexer m_indexer) {
         return new SequentialCommandGroup(
                 getOut(m_swerve, m_claw, m_arm, m_intake, m_indexer),
                 new SetArmCommand(m_arm, passThrough),
@@ -47,7 +47,7 @@ public class ArmPathFactory {
         );
     }
 
-    public static Command getScoreMidFrontPath(SwerveDrive m_swerve, GravityClawSubsystem m_claw, Arm m_arm, Intake m_intake, Indexer indexer) {
+    public static Command getScoreMidFrontPath(YAGSLswerve m_swerve, GravityClawSubsystem m_claw, Arm m_arm, Intake m_intake, Indexer indexer) {
         return new SequentialCommandGroup(
                 getOut(m_swerve, m_claw, m_arm, m_intake, indexer),
                 new SetArmCommand(m_arm, frontMid)

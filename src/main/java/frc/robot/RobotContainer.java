@@ -29,7 +29,7 @@ import java.io.IOException;
 
 public class RobotContainer implements SubsystemLogging {
     private final SendableChooser<Command> autoMode = new SendableChooser<Command>();
-    private final SwerveDrive m_swerveDrive = new SwerveDrive();
+    private final YAGSLswerve m_swerveDrive = new YAGSLswerve();
     public final Arm m_Arm = new Arm();
     private final XboxController m_operatorController = new XboxController(OperatorConstants.kOperatorControllerPort);
     private final CommandPS4Controller m_driverController = new CommandPS4Controller(OperatorConstants.kDriverControllerPort);

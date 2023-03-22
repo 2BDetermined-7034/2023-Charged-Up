@@ -18,7 +18,7 @@ public class ChaseTagCommand extends CommandBase {
     private static final TrapezoidProfile.Constraints OMEGA_CONSTRAINTS = new TrapezoidProfile.Constraints(8, 8);
 
 
-    private final SwerveDrive swerveDrive;
+    private final YAGSLswerve swerveDrive;
     private final VisionLocking visionLocking;
 
     private final Supplier<Pose2d> pose2dSupplier;
