@@ -42,7 +42,7 @@ public class VisionLocking extends SubsystemBase implements SubsystemLogging{
     private Side m_side;
     private int m_grid;
     private PieceType m_pieceType;
-    private static final int[] blueTags = {8,7,6};
+    private static final int[] blueTags = {6,7,8};
     private static final int[] redTags = {3,2,1};
     private final ShuffleboardTab driverTab;
     private final ShuffleboardLayout gridLocationLayout;
@@ -67,11 +67,7 @@ public class VisionLocking extends SubsystemBase implements SubsystemLogging{
         gridSelection = new boolean[3];
         coneCube = false;
 
-        if(DriverStation.getAlliance().equals(DriverStation.Alliance.Blue)) {
-            m_team = VisionLocking.Team.BLUE;
-        } else {
-            m_team = VisionLocking.Team.RED;
-        }
+
 
         configureDashboard();
     }
@@ -105,6 +101,14 @@ public class VisionLocking extends SubsystemBase implements SubsystemLogging{
         // Initialize the two boolean arrays to have base values.
         updateGridArray();
         updateLocationArray();
+    }
+
+    public void updateTeam() {
+        if(DriverStation.getAlliance().equals(DriverStation.Alliance.Blue)) {
+            m_team = VisionLocking.Team.BLUE;
+        } else {
+            m_team = VisionLocking.Team.RED;
+        }
     }
 
     public void setSide(Side setTo){
@@ -181,21 +185,21 @@ public class VisionLocking extends SubsystemBase implements SubsystemLogging{
 
 
     public static Pose2d getPosition(Team team, int grid, PieceType piece, Side side){
-        Pose2d position = FieldConstants.aprilTags.get(1).toPose2d();
-        double xVal = 0.95;
+        Pose2d position;
+        double xVal = 0.7;
         double yVal = 0.6;
 
         if(piece.equals(PieceType.CUBES)){
             yVal = 0;
         }
         if (team.equals(Team.BLUE)) {
-            //position = FieldConstants.aprilTags.get(blueTags[grid - 1]).toPose2d();
-            xVal *= -1;
+            position = FieldConstants.aprilTags.get(blueTags[grid]).toPose2d();
             if(piece.equals(PieceType.CONES)){
                  if(side.equals(Side.LEFT)) yVal *= -1;
             }
         } else {
-            //position = FieldConstants.aprilTags.get(redTags[grid - 1]).toPose2d();
+            position = FieldConstants.aprilTags.get(redTags[grid]).toPose2d();
+            xVal *= -1;
             if(piece.equals(PieceType.CONES)){
                 if(!side.equals(Side.LEFT)) yVal *= -1;
             }
@@ -251,10 +255,7 @@ public class VisionLocking extends SubsystemBase implements SubsystemLogging{
 
     @Override
     public void periodic() {
-
-
-
-
+        updateTeam();
         updateLogging();
     }
 

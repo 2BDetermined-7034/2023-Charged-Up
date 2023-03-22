@@ -4,9 +4,6 @@
 
 package frc.robot;
 
-import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.Compressor;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -26,7 +23,6 @@ import frc.robot.commands.clob.GravityClawToggleCommand;
 import frc.robot.constants.Constants;
 import frc.robot.constants.Constants.OperatorConstants;
 import frc.robot.subsystems.*;
-import frc.robot.util.ArmState;
 
 
 public class RobotContainer implements SubsystemLogging {
@@ -42,11 +38,13 @@ public class RobotContainer implements SubsystemLogging {
 
     public RobotContainer() {
 
-        autoMode.addOption("One Piece",  AutoFactory.getOneConeAuto(m_swerveDrive, intake, m_indexer, gravityClawSubsystem, m_Arm));
-        autoMode.addOption("One Piece Level",  AutoFactory.getOnePieceThenLevel(m_swerveDrive, intake, m_indexer, gravityClawSubsystem, m_Arm));
-        autoMode.addOption("One Piece Level lower",  AutoFactory.getOnePieceThenLevel(m_swerveDrive, intake, m_indexer, gravityClawSubsystem, m_Arm));
-        autoMode.addOption("Exit Top", AutoFactory.getLevelTop(m_swerveDrive));
-        autoMode.addOption("Exit Bot", AutoFactory.getLevelBot(m_swerveDrive));
+        autoMode.addOption("One Piece",  AutoFactory.getOnePieceAuto(m_swerveDrive, intake, m_indexer, gravityClawSubsystem, m_Arm));
+        autoMode.addOption("One Piece Exit",  AutoFactory.getOnePieceExit(m_swerveDrive, intake, m_indexer, gravityClawSubsystem, m_Arm));
+        autoMode.addOption("One Piece Level open",  AutoFactory.getOnePieceThenLevelOpen(m_swerveDrive, intake, m_indexer, gravityClawSubsystem, m_Arm));
+        autoMode.addOption("One Piece Level mid",  AutoFactory.getOnePieceThenLevelMid(m_swerveDrive, intake, m_indexer, gravityClawSubsystem, m_Arm));
+        autoMode.addOption("One Piece Level cable",  AutoFactory.getOnePieceThenLevelCable(m_swerveDrive, intake, m_indexer, gravityClawSubsystem, m_Arm));
+        autoMode.addOption("Exit Top", AutoFactory.getLevelOpen(m_swerveDrive));
+        autoMode.addOption("Exit Bot", AutoFactory.getLevelBotCable(m_swerveDrive));
 
         autoMode.addOption("Test auto",  AutoFactory.getTestAuto(m_swerveDrive));
         autoMode.setDefaultOption("Do Nothing",  new WaitCommand(10));
@@ -150,6 +148,8 @@ public class RobotContainer implements SubsystemLogging {
 
         m_driverController.L1().onTrue(m_visionLocker.runOnce(m_visionLocker::togglePiece));
 
+        m_driverController.povUp().whileTrue(new AutoBalance(m_swerveDrive));
+
         m_driverController.touchpad().whileTrue(
                 new ChaseTagCommand(m_swerveDrive, m_visionLocker).andThen(
                         new GravityClawCommand(gravityClawSubsystem, false).andThen(
@@ -173,7 +173,7 @@ public class RobotContainer implements SubsystemLogging {
        new Trigger(m_operatorController::getBackButton).onTrue(new GravityClawToggleCommand(gravityClawSubsystem));
 
 
-        new Trigger(m_operatorController::getAButton).onTrue(ArmPathFactory.getIntakePath(m_Arm, m_swerveDrive, gravityClawSubsystem)); // high// med
+        new Trigger(m_operatorController::getAButton).onTrue(ArmPathFactory.getIntakePath(m_Arm, gravityClawSubsystem)); // high// med
         new Trigger(m_operatorController::getBButton).onTrue(ArmPathFactory.getScoreMidPath(m_swerveDrive, gravityClawSubsystem, m_Arm, intake, m_indexer)); // low
         new Trigger(m_operatorController::getYButton).onTrue(ArmPathFactory.getScoreHighPath(m_swerveDrive, gravityClawSubsystem, m_Arm, intake, m_indexer)); // low
         new Trigger(m_operatorController::getStartButton).onTrue(ArmPathFactory.getScoreMidFrontPath(m_swerveDrive, gravityClawSubsystem, m_Arm, intake, m_indexer)); // low
@@ -182,7 +182,7 @@ public class RobotContainer implements SubsystemLogging {
 
         new Trigger(m_operatorController::getXButton).onTrue(m_visionLocker.runOnce(m_visionLocker::togglePiece));
         new Trigger((() -> Math.abs(m_operatorController.getLeftTriggerAxis()) > 0.05)).onTrue(
-                new SetArmCommand(m_Arm, m_swerveDrive, Constants.ArmConstants.ArmSetPoints.tuck, false));
+                new SetArmCommand(m_Arm, Constants.ArmConstants.ArmSetPoints.tuck));
         new Trigger((() -> Math.abs(m_operatorController.getRightTriggerAxis()) > 0.05)).onTrue(
                 new ArmOverride(m_Arm, m_swerveDrive, m_operatorController::getLeftX, m_operatorController::getRightY, m_operatorController::getRightTriggerAxis));
     }

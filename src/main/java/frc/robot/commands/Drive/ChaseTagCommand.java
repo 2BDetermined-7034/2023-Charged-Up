@@ -48,6 +48,8 @@ public class ChaseTagCommand extends CommandBase {
 
     @Override
     public void initialize() {
+
+        swerveDrive.getLimeLight().setModeVision();
         var robotPose = pose2dSupplier.get();
         omegaController.reset(robotPose.getRotation().getRadians());
         xController.reset(robotPose.getX());

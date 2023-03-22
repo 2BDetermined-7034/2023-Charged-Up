@@ -12,17 +12,13 @@ import frc.robot.util.ArmState;
 public class SetArmCommand extends CommandBase {
     private final ArmState goalState;
     private final Arm arm;
-    private final SwerveDrive drive;
-    private final boolean toggleSpeedOnEnd;
 
     /**
      * Creates a new ArmCommand.
      */
-    public SetArmCommand(Arm arm, SwerveDrive drive, ArmState goalState, boolean toggleSpeedOnEnd) {
+    public SetArmCommand(Arm arm, ArmState goalState) {
         this.goalState = goalState;
         this.arm = arm;
-        this.toggleSpeedOnEnd = toggleSpeedOnEnd;
-        this.drive = drive;
 
         // Use addRequirements() here to declare subsystem dependencies.
         addRequirements(arm);
@@ -31,7 +27,6 @@ public class SetArmCommand extends CommandBase {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        drive.setSpeedMulti(0.2);
         arm.setGoalState(goalState);
     }
 
@@ -42,9 +37,6 @@ public class SetArmCommand extends CommandBase {
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
-        if(toggleSpeedOnEnd) {
-            drive.setSpeedMulti(1);
-        }
     }
 
     // Returns true when the command should end.

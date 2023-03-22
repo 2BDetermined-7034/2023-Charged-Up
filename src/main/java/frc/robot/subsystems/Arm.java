@@ -46,8 +46,8 @@ public class Arm extends SubsystemBase implements SubsystemLogging {
         controller1.setIntegratorRange(-2, 2);
         controller2.setIntegratorRange(-2, 2);
 
-        controller1.setTolerance(Math.toRadians(6), 1.5);
-        controller2.setTolerance(Math.toRadians(6), 1.5);
+        controller1.setTolerance(Math.toRadians(10), 3);
+        controller2.setTolerance(Math.toRadians(10), 3);
 
         armFeedForward2 = new ArmFeedforward(0.01, kG1, kV1, kA1);
         armFeedForward1 = new ArmFeedforward(0.01, kG2, kV2, kA2);

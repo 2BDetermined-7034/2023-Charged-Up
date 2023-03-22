@@ -29,7 +29,7 @@ public class ArmOverride extends CommandBase {
     public void initialize() {
         arm.setGoalState(arm.getCurrentState().clear());
         arm.setIsOpenLoop(true);
-        m_swerveDrive.setSpeedMulti(0.2);
+        m_swerveDrive.setSpeedMulti(0.4);
     }
 
     // Called every time the scheduler runs while the command is scheduled.
