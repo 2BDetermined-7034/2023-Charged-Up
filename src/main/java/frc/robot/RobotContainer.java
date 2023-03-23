@@ -171,12 +171,18 @@ public class RobotContainer implements SubsystemLogging {
        new Trigger(m_operatorController::getRightBumper).whileTrue(m_visionLocker.runOnce(m_visionLocker::gridRight));
 
        new Trigger(m_operatorController::getBackButton).onTrue(new GravityClawToggleCommand(gravityClawSubsystem));
-
+        new Trigger(m_operatorController::getBackButton).onTrue(m_swerveDrive.runOnce(() -> m_swerveDrive.setSpeedMulti(1)));
 
         new Trigger(m_operatorController::getAButton).onTrue(ArmPathFactory.getIntakePath(m_Arm, gravityClawSubsystem)); // high// med
         new Trigger(m_operatorController::getBButton).onTrue(ArmPathFactory.getScoreMidPath(m_swerveDrive, gravityClawSubsystem, m_Arm, intake, m_indexer)); // low
+        new Trigger(m_operatorController::getBButton).onTrue(m_swerveDrive.runOnce(() -> m_swerveDrive.setSpeedMulti(0.3))); // low
+
         new Trigger(m_operatorController::getYButton).onTrue(ArmPathFactory.getScoreHighPath(m_swerveDrive, gravityClawSubsystem, m_Arm, intake, m_indexer)); // low
-        new Trigger(m_operatorController::getStartButton).onTrue(ArmPathFactory.getScoreMidFrontPath(m_swerveDrive, gravityClawSubsystem, m_Arm, intake, m_indexer)); // low
+        new Trigger(m_operatorController::getYButton).onTrue(m_swerveDrive.runOnce(() -> m_swerveDrive.setSpeedMulti(0.3))); // low
+
+        new Trigger(m_operatorController::getStartButton).onTrue(ArmPathFactory.getScoreShelf(m_swerveDrive, gravityClawSubsystem, m_Arm, intake, m_indexer)); // low
+        new Trigger(m_operatorController::getStartButton).onTrue(m_swerveDrive.runOnce(() -> m_swerveDrive.setSpeedMulti(0.3))); // low
+
 
 
 

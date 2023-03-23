@@ -44,7 +44,7 @@ public class Arm extends SubsystemBase implements SubsystemLogging {
         controller2.setIntegratorRange(-2, 2);
 
         controller1.setTolerance(Math.toRadians(10), 3);
-        controller2.setTolerance(Math.toRadians(10), 3);
+        controller2.setTolerance(Math.toRadians(10), 5);
 
         armFeedForward2 = new ArmFeedforward(0.01, kG1, kV1, kA1);
         armFeedForward1 = new ArmFeedforward(0.01, kG2, kV2, kA2);
@@ -52,8 +52,8 @@ public class Arm extends SubsystemBase implements SubsystemLogging {
         m_motor1 = new CANSparkMax(motor1ID, CANSparkMaxLowLevel.MotorType.kBrushless);
         m_motor2 = new CANSparkMax(motor2ID, CANSparkMaxLowLevel.MotorType.kBrushless);
 
-        m_motor1.setSmartCurrentLimit(15);
-        m_motor2.setSmartCurrentLimit(15);
+        m_motor1.setSmartCurrentLimit(30);
+        m_motor2.setSmartCurrentLimit(30);
 
         m_motor1.setSecondaryCurrentLimit(40);
         m_motor2.setSecondaryCurrentLimit(40);
@@ -96,8 +96,8 @@ public class Arm extends SubsystemBase implements SubsystemLogging {
     public void updateLogging() {
         log("theta1", Units.radiansToDegrees(getCurrentState().getTheta1()));
         log("theta2", Units.radiansToDegrees(getCurrentState().getTheta2()));
-        log("motor theta1", m_motor1Encoder.getPosition());
-        log("motor theta2", m_motor2Encoder.getPosition());
+        log("relative motor theta1", m_motor1Encoder.getPosition());
+        log("relative motor theta2", m_motor2Encoder.getPosition());
         log("encoder theta1", m_AbsoluteEncoder1.getDistance());
         log("encoder theta2", m_AbsoluteEncoder2.getDistance() + m_AbsoluteEncoder1.getDistance());
         log("Target Theta2", Units.radiansToDegrees(goalState.getTheta2()));
@@ -106,6 +106,8 @@ public class Arm extends SubsystemBase implements SubsystemLogging {
         log("omega2", getCurrentState().getOmega2());
         log("Applied Output1", m_motor1.getAppliedOutput());
         log("Applied Output2", m_motor2.getAppliedOutput());
+        log("Current 1", m_motor1.getOutputCurrent());
+        log("Current 2", m_motor2.getOutputCurrent());
         log("error1", controller1.getPositionError());
         log("error2", controller2.getPositionError());
     }

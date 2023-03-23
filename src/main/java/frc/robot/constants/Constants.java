@@ -107,15 +107,17 @@ public final class Constants {
         public static final TrapezoidProfile.Constraints shoulderConstraints = new TrapezoidProfile.Constraints(5, 4);
         public static final TrapezoidProfile.Constraints elbowConstraints = new TrapezoidProfile.Constraints(5, 2.5);
         public static class ArmSetPoints {
-            public static ArmState passThrough = new ArmState(Units.degreesToRadians(106), Units.degreesToRadians(223));
+            public static ArmState passThrough = new ArmState(Units.degreesToRadians(100), Units.degreesToRadians(215), 0, 1);
+            public static ArmState passThroughOut = new ArmState(Units.degreesToRadians(106), Units.degreesToRadians(223), 0, 0);
+
             public static ArmState preIntake = new ArmState(Units.degreesToRadians(86), Units.degreesToRadians(245), 0, 0.2);
 
             public static ArmState intake = new ArmState(Units.degreesToRadians(100), Units.degreesToRadians(255));
             public static ArmState tuck = new ArmState(Units.degreesToRadians(93), Units.degreesToRadians(193));
             public static ArmState midBack = new ArmState(Units.degreesToRadians(109), Units.degreesToRadians(5));
             //public static ArmState midBack = new ArmState(Units.degreesToRadians(95), Units.degreesToRadians(30));
-            public static ArmState frontMid = new ArmState(Units.degreesToRadians(138), Units.degreesToRadians(170));
-            public static ArmState high = new ArmState(Units.degreesToRadians(73), Units.degreesToRadians(30));
+            public static ArmState shelf = new ArmState(Units.degreesToRadians(117), Units.degreesToRadians(15));
+            public static ArmState high = new ArmState(Units.degreesToRadians(79), Units.degreesToRadians(28));
             public static ArmState startCone = new ArmState(Units.degreesToRadians(95), Units.degreesToRadians(240));
 
         }
@@ -156,8 +158,8 @@ public final class Constants {
         public static final int N2 = 1;
 
         //ArmFeedForward Gains
-        public static final double kG1 = 0.47d, kV1 = 3.47d, kA1 = 0.03d;
-        public static final double kG2 = 0.28, kV2 = 2.60, kA2 = .03;
+        public static final double kG1 = 0.47d, kV1 = 3.42d, kA1 = 0.03d;
+        public static final double kG2 = 0.28, kV2 = 2.59, kA2 = .03;
 
         //Gravity
         public static final double g = 9.81;

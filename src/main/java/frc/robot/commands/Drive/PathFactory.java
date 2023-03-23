@@ -39,6 +39,7 @@ public class PathFactory {
         Command fullAuto = autoBuilder.fullAuto(path);
 
         followTrajectoryCommand = new SequentialCommandGroup(
+                m_swerveDrive.runOnce(() -> m_swerveDrive.setSpeedMulti(1)),
                 new InstantCommand(() -> {
                     // Reset odometry for the first path you run during auto
                     if (isFirstPath) {

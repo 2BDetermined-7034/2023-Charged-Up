@@ -37,9 +37,11 @@ public class RunIntakeCommand extends CommandBase {
         if (intakeSpeed.getAsDouble() <= 0.3) m_drive.setSpeedMulti(0.2);
         else if (intakeSpeed.getAsDouble() >= 0.3) m_drive.setSpeedMulti(0.4);
 
+
         if(fireSolenoid) {
             m_intake.setSolenoid(false);
         }
+
     }
 
     @Override

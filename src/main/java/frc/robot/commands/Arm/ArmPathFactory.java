@@ -1,5 +1,6 @@
 package frc.robot.commands.Arm;
 
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -32,34 +33,32 @@ public class ArmPathFactory {
     public static Command getScoreHighPath(SwerveDrive m_swerve, GravityClawSubsystem m_claw, Arm m_arm, Intake m_intake, Indexer m_indexer){
         return new SequentialCommandGroup(
                 getOut(m_swerve, m_claw, m_arm, m_intake, m_indexer),
-                new SetArmCommand(m_arm, passThrough),
-                new SetArmCommand(m_arm, high)
-
+                new SetArmCommandWithConstraints(m_arm, passThroughOut, new TrapezoidProfile.Constraints(6, 4), new TrapezoidProfile.Constraints(7, 3)),
+                new SetArmCommandWithConstraints(m_arm, high, new TrapezoidProfile.Constraints(5, 4), new TrapezoidProfile.Constraints(9,3.7))
         );
     }
 
     public static Command getScoreMidPath(SwerveDrive m_swerve, GravityClawSubsystem m_claw, Arm m_arm, Intake m_intake, Indexer m_indexer) {
         return new SequentialCommandGroup(
                 getOut(m_swerve, m_claw, m_arm, m_intake, m_indexer),
-                new SetArmCommand(m_arm, passThrough),
-                new SetArmCommand(m_arm, midBack)
-
+                new SetArmCommand(m_arm, passThroughOut),
+                new SetArmCommandWithConstraints(m_arm, midBack, new TrapezoidProfile.Constraints(5, 2), new TrapezoidProfile.Constraints(6,2.5))
         );
     }
 
-    public static Command getScoreMidFrontPath(SwerveDrive m_swerve, GravityClawSubsystem m_claw, Arm m_arm, Intake m_intake, Indexer indexer) {
+    public static Command getScoreShelf(SwerveDrive m_swerve, GravityClawSubsystem m_claw, Arm m_arm, Intake m_intake, Indexer indexer) {
         return new SequentialCommandGroup(
                 getOut(m_swerve, m_claw, m_arm, m_intake, indexer),
-                new SetArmCommand(m_arm, frontMid)
+                new SetArmCommand(m_arm, shelf)
 
         );
     }
     public static Command getIntakePath(Arm m_arm, GravityClawSubsystem claw){
         return new SequentialCommandGroup(
                 new GravityClawCommand(claw, false),
-                new SetArmCommand(m_arm,  passThrough),
+                new SetArmCommandWithConstraints(m_arm,  passThrough, new TrapezoidProfile.Constraints(3, 2), new TrapezoidProfile.Constraints(3, 1.5)),
                 new GravityClawCommand(claw, true),
-                new SetArmCommand(m_arm,preIntake),
+                new SetArmCommandWithConstraints(m_arm,preIntake, new TrapezoidProfile.Constraints(5,4), new TrapezoidProfile.Constraints(3, 1)),
                 new SetArmCommand(m_arm, intake)
         );
     }
