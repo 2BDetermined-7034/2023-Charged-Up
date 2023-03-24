@@ -109,7 +109,7 @@ public final class Constants {
         public static class ArmSetPoints {
             public static ArmState limit = new ArmState(Units.degreesToRadians(70), Units.degreesToRadians(90), 0, 0.2);
 
-            public static ArmState passThrough = new ArmState(Units.degreesToRadians(100), Units.degreesToRadians(215), 0, 0);
+            public static ArmState passThrough = new ArmState(Units.degreesToRadians(105), Units.degreesToRadians(230), 0, 0);
             public static ArmState passThroughOut = new ArmState(Units.degreesToRadians(106), Units.degreesToRadians(223), 0, 0);
 
             public static ArmState preIntake = new ArmState(Units.degreesToRadians(86), Units.degreesToRadians(245), 0, 0.2);
