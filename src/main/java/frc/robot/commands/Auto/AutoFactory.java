@@ -39,6 +39,10 @@ public class AutoFactory {
         return new SequentialCommandGroup(
                 drive.runOnce(drive.getLimeLight()::setModeDriver),
                 getOnePieceAuto(drive, intake, indexer, claw, arm),
+                new ParallelCommandGroup(
+                        ArmPathFactory.getIntakePath(arm, claw),
+                        new PathFactory(drive, path, true, true).getCommand()
+                ),
                 new PathFactory(drive, path, true, true).getCommand(),
                 drive.runOnce(drive.getLimeLight()::setModeVision)
         );
