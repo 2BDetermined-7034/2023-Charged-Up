@@ -34,7 +34,7 @@ public class ArmPathFactory {
         return new SequentialCommandGroup(
                 getOut(m_swerve, m_claw, m_arm, m_intake, m_indexer),
                 new SetArmCommandWithConstraints(m_arm, passThroughOut, new TrapezoidProfile.Constraints(6, 4), new TrapezoidProfile.Constraints(7, 3)),
-                new SetArmCommandWithConstraints(m_arm, high, new TrapezoidProfile.Constraints(5, 4), new TrapezoidProfile.Constraints(6,3.7))
+                new SetArmCommandWithConstraints(m_arm, high, new TrapezoidProfile.Constraints(5, 2), new TrapezoidProfile.Constraints(6,2.5))
         );
     }
 
@@ -56,9 +56,19 @@ public class ArmPathFactory {
     public static Command getIntakePath(Arm m_arm, GravityClawSubsystem claw){
         return new SequentialCommandGroup(
                 new GravityClawCommand(claw, false),
-                new SetArmCommandWithConstraints(m_arm,  passThrough, new TrapezoidProfile.Constraints(3, 2), new TrapezoidProfile.Constraints(3, 1.5)),
+                new SetArmCommand(m_arm, limit),
+                new SetArmCommandWithConstraints(m_arm, passThrough, new TrapezoidProfile.Constraints(5, 4), new TrapezoidProfile.Constraints(3, 1.5)),
                 new GravityClawCommand(claw, true),
-                new SetArmCommandWithConstraints(m_arm,preIntake, new TrapezoidProfile.Constraints(5,4), new TrapezoidProfile.Constraints(3, 1)),
+                new SetArmCommandWithConstraints(m_arm, preIntake, new TrapezoidProfile.Constraints(5,4), new TrapezoidProfile.Constraints(3, 1)),
+                new SetArmCommand(m_arm, intake)
+        );
+    }
+    public static Command getIntakePathNoLimit(Arm m_arm, GravityClawSubsystem claw){
+        return new SequentialCommandGroup(
+                new GravityClawCommand(claw, false),
+                new SetArmCommandWithConstraints(m_arm, passThrough, new TrapezoidProfile.Constraints(5, 4), new TrapezoidProfile.Constraints(3, 1.5)),
+                new GravityClawCommand(claw, true),
+                new SetArmCommandWithConstraints(m_arm, preIntake, new TrapezoidProfile.Constraints(5,4), new TrapezoidProfile.Constraints(3, 1)),
                 new SetArmCommand(m_arm, intake)
         );
     }

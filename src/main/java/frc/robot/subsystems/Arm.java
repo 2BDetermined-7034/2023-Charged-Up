@@ -52,8 +52,9 @@ public class Arm extends SubsystemBase implements SubsystemLogging {
         m_motor1 = new CANSparkMax(motor1ID, CANSparkMaxLowLevel.MotorType.kBrushless);
         m_motor2 = new CANSparkMax(motor2ID, CANSparkMaxLowLevel.MotorType.kBrushless);
 
-        m_motor1.setSmartCurrentLimit(30);
+        m_motor1.setSmartCurrentLimit(15);
         m_motor2.setSmartCurrentLimit(30);
+
 
         m_motor1.setSecondaryCurrentLimit(40);
         m_motor2.setSecondaryCurrentLimit(40);

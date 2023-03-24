@@ -160,6 +160,9 @@ public class SwerveModule {
         mDriveEncoder.setPositionConversionFactor(1 / cotsSwerveConstants.driveGearRatio
                 * cotsSwerveConstants.wheelCircumference
         );
+        mDriveEncoder.setVelocityConversionFactor(mDriveEncoder.getPositionConversionFactor() / 60);
+
+
         mDriveEncoder.setPosition(0);
 
         drivePIDController.setP(cotsSwerveConstants.driveKP);
@@ -170,8 +173,7 @@ public class SwerveModule {
     }
 
     public SwerveModuleState getState(){
-        return new SwerveModuleState(
-        );
+        return new SwerveModuleState(mDriveEncoder.getVelocity(), getAngle());
     }
     public SwerveModulePosition getPosition() {
         return new SwerveModulePosition(mDriveEncoder.getPosition(), getAbsoluteAngle());
@@ -180,4 +182,5 @@ public class SwerveModule {
     public SwerveModuleState getTargetState() {
         return targetState;
     }
+
 }

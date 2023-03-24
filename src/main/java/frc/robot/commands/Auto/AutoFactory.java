@@ -43,7 +43,6 @@ public class AutoFactory {
                         ArmPathFactory.getIntakePath(arm, claw),
                         new PathFactory(drive, path, true, true).getCommand()
                 ),
-                new PathFactory(drive, path, true, true).getCommand(),
                 drive.runOnce(drive.getLimeLight()::setModeVision)
         );
     }
