@@ -107,6 +107,7 @@ public class Intake extends SubsystemBase implements SubsystemLogging {
         log("PSI", compressor.getPressure());
         log("is Full?", compressor.getPressureSwitchValue());
         log("Solenoid State", solenoid.get().equals(DoubleSolenoid.Value.kForward));
+        log("Compressor", compressor.isEnabled());
     }
 
     @Override

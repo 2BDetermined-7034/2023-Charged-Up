@@ -196,7 +196,7 @@ public class RobotContainer implements SubsystemLogging {
         new Trigger((() -> Math.abs(m_operatorController.getLeftTriggerAxis()) > 0.05)).onTrue(
                 new SetArmCommand(m_Arm, Constants.ArmConstants.ArmSetPoints.tuck));
         new Trigger((() -> Math.abs(m_operatorController.getRightTriggerAxis()) > 0.05)).onTrue(
-                new ArmOverride(m_Arm, m_swerveDrive, m_operatorController::getLeftX, m_operatorController::getRightY, m_operatorController::getRightTriggerAxis));
+                new ArmOverride(m_Arm, m_swerveDrive, m_operatorController::getLeftY, m_operatorController::getRightY, m_operatorController::getRightTriggerAxis));
     }
 
     public Command getAutonomousCommand() {
