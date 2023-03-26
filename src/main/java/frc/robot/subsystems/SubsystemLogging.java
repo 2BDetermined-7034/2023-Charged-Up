@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import org.littletonrobotics.junction.Logger;
 
 public interface SubsystemLogging {
@@ -28,6 +29,10 @@ public interface SubsystemLogging {
     }
     default void log(String key, long... val) {
         Logger.getInstance().recordOutput(String.format("%s %s", this.getClass().getName().substring(21), key), (val));
+    }
+    default void log(String key, Mechanism2d val) {
+        Logger.getInstance().recordOutput(String.format("%s %s", this.getClass().getName().substring(21), key), (val));
+
     }
 
     /**
