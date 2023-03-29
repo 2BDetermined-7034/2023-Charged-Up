@@ -6,6 +6,11 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.numbers.N2;
 import edu.wpi.first.math.numbers.N4;
 import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
+import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
+import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
+import edu.wpi.first.wpilibj.util.Color8Bit;
+import frc.robot.constants.Constants;
 
 import static frc.robot.constants.Constants.ArmConstants.*;
 
@@ -95,6 +100,14 @@ public class ArmState {
     }
     public Matrix<N4, N1> getStateMatrix4() {
         return VecBuilder.fill(getTheta1(), getTheta2(), omega1, omega2);
+    }
+    public Mechanism2d getMechanism(Color8Bit color) {
+        Mechanism2d mech = new Mechanism2d(3,3);
+        MechanismRoot2d root = mech.getRoot("A", 0,0);
+        var shoulder = root.append(new MechanismLigament2d("shoulder", l1, theta1.getDegrees(), 6, color));
+        var elbow = shoulder.append(new MechanismLigament2d("elbow", l2, theta2.getDegrees(), 6, color));
+        return mech;
+
     }
     public ArmState clear() {
         this.omega1 = 0;

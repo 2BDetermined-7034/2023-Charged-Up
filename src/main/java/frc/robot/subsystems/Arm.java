@@ -12,8 +12,10 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.util.ArmState;
+import org.littletonrobotics.junction.Logger;
 
 import static frc.robot.constants.Constants.ArmConstants.*;
 
@@ -111,6 +113,9 @@ public class Arm extends SubsystemBase implements SubsystemLogging {
         log("Current 2", m_motor2.getOutputCurrent());
         log("error1", controller1.getPositionError());
         log("error2", controller2.getPositionError());
+        log("currentMech", getCurrentState().getMechanism(new Color8Bit(255,0,0)));
+        log("targetMech", goalState.getMechanism(new Color8Bit(255,0,0)));
+
     }
 
     /**
