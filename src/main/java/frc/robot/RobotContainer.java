@@ -45,6 +45,8 @@ public class RobotContainer implements SubsystemLogging {
         autoMode.addOption("One Piece Level cable",  AutoFactory.getOnePieceThenLevelCable(m_swerveDrive, intake, m_indexer, gravityClawSubsystem, m_Arm));
         autoMode.addOption("Exit Top", AutoFactory.getLevelOpen(m_swerveDrive));
         autoMode.addOption("Exit Bot", AutoFactory.getLevelBotCable(m_swerveDrive));
+        autoMode.addOption("Two Piece", AutoFactory.getTwoPiece(m_swerveDrive, intake, m_indexer, gravityClawSubsystem, m_Arm));
+
 
         autoMode.addOption("Test auto",  AutoFactory.getTestAuto(m_swerveDrive));
         autoMode.setDefaultOption("Do Nothing",  new WaitCommand(10));

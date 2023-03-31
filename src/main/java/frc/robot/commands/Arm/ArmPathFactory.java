@@ -1,12 +1,15 @@
 package frc.robot.commands.Arm;
 
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.Intake.RunIntakeCommand;
 import frc.robot.commands.clob.GravityClawCommand;
 import frc.robot.subsystems.*;
+import frc.robot.util.ArmState;
 
 import static frc.robot.constants.Constants.ArmConstants.ArmSetPoints.*;
 
@@ -61,5 +64,14 @@ public class ArmPathFactory {
                 new SetArmCommandWithConstraints(m_arm,preIntake, new TrapezoidProfile.Constraints(5,4), new TrapezoidProfile.Constraints(3, 1)),
                 new SetArmCommand(m_arm, intake)
         );
+    }
+
+    public static Command getAutoHighPath(Arm m_arm, GravityClawSubsystem claw) {
+        return new SequentialCommandGroup(
+        new SetArmCommand(m_arm, new ArmState(Units.degreesToRadians(97), Units.degreesToRadians(210))),
+                new SetArmCommand(m_arm, high),
+                new WaitCommand(3)
+
+                );
     }
 }

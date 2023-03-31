@@ -3,11 +3,14 @@ package frc.robot.commands.Auto;
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.commands.Arm.ArmPathFactory;
 import frc.robot.commands.Arm.SetArmCommand;
+import frc.robot.commands.Arm.SetArmCommandWithConstraints;
 import frc.robot.commands.Drive.AutoBalance;
 import frc.robot.commands.Drive.PathFactory;
+import frc.robot.commands.Intake.RunIntakeCommand;
 import frc.robot.commands.clob.GravityClawCommand;
 import frc.robot.commands.clob.GravityClawToggleCommand;
 import frc.robot.constants.Constants;
@@ -21,9 +24,30 @@ public class AutoFactory {
                 new SetArmCommand(arm, Constants.ArmConstants.ArmSetPoints.intake),
                 ArmPathFactory.getScoreHighPath(drive, claw, arm, intake, indexer),
                 new GravityClawToggleCommand(claw),
-                new WaitCommand(0.5)
+                new WaitCommand(0.25)
+        );
+
+    }
+
+    public static Command getOnePieceCone(SwerveDrive drive, Intake intake, Indexer indexer, GravityClawSubsystem claw, Arm arm) {
+        return new SequentialCommandGroup(
+                new GravityClawCommand(claw, false),
+                ArmPathFactory.getAutoHighPath(arm, claw),
+                new GravityClawToggleCommand(claw),
+                new WaitCommand(0.25)
         );
     }
+
+    public static Command getTwoPiece(SwerveDrive drive, Intake intake, Indexer indexer, GravityClawSubsystem claw, Arm arm) {
+        PathPlannerTrajectory path = PathPlanner.loadPath("twoPiece", new PathConstraints(3, 3));
+
+        return new SequentialCommandGroup(
+                getOnePieceCone(drive, intake, indexer, claw, arm)
+
+
+        );
+    }
+
 
     public static Command getLevelOpen(SwerveDrive drive) {
         PathPlannerTrajectory path = PathPlanner.loadPath("exitLevel", new PathConstraints(3, 3));
@@ -97,10 +121,13 @@ public class AutoFactory {
         );
     }
 
+
     public static Command getTestAuto(SwerveDrive drive) {
         PathPlannerTrajectory path = PathPlanner.loadPath("path", new PathConstraints(3, 3));
         return new PathFactory(drive, path,true, true).getCommand();
     }
+
+
 
 
 }
