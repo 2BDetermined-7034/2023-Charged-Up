@@ -28,6 +28,7 @@ import frc.robot.util.SwerveModule;
 public class SwerveDrive extends SubsystemBase implements SubsystemLogging {
 
     private static final AHRS m_navx = new AHRS(SPI.Port.kMXP, (byte) 200);
+    private double accelerometer = 0;
     //FL, FR, BL, BR
     private final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
             new Translation2d(Constants.Drivebase.Measurements.width / 2.0, Constants.Drivebase.Measurements.length / 2.0),
@@ -228,6 +229,8 @@ public class SwerveDrive extends SubsystemBase implements SubsystemLogging {
         SmartDashboard.putNumber("yaw", m_navx.getYaw());
         SmartDashboard.putNumber("roll", m_navx.getRoll());
 
+        //accelerometer = Math.pow(Math.pow(m_navx.getWorldLinearAccelX(), 2) + Math.pow(m_navx.getWorldLinearAccelY(), 2), 1d/2d);
+
         updateLogging();
 
     }
@@ -253,10 +256,21 @@ public class SwerveDrive extends SubsystemBase implements SubsystemLogging {
     public void lockModules() {
     }
 
+    public SwerveModuleState[] getCurrentStates() {
+            return new SwerveModuleState[] {
+                    m_frontLeftModule.getState(),
+                    m_frontRightModule.getState(),
+                    m_backLeftModule.getState(),
+                    m_backRightModule.getState()
+            };
+    }
+
     @Override
     public void updateLogging() {
         log("Pose2D", getPosition());
-        log("Swerve Module States", m_states);
+        log("Target Module States", m_states);
+        log("Current Swerve States",  getCurrentStates());
         log("Speed Multi", speedMulti);
+        log("Acceleromter", accelerometer);
     }
 }

@@ -107,7 +107,9 @@ public final class Constants {
         public static final TrapezoidProfile.Constraints shoulderConstraints = new TrapezoidProfile.Constraints(5, 4);
         public static final TrapezoidProfile.Constraints elbowConstraints = new TrapezoidProfile.Constraints(5, 2.5);
         public static class ArmSetPoints {
-            public static ArmState passThrough = new ArmState(Units.degreesToRadians(100), Units.degreesToRadians(215), 0, 1);
+            public static ArmState limit = new ArmState(Units.degreesToRadians(70), Units.degreesToRadians(90), 0, 0.2);
+
+            public static ArmState passThrough = new ArmState(Units.degreesToRadians(105), Units.degreesToRadians(230), 0, 0);
             public static ArmState passThroughOut = new ArmState(Units.degreesToRadians(106), Units.degreesToRadians(223), 0, 0);
 
             public static ArmState preIntake = new ArmState(Units.degreesToRadians(86), Units.degreesToRadians(245), 0, 0.2);
@@ -116,7 +118,7 @@ public final class Constants {
             public static ArmState tuck = new ArmState(Units.degreesToRadians(93), Units.degreesToRadians(193));
             public static ArmState midBack = new ArmState(Units.degreesToRadians(109), Units.degreesToRadians(5));
             //public static ArmState midBack = new ArmState(Units.degreesToRadians(95), Units.degreesToRadians(30));
-            public static ArmState shelf = new ArmState(Units.degreesToRadians(117), Units.degreesToRadians(15));
+            public static ArmState shelf = new ArmState(Units.degreesToRadians(117), Units.degreesToRadians(9));
             public static ArmState high = new ArmState(Units.degreesToRadians(79), Units.degreesToRadians(28));
             public static ArmState startCone = new ArmState(Units.degreesToRadians(95), Units.degreesToRadians(240));
 

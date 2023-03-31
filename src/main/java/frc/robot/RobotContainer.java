@@ -151,13 +151,17 @@ public class RobotContainer implements SubsystemLogging {
         m_driverController.L1().onTrue(m_visionLocker.runOnce(m_visionLocker::togglePiece));
 
         m_driverController.povUp().whileTrue(new AutoBalance(m_swerveDrive));
-
+        m_driverController.povDown().whileTrue(m_swerveDrive.runOnce(() -> m_swerveDrive.setSpeedMulti(1)));
+        m_driverController.touchpad().whileTrue(m_swerveDrive.runOnce(() -> m_swerveDrive.setSpeedMulti(0.2)));
+        /*
         m_driverController.touchpad().whileTrue(
                 new ChaseTagCommand(m_swerveDrive, m_visionLocker).andThen(
                         new GravityClawCommand(gravityClawSubsystem, false).andThen(
                         m_visionLocker.getArmCommand(m_swerveDrive, gravityClawSubsystem, m_Arm, intake, m_indexer))
                 )
         );
+
+         */
 
         // Gunner controls
         new POVButton(m_operatorController, 270).whileTrue(m_visionLocker.runOnce(() -> m_visionLocker.setSide(VisionLocking.Side.LEFT)));
@@ -175,7 +179,9 @@ public class RobotContainer implements SubsystemLogging {
        new Trigger(m_operatorController::getBackButton).onTrue(new GravityClawToggleCommand(gravityClawSubsystem));
         new Trigger(m_operatorController::getBackButton).onTrue(m_swerveDrive.runOnce(() -> m_swerveDrive.setSpeedMulti(1)));
 
-        new Trigger(m_operatorController::getAButton).onTrue(ArmPathFactory.getIntakePath(m_Arm, gravityClawSubsystem)); // high// med
+        new Trigger(m_operatorController::getAButton).onTrue(ArmPathFactory.getIntakePathNoLimit(m_Arm, gravityClawSubsystem)); // high// med
+        //new Trigger(m_operatorController::getRightBumper).onTrue(ArmPathFactory.getIntakePathNoLimit(m_Arm, gravityClawSubsystem)); // high// med
+
         new Trigger(m_operatorController::getBButton).onTrue(ArmPathFactory.getScoreMidPath(m_swerveDrive, gravityClawSubsystem, m_Arm, intake, m_indexer)); // low
         new Trigger(m_operatorController::getBButton).onTrue(m_swerveDrive.runOnce(() -> m_swerveDrive.setSpeedMulti(0.3))); // low
 
@@ -192,7 +198,7 @@ public class RobotContainer implements SubsystemLogging {
         new Trigger((() -> Math.abs(m_operatorController.getLeftTriggerAxis()) > 0.05)).onTrue(
                 new SetArmCommand(m_Arm, Constants.ArmConstants.ArmSetPoints.tuck));
         new Trigger((() -> Math.abs(m_operatorController.getRightTriggerAxis()) > 0.05)).onTrue(
-                new ArmOverride(m_Arm, m_swerveDrive, m_operatorController::getLeftX, m_operatorController::getRightY, m_operatorController::getRightTriggerAxis));
+                new ArmOverride(m_Arm, m_swerveDrive, m_operatorController::getLeftY, m_operatorController::getRightY, m_operatorController::getRightTriggerAxis));
     }
 
     public Command getAutonomousCommand() {

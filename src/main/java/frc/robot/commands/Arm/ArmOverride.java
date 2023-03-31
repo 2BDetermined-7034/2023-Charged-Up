@@ -35,7 +35,7 @@ public class ArmOverride extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        arm.setInput(getx1.getAsDouble() * kMaxArmOverrideSpeedShoulder, -gety1.getAsDouble() * kMaxArmOverrideSpeedDistal);
+        arm.setInput(-getx1.getAsDouble() * kMaxArmOverrideSpeedShoulder, -gety1.getAsDouble() * kMaxArmOverrideSpeedDistal);
     }
 
     // Called once the command ends or is interrupted.
