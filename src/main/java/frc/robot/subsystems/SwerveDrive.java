@@ -229,7 +229,8 @@ public class SwerveDrive extends SubsystemBase implements SubsystemLogging {
         SmartDashboard.putNumber("yaw", m_navx.getYaw());
         SmartDashboard.putNumber("roll", m_navx.getRoll());
 
-        //accelerometer = Math.pow(Math.pow(m_navx.getWorldLinearAccelX(), 2) + Math.pow(m_navx.getWorldLinearAccelY(), 2), 1d/2d);
+        accelerometer = Math.pow(Math.pow(m_navx.getWorldLinearAccelX(), 2) + Math.pow(m_navx.getWorldLinearAccelY(), 2), 1d/2d);
+
 
         updateLogging();
 

@@ -80,7 +80,7 @@ public class ArmPathFactory {
         return new SequentialCommandGroup(
         new SetArmCommand(m_arm, new ArmState(Units.degreesToRadians(97), Units.degreesToRadians(210))),
                 new SetArmCommand(m_arm, high),
-                new WaitCommand(3)
+                new WaitCommand(1.5)
 
                 );
     }

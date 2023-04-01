@@ -10,6 +10,7 @@ import frc.robot.commands.Arm.SetArmCommand;
 import frc.robot.commands.Arm.SetArmCommandWithConstraints;
 import frc.robot.commands.Drive.AutoBalance;
 import frc.robot.commands.Drive.PathFactory;
+import frc.robot.commands.Indexer.RunIndexerCommand;
 import frc.robot.commands.Intake.RunIntakeCommand;
 import frc.robot.commands.clob.GravityClawCommand;
 import frc.robot.commands.clob.GravityClawToggleCommand;
@@ -24,7 +25,7 @@ public class AutoFactory {
                 new SetArmCommand(arm, Constants.ArmConstants.ArmSetPoints.intake),
                 ArmPathFactory.getScoreHighPath(drive, claw, arm, intake, indexer),
                 new GravityClawToggleCommand(claw),
-                new WaitCommand(0.25)
+                new WaitCommand(0.75)
         );
 
     }
@@ -41,10 +42,32 @@ public class AutoFactory {
     public static Command getTwoPiece(SwerveDrive drive, Intake intake, Indexer indexer, GravityClawSubsystem claw, Arm arm) {
         PathPlannerTrajectory path = PathPlanner.loadPath("twoPiece", new PathConstraints(3, 3));
 
+        /**
         return new SequentialCommandGroup(
-                getOnePieceCone(drive, intake, indexer, claw, arm)
+                getOnePieceCone(drive, intake, indexer, claw, arm),
+                new ParallelCommandGroup(
+                        ArmPathFactory.getIntakePathNoLimit(arm, claw)
+                        //new PathFactory(drive, path, true, true).getCommand()
+                        )
 
 
+
+        );
+         */
+
+        return new SequentialCommandGroup(
+                new ParallelCommandGroup(
+                        new PathFactory(drive, path, true, true).getCommand(),
+                        new SequentialCommandGroup(
+                                new WaitCommand(1),
+                                new ParallelRaceGroup(
+                                        new RunIndexerCommand(indexer),
+                                        new WaitCommand(5)
+
+                                        )
+                        )
+
+                )
         );
     }
 
@@ -78,10 +101,14 @@ public class AutoFactory {
                 drive.runOnce(drive.getLimeLight()::setModeDriver),
                 getOnePieceAuto(drive, intake, indexer, claw, arm),
                 new ParallelCommandGroup(
-                        ArmPathFactory.getIntakePath(arm, claw),
-                        new PathFactory(drive, path, true, true).getCommand()
+                        ArmPathFactory.getIntakePathNoLimit(arm, claw),
+                        new SequentialCommandGroup(
+                                new WaitCommand(3),
+                        new PathFactory(drive, path, true, true).getCommand(),
+                                new AutoBalance(drive)
+                                )
+
                 ),
-                new AutoBalance(drive),
                 drive.runOnce(drive.getLimeLight()::setModeVision)
         );
     }
@@ -104,9 +131,13 @@ public class AutoFactory {
                 getOnePieceAuto(drive, intake, indexer, claw, arm),
                 new ParallelCommandGroup(
                         ArmPathFactory.getIntakePath(arm, claw),
-                        new PathFactory(drive, path, true, true).getCommand()
-                ),
-                new AutoBalance(drive)
+                        new SequentialCommandGroup(
+                                new PathFactory(drive, path, true, true).getCommand(),
+                                new AutoBalance(drive)
+
+
+                        )
+                )
 
         );
     }
