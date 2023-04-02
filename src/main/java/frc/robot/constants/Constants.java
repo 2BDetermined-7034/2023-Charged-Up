@@ -40,7 +40,7 @@ public final class Constants {
             public static final int flDrive = 12;
             public static final int flSteer = 13;
             public static final int flEncoder = 2;
-            public static final Rotation2d flOffset = Rotation2d.fromDegrees(-21.533201217651367);
+            public static final Rotation2d flOffset = Rotation2d.fromDegrees(-22.32); // -21.533201217651367
 
 
             // Practice robot settings (done):
@@ -48,19 +48,19 @@ public final class Constants {
 
             public static final int frSteer = 3;
             public static final int frEncoder = 1;
-            public static final Rotation2d frOffset = Rotation2d.fromDegrees(-65.83008575439453);
+            public static final Rotation2d frOffset = Rotation2d.fromDegrees(-69.96); // -65.83008575439453
 
             // done
             public static final int blDrive = 10;
             public static final int blSteer = 9;
             public static final int blEncoder = 3;
-            public static final Rotation2d blOffset = Rotation2d.fromDegrees(-1.23046875);
+            public static final Rotation2d blOffset = Rotation2d.fromDegrees(-2.70); // -1.23046875
 
             // done
             public static final int brDrive = 6;
             public static final int brSteer = 5;
             public static final int brEncoder = 4;
-            public static final Rotation2d brOffset = Rotation2d.fromDegrees(71.45);
+            public static final Rotation2d brOffset = Rotation2d.fromDegrees(68.25); // 71.45
         }
 
         public static class MotorConfig {
@@ -114,7 +114,7 @@ public final class Constants {
 
             public static ArmState preIntake = new ArmState(Units.degreesToRadians(86), Units.degreesToRadians(245), 0, 0.2);
 
-            public static ArmState intake = new ArmState(Units.degreesToRadians(100), Units.degreesToRadians(255));
+            public static ArmState intake = new ArmState(Units.degreesToRadians(97), Units.degreesToRadians(250));
             public static ArmState tuck = new ArmState(Units.degreesToRadians(93), Units.degreesToRadians(193));
             public static ArmState midBack = new ArmState(Units.degreesToRadians(109), Units.degreesToRadians(5));
             //public static ArmState midBack = new ArmState(Units.degreesToRadians(95), Units.degreesToRadians(30));

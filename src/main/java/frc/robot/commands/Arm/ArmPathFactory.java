@@ -56,17 +56,8 @@ public class ArmPathFactory {
                 new GravityClawCommand(m_claw, false)
         );
     }
+
     public static Command getIntakePath(Arm m_arm, GravityClawSubsystem claw){
-        return new SequentialCommandGroup(
-                new GravityClawCommand(claw, false),
-                new SetArmCommand(m_arm, limit),
-                new SetArmCommandWithConstraints(m_arm, passThrough, new TrapezoidProfile.Constraints(5, 4), new TrapezoidProfile.Constraints(3, 1.5)),
-                new GravityClawCommand(claw, true),
-                new SetArmCommandWithConstraints(m_arm, preIntake, new TrapezoidProfile.Constraints(5,4), new TrapezoidProfile.Constraints(3, 1)),
-                new SetArmCommand(m_arm, intake)
-        );
-    }
-    public static Command getIntakePathNoLimit(Arm m_arm, GravityClawSubsystem claw){
         return new SequentialCommandGroup(
                 new GravityClawCommand(claw, false),
                 new SetArmCommandWithConstraints(m_arm, passThrough, new TrapezoidProfile.Constraints(5, 4), new TrapezoidProfile.Constraints(3, 1.5)),

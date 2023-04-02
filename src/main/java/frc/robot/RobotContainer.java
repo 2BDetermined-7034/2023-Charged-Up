@@ -18,7 +18,6 @@ import frc.robot.commands.Arm.SetArmCommand;
 import frc.robot.commands.Auto.AutoFactory;
 import frc.robot.commands.Drive.*;
 import frc.robot.commands.Intake.RunIntakeCommand;
-import frc.robot.commands.clob.GravityClawCommand;
 import frc.robot.commands.clob.GravityClawToggleCommand;
 import frc.robot.constants.Constants;
 import frc.robot.constants.Constants.OperatorConstants;
@@ -179,7 +178,7 @@ public class RobotContainer implements SubsystemLogging {
        new Trigger(m_operatorController::getBackButton).onTrue(new GravityClawToggleCommand(gravityClawSubsystem));
         new Trigger(m_operatorController::getBackButton).onTrue(m_swerveDrive.runOnce(() -> m_swerveDrive.setSpeedMulti(1)));
 
-        new Trigger(m_operatorController::getAButton).onTrue(ArmPathFactory.getIntakePathNoLimit(m_Arm, gravityClawSubsystem)); // high// med
+        new Trigger(m_operatorController::getAButton).onTrue(ArmPathFactory.getIntakePath(m_Arm, gravityClawSubsystem)); // high// med
         //new Trigger(m_operatorController::getRightBumper).onTrue(ArmPathFactory.getIntakePathNoLimit(m_Arm, gravityClawSubsystem)); // high// med
 
         new Trigger(m_operatorController::getBButton).onTrue(ArmPathFactory.getScoreMidPath(m_swerveDrive, gravityClawSubsystem, m_Arm, intake, m_indexer)); // low
