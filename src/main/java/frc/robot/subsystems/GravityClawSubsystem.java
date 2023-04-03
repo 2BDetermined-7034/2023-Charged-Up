@@ -8,6 +8,7 @@ import frc.robot.constants.Constants;
 
 public class GravityClawSubsystem extends SubsystemBase implements SubsystemLogging {
     private final DoubleSolenoid sol;
+    private DoubleSolenoid.Value solenoidState;
 
     public GravityClawSubsystem() {
         sol = new DoubleSolenoid(PneumaticsModuleType.REVPH, Constants.GravityClaw.grabberFC, Constants.GravityClaw.grabberRC);
@@ -18,22 +19,30 @@ public class GravityClawSubsystem extends SubsystemBase implements SubsystemLogg
     }
 
     public void setSolonoid(boolean direction) {
+        DoubleSolenoid.Value newState;
+
         if (direction) {
-            sol.set(DoubleSolenoid.Value.kReverse);
-        } else sol.set(DoubleSolenoid.Value.kForward);
-    }
-
-    public DoubleSolenoid.Value getSolenoid() {
-        return sol.get();
-    }
-
-    public void ToggleSolonoid() {
-        if (sol.get().equals(DoubleSolenoid.Value.kForward)) {
-            sol.set(DoubleSolenoid.Value.kReverse);
+            newState = DoubleSolenoid.Value.kReverse;
         } else {
-            sol.set(DoubleSolenoid.Value.kForward);
+            newState = DoubleSolenoid.Value.kForward;
+        }
+        if (newState != solenoidState) {
+            sol.set(newState);
+            solenoidState = newState;
         }
     }
+
+//    public DoubleSolenoid.Value getSolenoid() {
+//        return sol.get();
+//    }
+
+//    public void ToggleSolonoid() {
+//        if (sol.get().equals(DoubleSolenoid.Value.kForward)) {
+//            sol.set(DoubleSolenoid.Value.kReverse);
+//        } else {
+//            sol.set(DoubleSolenoid.Value.kForward);
+//        }
+//    }
 
     @Override
     public void periodic() {
