@@ -36,13 +36,13 @@ public class GravityClawSubsystem extends SubsystemBase implements SubsystemLogg
 //        return sol.get();
 //    }
 
-//    public void ToggleSolonoid() {
-//        if (sol.get().equals(DoubleSolenoid.Value.kForward)) {
-//            sol.set(DoubleSolenoid.Value.kReverse);
-//        } else {
-//            sol.set(DoubleSolenoid.Value.kForward);
-//        }
-//    }
+    public void ToggleSolonoid() {
+        if (sol.get().equals(DoubleSolenoid.Value.kForward)) {
+            sol.set(DoubleSolenoid.Value.kReverse);
+        } else {
+            sol.set(DoubleSolenoid.Value.kForward);
+        }
+    }
 
     @Override
     public void periodic() {
