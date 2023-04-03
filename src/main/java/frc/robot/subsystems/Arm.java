@@ -18,6 +18,7 @@ import frc.robot.util.ArmState;
 import org.littletonrobotics.junction.Logger;
 
 import static frc.robot.constants.Constants.ArmConstants.*;
+import static frc.robot.constants.Constants.ArmConstants.ArmSetPoints.intake;
 
 public class Arm extends SubsystemBase implements SubsystemLogging {
     private final CANSparkMax m_motor1, m_motor2;
@@ -181,7 +182,7 @@ public class Arm extends SubsystemBase implements SubsystemLogging {
      */
     @Deprecated
     public boolean isArmHome() {
-        return Math.abs(getCurrentState().getTheta1() - Math.toRadians(90)) < Math.toRadians(4) && Math.abs(getCurrentState().getTheta2() - Math.toRadians(275)) < Math.toRadians(4);
+        return Math.abs(Units.radiansToDegrees(getCurrentState().diff(intake).getTheta1())) < 10 && Math.abs(Units.radiansToDegrees(getCurrentState().diff(intake).getTheta2())) < 10;
     }
     public boolean isArmAtSetpoint() {
         return controller1.atGoal() && controller2.atGoal();
