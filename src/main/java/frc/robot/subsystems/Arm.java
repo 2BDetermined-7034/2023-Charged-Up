@@ -15,7 +15,6 @@ import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.util.ArmState;
-import org.littletonrobotics.junction.Logger;
 
 import static frc.robot.constants.Constants.ArmConstants.*;
 import static frc.robot.constants.Constants.ArmConstants.ArmSetPoints.intake;
@@ -65,7 +64,7 @@ public class Arm extends SubsystemBase implements SubsystemLogging {
         m_motor1.setInverted(true);
         m_motor2.setInverted(false);
 
-        setModeCoast();
+        setMotorControllerMode(CANSparkMax.IdleMode.kCoast);
         m_motor1Encoder = m_motor1.getEncoder();
         m_motor2Encoder = m_motor2.getEncoder();
 
@@ -114,8 +113,8 @@ public class Arm extends SubsystemBase implements SubsystemLogging {
         log("Current 2", m_motor2.getOutputCurrent());
         log("error1", controller1.getPositionError());
         log("error2", controller2.getPositionError());
-        log("currentMech", getCurrentState().getMechanism(new Color8Bit(255,0,0)));
-        log("targetMech", goalState.getMechanism(new Color8Bit(255,0,0)));
+        log("currentMechanism", getCurrentState().getMechanism(new Color8Bit(255,0,0)));
+        log("targetMechanism", goalState.getMechanism(new Color8Bit(0,0,255)));
 
     }
 
@@ -213,15 +212,7 @@ public class Arm extends SubsystemBase implements SubsystemLogging {
     /**
      * Changes Idle Mode of Motors
      */
-    public void setModeBreak() {
-        m_motor1.setIdleMode(CANSparkMax.IdleMode.kBrake);
-        m_motor2.setIdleMode(CANSparkMax.IdleMode.kBrake);
-    }
-
-    /**
-     * Changes Idle Mode of Motors
-     */
-    public void setModeCoast() {
+    public void setMotorControllerMode(CANSparkMax.IdleMode mode) {
         m_motor1.setIdleMode(CANSparkMax.IdleMode.kCoast);
         m_motor2.setIdleMode(CANSparkMax.IdleMode.kCoast);
     }

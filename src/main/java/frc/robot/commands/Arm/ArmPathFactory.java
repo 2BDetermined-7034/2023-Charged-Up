@@ -61,8 +61,12 @@ public class ArmPathFactory {
         return new SequentialCommandGroup(
                 new GravityClawCommand(claw, false),
                 new SetArmCommandWithConstraints(m_arm, passThrough, new TrapezoidProfile.Constraints(5, 4), new TrapezoidProfile.Constraints(3, 1.5)),
-                new GravityClawCommand(claw, true),
+
+
                 new SetArmCommandWithConstraints(m_arm, preIntake, new TrapezoidProfile.Constraints(5,4), new TrapezoidProfile.Constraints(3, 1)),
+                new GravityClawCommand(claw, true),
+
+
                 new SetArmCommand(m_arm, intake)
         );
     }

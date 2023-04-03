@@ -109,17 +109,17 @@ public final class Constants {
         public static class ArmSetPoints {
             public static ArmState limit = new ArmState(Units.degreesToRadians(70), Units.degreesToRadians(90), 0, 0.2);
 
-            public static ArmState passThrough = new ArmState(Units.degreesToRadians(105), Units.degreesToRadians(230), 0, 0);
-            public static ArmState passThroughOut = new ArmState(Units.degreesToRadians(106), Units.degreesToRadians(223), 0, 0);
+            public static ArmState passThrough = new ArmState(Units.degreesToRadians(103), Units.degreesToRadians(235), 0, 0);
+            public static ArmState passThroughOut = new ArmState(Units.degreesToRadians(103), Units.degreesToRadians(235), 0, 0);
 
-            public static ArmState preIntake = new ArmState(Units.degreesToRadians(86), Units.degreesToRadians(245), 0, 0.2);
+            public static ArmState preIntake = new ArmState(Units.degreesToRadians(95), Units.degreesToRadians(247), 0, 0.2);
 
-            public static ArmState intake = new ArmState(Units.degreesToRadians(97), Units.degreesToRadians(250));
+            public static ArmState intake = new ArmState(Units.degreesToRadians(107), Units.degreesToRadians(259));
             public static ArmState tuck = new ArmState(Units.degreesToRadians(93), Units.degreesToRadians(193));
-            public static ArmState midBack = new ArmState(Units.degreesToRadians(109), Units.degreesToRadians(5));
+            public static ArmState midBack = new ArmState(Units.degreesToRadians(109), Units.degreesToRadians(13));
             //public static ArmState midBack = new ArmState(Units.degreesToRadians(95), Units.degreesToRadians(30));
             public static ArmState shelf = new ArmState(Units.degreesToRadians(117), Units.degreesToRadians(9));
-            public static ArmState high = new ArmState(Units.degreesToRadians(79), Units.degreesToRadians(28));
+            public static ArmState high = new ArmState(Units.degreesToRadians(76), Units.degreesToRadians(27));
             public static ArmState startCone = new ArmState(Units.degreesToRadians(95), Units.degreesToRadians(240));
 
         }

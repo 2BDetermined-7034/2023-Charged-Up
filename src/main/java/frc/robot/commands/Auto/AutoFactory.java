@@ -9,6 +9,7 @@ import frc.robot.commands.Arm.SetArmCommand;
 import frc.robot.commands.Drive.AutoBalance;
 import frc.robot.commands.Drive.PathFactory;
 import frc.robot.commands.Indexer.RunIndexerCommand;
+import frc.robot.commands.Intake.RunIntakeCommand;
 import frc.robot.commands.clob.GravityClawCommand;
 import frc.robot.commands.clob.GravityClawToggleCommand;
 import frc.robot.constants.Constants;
@@ -20,7 +21,7 @@ public class AutoFactory {
         return new SequentialCommandGroup(
                 new GravityClawCommand(claw, false),
                 new SetArmCommand(arm, Constants.ArmConstants.ArmSetPoints.intake),
-                ArmPathFactory.getAutoHighPath(arm, claw),
+                ArmPathFactory.getScoreHighPath(drive, claw, arm, intake, indexer),
                 new GravityClawToggleCommand(claw),
                 new WaitCommand(0.75)
         );
@@ -38,14 +39,13 @@ public class AutoFactory {
 
     public static Command getTwoPiece(SwerveDrive drive, Intake intake, Indexer indexer, GravityClawSubsystem claw, Arm arm) {
         drive.zeroGyroscope();
-        PathPlannerTrajectory path = PathPlanner.loadPath("twoPiece", new PathConstraints(2, 1.2));
+        PathPlannerTrajectory path = PathPlanner.loadPath("twoPiece", new PathConstraints(3, 1.5));
 
-        /**
+        /*
         return new SequentialCommandGroup(
                 getOnePieceCone(drive, intake, indexer, claw, arm),
                 new ParallelCommandGroup(
                         ArmPathFactory.getIntakePathNoLimit(arm, claw)
-                        //new PathFactory(drive, path, true, true).getCommand()
                         )
 
 
@@ -57,10 +57,10 @@ public class AutoFactory {
                 new ParallelCommandGroup(
                         new PathFactory(drive, path, true, true).getCommand(),
                         new SequentialCommandGroup(
-                                new WaitCommand(1),
+                                new WaitCommand(3.3),
                                 new ParallelRaceGroup(
-                                        new RunIndexerCommand(indexer),
-                                        new WaitCommand(5)
+                                        new RunIntakeCommand(drive, intake, indexer, () -> 0.2, () -> 0.3, true),
+                                        new WaitCommand(1)
 
                                         )
                         )

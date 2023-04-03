@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -22,6 +23,7 @@ import frc.robot.commands.clob.GravityClawToggleCommand;
 import frc.robot.constants.Constants;
 import frc.robot.constants.Constants.OperatorConstants;
 import frc.robot.subsystems.*;
+import frc.robot.util.ArmState;
 
 
 public class RobotContainer implements SubsystemLogging {
@@ -194,7 +196,8 @@ public class RobotContainer implements SubsystemLogging {
 
 
 
-        new Trigger(m_operatorController::getXButton).onTrue(m_visionLocker.runOnce(m_visionLocker::togglePiece));
+        new Trigger(m_operatorController::getXButton).onTrue(new SetArmCommand(m_Arm, new ArmState(Units.degreesToRadians(74), Units.degreesToRadians(13)))
+        );
         new Trigger((() -> Math.abs(m_operatorController.getLeftTriggerAxis()) > 0.05)).onTrue(
                 new SetArmCommand(m_Arm, Constants.ArmConstants.ArmSetPoints.tuck));
         new Trigger((() -> Math.abs(m_operatorController.getRightTriggerAxis()) > 0.05)).onTrue(
