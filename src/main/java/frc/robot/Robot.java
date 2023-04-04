@@ -27,7 +27,6 @@ import org.littletonrobotics.junction.inputs.LoggedPowerDistribution;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
-import edu.wpi.first.networktables.NetworkTableInstance;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -39,8 +38,6 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 public class Robot extends LoggedRobot  implements SubsystemLogging {
     private Command autonomousCommand;
     private RobotContainer robotContainer;
-    int loopCounter = 0;
-    NetworkTableInstance inst = NetworkTableInstance.getDefault();
     /**
      * This function is run when the robot is first started up and should be used
      * for any initialization code.
@@ -159,11 +156,6 @@ public class Robot extends LoggedRobot  implements SubsystemLogging {
      */
     @Override
     public void teleopPeriodic() {
-        loopCounter++;
-        if (loopCounter >= 50) {
-            inst.flush();
-            loopCounter = 0;
-        }
     }
 
     /**

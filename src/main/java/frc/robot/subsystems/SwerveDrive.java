@@ -12,7 +12,6 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
@@ -226,12 +225,9 @@ public class SwerveDrive extends SubsystemBase implements SubsystemLogging {
         m_backLeftModule.setDesiredState(m_states[2], m_IsOpenLoop);
         m_backRightModule.setDesiredState(m_states[3], m_IsOpenLoop);
 
-
-        if(!DriverStation.isFMSAttached()) {
-            SmartDashboard.putNumber("Pitch", m_navx.getPitch());
-            SmartDashboard.putNumber("yaw", m_navx.getYaw());
-            SmartDashboard.putNumber("roll", m_navx.getRoll());
-        }
+        SmartDashboard.putNumber("Pitch", m_navx.getPitch());
+        SmartDashboard.putNumber("yaw", m_navx.getYaw());
+        SmartDashboard.putNumber("roll", m_navx.getRoll());
 
         accelerometer = Math.pow(Math.pow(m_navx.getWorldLinearAccelX(), 2) + Math.pow(m_navx.getWorldLinearAccelY(), 2), 1d/2d);
 
@@ -276,6 +272,6 @@ public class SwerveDrive extends SubsystemBase implements SubsystemLogging {
         log("Target Module States", m_states);
         log("Current Swerve States",  getCurrentStates());
         log("Speed Multi", speedMulti);
-        log("Accelerometer", accelerometer);
+        log("Acceleromter", accelerometer);
     }
 }
