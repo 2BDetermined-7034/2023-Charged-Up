@@ -33,7 +33,7 @@ public class Indexer extends SubsystemBase implements SubsystemLogging {
         indexerMotorLeft.setIdleMode(CANSparkMax.IdleMode.kBrake);
         indexerMotorRight.setIdleMode(CANSparkMax.IdleMode.kBrake);
 
-        indexerMotors = new MotorControllerGroup(indexerMotorLeft, indexerMotorRight); // TODO Make indexerMotorLeft follow indexerMotorRight
+        indexerMotors = new MotorControllerGroup(indexerMotorLeft, indexerMotorRight);
 
     }
 
