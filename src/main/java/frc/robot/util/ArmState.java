@@ -105,8 +105,8 @@ public class ArmState {
     public Mechanism2d getMechanism(Color8Bit color) {
         Mechanism2d mech = new Mechanism2d(3,3);
         MechanismRoot2d root = mech.getRoot("A", 0,0);
-        var shoulder = root.append(new MechanismLigament2d("shoulder", l1, theta1.getDegrees(), 6, color));
-        var elbow = shoulder.append(new MechanismLigament2d("elbow", l2, theta2.getDegrees(), 6, color));
+        var shoulder = root.append(new MechanismLigament2d("shoulder", l1, 180 - theta1.getDegrees(), 6, color));
+        var elbow = shoulder.append(new MechanismLigament2d("elbow", l2, theta2.getDegrees() + (180 - theta1.getDegrees()), 6, color));
         return mech;
 
     }
