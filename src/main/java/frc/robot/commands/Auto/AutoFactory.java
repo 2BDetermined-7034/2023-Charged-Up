@@ -59,7 +59,7 @@ public class AutoFactory {
                         new SequentialCommandGroup(
                                 new WaitCommand(3.3),
                                 new ParallelRaceGroup(
-                                        new RunIntakeCommand(drive, intake, indexer, () -> 0.2, () -> 0.3, true),
+                                        new RunIntakeCommand(drive, intake, indexer, () -> 0.5, () -> 0.3, true),
                                         new WaitCommand(1)
 
                                         )

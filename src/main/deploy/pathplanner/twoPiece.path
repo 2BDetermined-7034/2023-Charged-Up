@@ -50,15 +50,15 @@
     {
       "anchorPoint": {
         "x": 7.1,
-        "y": 4.4
+        "y": 4.27
       },
       "prevControl": {
         "x": 5.318280401921151,
-        "y": 4.4
+        "y": 4.27
       },
       "nextControl": {
         "x": 5.318280401921151,
-        "y": 4.4
+        "y": 4.27
       },
       "holonomicAngle": 0.0,
       "isReversal": true,
@@ -74,15 +74,40 @@
     },
     {
       "anchorPoint": {
-        "x": 1.7,
-        "y": 4.36
+        "x": 3.75968512620786,
+        "y": 4.487733078030259
       },
       "prevControl": {
-        "x": 2.0553667052310542,
-        "y": 4.397804968641602
+        "x": 4.6278005386021865,
+        "y": 4.514651385391324
+      },
+      "nextControl": {
+        "x": 2.286612436472737,
+        "y": 4.442056405480333
+      },
+      "holonomicAngle": 0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 1.71,
+        "y": 4.2
+      },
+      "prevControl": {
+        "x": 2.6063491443222206,
+        "y": 4.116774671156181
       },
       "nextControl": null,
-      "holonomicAngle": 0.0,
+      "holonomicAngle": -10.0,
       "isReversal": false,
       "velOverride": null,
       "isLocked": false,

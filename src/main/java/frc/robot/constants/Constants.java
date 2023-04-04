@@ -118,7 +118,7 @@ public final class Constants {
             public static ArmState tuck = new ArmState(Units.degreesToRadians(93), Units.degreesToRadians(193));
             public static ArmState midBack = new ArmState(Units.degreesToRadians(109), Units.degreesToRadians(13));
             //public static ArmState midBack = new ArmState(Units.degreesToRadians(95), Units.degreesToRadians(30));
-            public static ArmState shelf = new ArmState(Units.degreesToRadians(117), Units.degreesToRadians(9));
+            public static ArmState shelf = new ArmState(Units.degreesToRadians(95), Units.degreesToRadians(173));
             public static ArmState high = new ArmState(Units.degreesToRadians(76), Units.degreesToRadians(27));
             public static ArmState startCone = new ArmState(Units.degreesToRadians(95), Units.degreesToRadians(240));
 

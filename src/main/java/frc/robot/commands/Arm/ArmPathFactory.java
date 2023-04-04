@@ -52,12 +52,26 @@ public class ArmPathFactory {
     public static Command getScoreShelf(SwerveDrive m_swerve, GravityClawSubsystem m_claw, Arm m_arm, Intake m_intake, Indexer indexer) {
         return new SequentialCommandGroup(
                 getOut(m_swerve, m_claw, m_arm, m_intake, indexer),
-                new SetArmCommand(m_arm, shelf),
+                new SetArmCommandWithConstraints(m_arm, shelf, new TrapezoidProfile.Constraints(5,4), new TrapezoidProfile.Constraints(1,1)),
                 new GravityClawCommand(m_claw, false)
         );
     }
 
     public static Command getIntakePath(Arm m_arm, GravityClawSubsystem claw){
+        return new SequentialCommandGroup(
+
+                new SetArmCommandWithConstraints(m_arm, passThrough, new TrapezoidProfile.Constraints(5, 4), new TrapezoidProfile.Constraints(4, 3)),
+
+
+                new SetArmCommandWithConstraints(m_arm, preIntake, new TrapezoidProfile.Constraints(5,4), new TrapezoidProfile.Constraints(3, 1)),
+                new GravityClawCommand(claw, true),
+
+
+                new SetArmCommand(m_arm, intake)
+        );
+    }
+
+    public static Command getIntakePathAuto(Arm m_arm, GravityClawSubsystem claw){
         return new SequentialCommandGroup(
                 new GravityClawCommand(claw, false),
                 new SetArmCommandWithConstraints(m_arm, passThrough, new TrapezoidProfile.Constraints(5, 4), new TrapezoidProfile.Constraints(3, 1.5)),

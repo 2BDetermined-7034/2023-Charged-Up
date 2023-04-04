@@ -44,12 +44,14 @@ public class DefaultDriveCommand extends CommandBase {
         );
 
 
-        if(DriverStation.isTeleop() && m_Arm.isArmHome()) {
+        /*
+        if(DriverStation.isTeleop() && !m_Arm.isArmHome()) {
             m_swerveDrive.setSpeedMulti(0.2);
         }
         else {
             m_swerveDrive.setSpeedMulti(1);
         }
+         */
     }
 
     @Override
