@@ -74,14 +74,14 @@ public class VisionLocking extends SubsystemBase implements SubsystemLogging{
 
     public void configureDashboard(){
         // Grid selection layout config
-        Map selectProperties = Map.of("colorWhenFalse", "#000000", "colorWhenTrue", "#7cfc00");
+        Map<String, Object> selectProperties = Map.of("colorWhenFalse", "#000000", "colorWhenTrue", "#7cfc00");
         gridSelectionLayout.addBoolean("Left", () -> gridSelection[0]).withProperties(selectProperties).withPosition(0, 0);
         gridSelectionLayout.addBoolean("Center", () -> gridSelection[1]).withProperties(selectProperties).withPosition(1, 0);
         gridSelectionLayout.addBoolean("Right", () -> gridSelection[2]).withProperties(selectProperties).withPosition(2, 0);
 
         // Grid location layout config
-        Map coneSlotProperties = Map.of("colorWhenFalse", "#000000", "colorWhenTrue", "#5D3FD3");
-        Map cubeSlotProperties = Map.of("colorWhenFalse", "#000000", "colorWhenTrue", "#FDDA0D");
+        Map<String, Object> coneSlotProperties = Map.of("colorWhenFalse", "#000000", "colorWhenTrue", "#5D3FD3");
+        Map<String, Object> cubeSlotProperties = Map.of("colorWhenFalse", "#000000", "colorWhenTrue", "#FDDA0D");
         // Cube slots
         gridLocationLayout.addBoolean("TL", () -> gridLocation[0][0]).withProperties(cubeSlotProperties).withPosition(0, 0);
         gridLocationLayout.addBoolean("ML", () -> gridLocation[0][1]).withProperties(cubeSlotProperties).withPosition(0, 1);
