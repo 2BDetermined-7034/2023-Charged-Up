@@ -114,9 +114,9 @@ public final class Constants {
 
             public static ArmState preIntake = new ArmState(Units.degreesToRadians(95), Units.degreesToRadians(247), 0, 0.2);
 
-            public static ArmState intake = new ArmState(Units.degreesToRadians(107), Units.degreesToRadians(259));
+            public static ArmState intake = new ArmState(Units.degreesToRadians(103), Units.degreesToRadians(255));
             public static ArmState tuck = new ArmState(Units.degreesToRadians(93), Units.degreesToRadians(193));
-            public static ArmState midBack = new ArmState(Units.degreesToRadians(109), Units.degreesToRadians(13));
+            public static ArmState midBack = new ArmState(Units.degreesToRadians(109), Units.degreesToRadians(7));
             //public static ArmState midBack = new ArmState(Units.degreesToRadians(95), Units.degreesToRadians(30));
             public static ArmState shelf = new ArmState(Units.degreesToRadians(95), Units.degreesToRadians(173));
             public static ArmState high = new ArmState(Units.degreesToRadians(76), Units.degreesToRadians(27));

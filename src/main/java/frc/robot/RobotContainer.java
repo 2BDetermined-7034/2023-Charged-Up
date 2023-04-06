@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
@@ -141,14 +142,23 @@ public class RobotContainer implements SubsystemLogging {
                 () -> -0.8,
                 false
         ));
-        m_driverController.R1().whileTrue(new RunIntakeCommand(
-                m_swerveDrive,
-                intake,
-                m_indexer,
-                () -> 0,
-                () -> 0.7,
-                false
-        ));
+
+        m_driverController.R1().whileTrue(
+                    new RunIntakeCommand(
+                    m_swerveDrive,
+                    intake,
+                    m_indexer,
+                    () -> 0,
+                    () -> 0.7,
+                    false)
+        );
+
+        new Trigger(() -> m_driverController.getR2Axis() < 0.25).whileTrue(
+                new SequentialCommandGroup(
+                        new WaitCommand(0.75),
+                        intake.runOnce(() -> intake.setSolenoid(true))
+                )
+        );
 
         m_driverController.L1().onTrue(m_visionLocker.runOnce(m_visionLocker::togglePiece));
 

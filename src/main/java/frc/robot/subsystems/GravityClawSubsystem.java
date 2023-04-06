@@ -26,9 +26,8 @@ public class GravityClawSubsystem extends SubsystemBase implements SubsystemLogg
         } else {
             newState = DoubleSolenoid.Value.kForward;
         }
-        if (newState != solenoidState) {
+        if (newState != sol.get()) {
             sol.set(newState);
-            solenoidState = newState;
         }
     }
 
@@ -42,6 +41,7 @@ public class GravityClawSubsystem extends SubsystemBase implements SubsystemLogg
         } else {
             sol.set(DoubleSolenoid.Value.kForward);
         }
+
     }
 
     @Override

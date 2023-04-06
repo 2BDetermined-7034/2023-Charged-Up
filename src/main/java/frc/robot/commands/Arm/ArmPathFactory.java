@@ -37,7 +37,7 @@ public class ArmPathFactory {
         return new SequentialCommandGroup(
                 getOut(m_swerve, m_claw, m_arm, m_intake, m_indexer),
                 new SetArmCommandWithConstraints(m_arm, passThroughOut, new TrapezoidProfile.Constraints(6, 4), new TrapezoidProfile.Constraints(7, 3)),
-                new SetArmCommandWithConstraints(m_arm, high, new TrapezoidProfile.Constraints(5, 2), new TrapezoidProfile.Constraints(6,2.5))
+                new SetArmCommandWithConstraints(m_arm, high, new TrapezoidProfile.Constraints(5, 2), new TrapezoidProfile.Constraints(6,3.5))
         );
     }
 
@@ -45,7 +45,7 @@ public class ArmPathFactory {
         return new SequentialCommandGroup(
                 getOut(m_swerve, m_claw, m_arm, m_intake, m_indexer),
                 new SetArmCommand(m_arm, passThroughOut),
-                new SetArmCommandWithConstraints(m_arm, midBack, new TrapezoidProfile.Constraints(5, 2), new TrapezoidProfile.Constraints(6,2))
+                new SetArmCommandWithConstraints(m_arm, midBack, new TrapezoidProfile.Constraints(5, 2), new TrapezoidProfile.Constraints(6,3))
         );
     }
 
@@ -59,14 +59,10 @@ public class ArmPathFactory {
 
     public static Command getIntakePath(Arm m_arm, GravityClawSubsystem claw){
         return new SequentialCommandGroup(
-
+                new GravityClawCommand(claw, false),
                 new SetArmCommandWithConstraints(m_arm, passThrough, new TrapezoidProfile.Constraints(5, 4), new TrapezoidProfile.Constraints(4, 3)),
-
-
                 new SetArmCommandWithConstraints(m_arm, preIntake, new TrapezoidProfile.Constraints(5,4), new TrapezoidProfile.Constraints(3, 1)),
                 new GravityClawCommand(claw, true),
-
-
                 new SetArmCommand(m_arm, intake)
         );
     }

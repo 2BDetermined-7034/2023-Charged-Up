@@ -25,7 +25,6 @@ public class GravityClawCommand extends CommandBase {
     @Override
     public void execute() {
         gravityClawSubsystem.setSolonoid(!direction);
-
     }
 
     @Override

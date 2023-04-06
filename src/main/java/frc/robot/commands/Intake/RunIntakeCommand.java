@@ -62,6 +62,5 @@ public class RunIntakeCommand extends CommandBase {
         m_intake.runIntake(0);
         index.stopIndexer();
 
-        m_intake.setSolenoid(true);
     }
 }
