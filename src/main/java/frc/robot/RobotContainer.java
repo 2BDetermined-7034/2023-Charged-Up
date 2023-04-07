@@ -152,13 +152,15 @@ public class RobotContainer implements SubsystemLogging {
                     () -> 0.7,
                     false)
         );
-
-        new Trigger(() -> m_driverController.getR2Axis() < 0.25).whileTrue(
-                new SequentialCommandGroup(
-                        new WaitCommand(0.75),
-                        intake.runOnce(() -> intake.setSolenoid(true))
-                )
-        );
+/*
+The below code creates a time deadband for running the intake Solenoid, has a bug which can make the intake not come back up
+ */
+//        new Trigger(() -> m_driverController.getR2Axis() < 0.25).whileTrue(
+//                new SequentialCommandGroup(
+//                        new WaitCommand(0.75),
+//                        intake.runOnce(() -> intake.setSolenoid(true))
+//                )
+//        );
 
         m_driverController.L1().onTrue(m_visionLocker.runOnce(m_visionLocker::togglePiece));
 

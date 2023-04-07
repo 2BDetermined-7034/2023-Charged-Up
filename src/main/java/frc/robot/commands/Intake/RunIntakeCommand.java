@@ -61,6 +61,7 @@ public class RunIntakeCommand extends CommandBase {
         m_drive.setSpeedMulti(1);
         m_intake.runIntake(0);
         index.stopIndexer();
+        m_intake.setSolenoid(true);
 
     }
 }

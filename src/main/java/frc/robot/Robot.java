@@ -81,9 +81,10 @@ public class Robot extends LoggedRobot  implements SubsystemLogging {
         robotContainer = new RobotContainer();
 
 
-        CameraServer.startAutomaticCapture();
+        UsbCamera camera = CameraServer.startAutomaticCapture();
 
-
+        camera.setFPS(10);
+        camera.setResolution(360,480);
     }
 
     /**

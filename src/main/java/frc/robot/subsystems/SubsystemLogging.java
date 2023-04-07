@@ -37,6 +37,7 @@ public interface SubsystemLogging {
         Logger.getInstance().recordOutput(String.format("%s/%s", this.getClass().getName().substring(21), key), (val));
     }
     default void log(String key, Mechanism2d val) {
+
         Logger.getInstance().recordOutput(String.format("%s/%s", this.getClass().getName().substring(21), key), (val));
 
     }
@@ -44,7 +45,10 @@ public interface SubsystemLogging {
 
     /**
      * Where subsystems should <b><u>override</u></b> and log stuff
-     * Call as last method in Periodic
+     * <div>
+     *     <p>Call as last method in Periodic</p>
+     * </div>
+     *
      */
     default void updateLogging() {
         Logger.getInstance().recordOutput(String.format("%s/%s", this.getClass().getName().substring(21), "Default"), ("amogus"));

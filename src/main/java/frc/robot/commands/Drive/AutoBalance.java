@@ -2,6 +2,7 @@ package frc.robot.commands.Drive;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.SubsystemLogging;
@@ -31,30 +32,32 @@ public class AutoBalance extends CommandBase implements SubsystemLogging {
     public void execute() {
 
         double speed = pid.calculate(m_swerveDrive.getPitch().getRadians(), 0);
-        SmartDashboard.putNumber("Speed", speed);
-        SmartDashboard.putNumber("Pitch", m_swerveDrive.getPitch().getDegrees());
-        if (Math.abs(speed) < 3 && Math.abs(m_swerveDrive.getPitch().getDegrees()) < 5) {
-            speed = 0;
+        if (!DriverStation.isFMSAttached()) {
+            SmartDashboard.putNumber("Speed", speed);
+            SmartDashboard.putNumber("Pitch", m_swerveDrive.getPitch().getDegrees());
         }
-        m_swerveDrive.drive(ChassisSpeeds.fromFieldRelativeSpeeds(
-                speed,
-                0,
-                0,
-                SwerveDrive.getGyroscopeRotation()
-        ));
+            if (Math.abs(speed) < 3 && Math.abs(m_swerveDrive.getPitch().getDegrees()) < 5) {
+                speed = 0;
+            }
+            m_swerveDrive.drive(ChassisSpeeds.fromFieldRelativeSpeeds(
+                    speed,
+                    0,
+                    0,
+                    SwerveDrive.getGyroscopeRotation()
+            ));
 
-    }
+        }
 
-    // Called once the command ends or is interrupted.
-    @Override
-    public void end(boolean interrupted) {
-        m_swerveDrive.stop();
-    }
+        // Called once the command ends or is interrupted.
+        @Override
+        public void end ( boolean interrupted){
+            m_swerveDrive.stop();
+        }
 
-    // Returns true when the command should end.
-    @Override
-    public boolean isFinished() {
-        return false;
-    }
+        // Returns true when the command should end.
+        @Override
+        public boolean isFinished () {
+            return false;
+        }
 
 }
