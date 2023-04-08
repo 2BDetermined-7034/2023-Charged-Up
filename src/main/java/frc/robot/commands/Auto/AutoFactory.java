@@ -72,7 +72,7 @@ public class AutoFactory {
 
 
     public static Command getLevelOpen(SwerveDrive drive) {
-        PathPlannerTrajectory path = PathPlanner.loadPath("exitLevel", new PathConstraints(3, 3));
+        PathPlannerTrajectory path = PathPlanner.loadPath("exitLevelOpen", new PathConstraints(3, 3));
 
         return new SequentialCommandGroup(
                 new PathFactory(drive, path, true, true).getCommand(),
@@ -99,18 +99,21 @@ public class AutoFactory {
 
     public static Command getOnePieceThenLevelMid(SwerveDrive drive, Intake intake, Indexer indexer, GravityClawSubsystem claw, Arm arm) {
         PathPlannerTrajectory path = PathPlanner.loadPath("exitLevelMid", new PathConstraints(3.2, 3.3));
+        PathPlannerTrajectory path2 = PathPlanner.loadPath("exitLevelMid2", new PathConstraints(3.2, 3.3));
+
         return new SequentialCommandGroup(
                 drive.runOnce(drive.getLimeLight()::setModeDriver),
                 getOnePieceAuto(drive, intake, indexer, claw, arm),
                 new ParallelCommandGroup(
                         ArmPathFactory.getIntakePath(arm, claw),
                         new SequentialCommandGroup(
-                                new WaitCommand(1),
+                                new WaitCommand(1.2),
                                 new PathFactory(drive, path, true, true).getCommand(),
-                                new AutoBalance(drive)
+                                new WaitCommand(1)
                                 )
 
                 ),
+                new PathFactory(drive, path2, true, false).getCommand(),
                 drive.runOnce(drive.getLimeLight()::setModeVision)
         );
 

@@ -84,7 +84,7 @@ public class Robot extends LoggedRobot  implements SubsystemLogging {
         UsbCamera camera = CameraServer.startAutomaticCapture();
 
         camera.setFPS(10);
-        camera.setResolution(360,480);
+        camera.setResolution(240,160);
     }
 
     /**
@@ -92,7 +92,7 @@ public class Robot extends LoggedRobot  implements SubsystemLogging {
      */
     @Override
     public void robotPeriodic() {
-        LoggedPowerDistribution.getInstance(0, PowerDistribution.ModuleType.kRev);
+//        LoggedPowerDistribution.getInstance(0, PowerDistribution.ModuleType.kRev);
         // Runs the Scheduler. This is responsible for polling buttons, adding
         // newly-scheduled commands, running already-scheduled commands, removing
         // finished or interrupted commands, and running subsystem periodic() methods.

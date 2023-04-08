@@ -31,6 +31,9 @@ public class Arm extends SubsystemBase implements SubsystemLogging {
     private double input1, input2;
     private double last_velocity1, last_velocity2;
     private boolean isOpenLoop;
+    private TrapezoidProfile.State profile1;
+    private TrapezoidProfile.State profile2;
+
 
     /**
      * Creates a new Arm.
@@ -136,6 +139,9 @@ public class Arm extends SubsystemBase implements SubsystemLogging {
         controller1.reset(new TrapezoidProfile.State(getCurrentState().getTheta1(), getCurrentState().getOmega1()));
         controller2.reset(new TrapezoidProfile.State(getCurrentState().getTheta2(), getCurrentState().getOmega2()));
         this.goalState = goalState;
+        this.profile1 = new TrapezoidProfile.State(goalState.getTheta1(), goalState.getOmega1());
+        this.profile2 = new TrapezoidProfile.State(goalState.getTheta2(), goalState.getOmega2());
+
     }
 
     public void setIsOpenLoop(boolean condition) {
@@ -157,12 +163,12 @@ public class Arm extends SubsystemBase implements SubsystemLogging {
         double omega1 = m_motor1Encoder.getVelocity();
         double omega2 = m_motor2Encoder.getVelocity();
 
-        double firstAlpha = (m_motor1Encoder.getVelocity() - last_velocity1) / (0.02);
-        double secondAlpha = (m_motor2Encoder.getVelocity() - last_velocity2) / (0.02);
+//        double firstAlpha = (m_motor1Encoder.getVelocity() - last_velocity1) / (0.02);
+//        double secondAlpha = (m_motor2Encoder.getVelocity() - last_velocity2) / (0.02);
 
 
 
-        return new ArmState(theta1, theta2, omega1, omega2, firstAlpha, secondAlpha);
+        return new ArmState(theta1, theta2, omega1, omega2);
     }
 
     public boolean goalStateValid() {
@@ -228,10 +234,9 @@ public class Arm extends SubsystemBase implements SubsystemLogging {
             goalState = getCurrentState();
             setVoltages(0, 0);
         }
-        ArmState goalState = getGoalState();
+
         if (!isOpenLoop) {
-            TrapezoidProfile.State profile1 = new TrapezoidProfile.State(goalState.getTheta1(), goalState.getOmega1());
-            TrapezoidProfile.State profile2 = new TrapezoidProfile.State(goalState.getTheta2(), goalState.getOmega2());
+
             input1 = controller1.calculate(getCurrentState().getTheta1(), profile1, constraint1);
             input2 = controller2.calculate(getCurrentState().getTheta2(), profile2, constraint2);
         }
@@ -243,7 +248,7 @@ public class Arm extends SubsystemBase implements SubsystemLogging {
 
         last_velocity1 = m_motor1Encoder.getVelocity();
         last_velocity2 = m_motor2Encoder.getVelocity();
-        updateLogging();
+//        updateLogging();
     }
 
 }
