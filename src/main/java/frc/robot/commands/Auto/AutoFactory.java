@@ -109,11 +109,13 @@ public class AutoFactory {
                         new SequentialCommandGroup(
                                 new WaitCommand(1.2),
                                 new PathFactory(drive, path, true, true).getCommand(),
-                                new WaitCommand(1)
+                                new WaitCommand(.2),
+                                new PathFactory(drive, path2, true, false).getCommand(),
+                                new AutoBalance(drive)
                                 )
 
                 ),
-                new PathFactory(drive, path2, true, false).getCommand(),
+
                 drive.runOnce(drive.getLimeLight()::setModeVision)
         );
 

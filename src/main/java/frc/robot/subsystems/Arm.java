@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.StatusFrame;
 import com.revrobotics.*;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
@@ -87,6 +88,14 @@ public class Arm extends SubsystemBase implements SubsystemLogging {
 
         m_motor1Encoder.setPosition(m_AbsoluteEncoder1.getAbsolutePosition());
         m_motor2Encoder.setPosition(m_AbsoluteEncoder2.getDistance() + m_AbsoluteEncoder1.getDistance());
+
+        m_motor1.setPeriodicFramePeriod(CANSparkMaxLowLevel.PeriodicFrame.kStatus2, 500);
+        m_motor2.setPeriodicFramePeriod(CANSparkMaxLowLevel.PeriodicFrame.kStatus2, 500);
+
+        m_motor1.setPeriodicFramePeriod(CANSparkMaxLowLevel.PeriodicFrame.kStatus0, 500);
+        m_motor2.setPeriodicFramePeriod(CANSparkMaxLowLevel.PeriodicFrame.kStatus0, 500);
+
+
 
         last_velocity1 = 0;
         last_velocity2 = 0;
