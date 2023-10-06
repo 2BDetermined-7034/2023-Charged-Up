@@ -71,14 +71,14 @@ public class AutoFactory {
     }
 
 
-//    public static Command getLevelOpen(SwerveDrive drive) {
-//        PathPlannerTrajectory path = PathPlanner.loadPath("exitLevel", new PathConstraints(3, 3));
-//
-//        return new SequentialCommandGroup(
-//                new PathFactory(drive, path, true, true).getCommand(),
-//                new AutoBalance(drive)
-//        );
-//    }
+//     public static Command getLevelOpen(SwerveDrive drive) {
+//         PathPlannerTrajectory path = PathPlanner.loadPath("exitLevel", new PathConstraints(3, 3));
+
+//         return new SequentialCommandGroup(
+//                 new PathFactory(drive, path, true, true).getCommand(),
+//                 new AutoBalance(drive)
+//         );
+//     }
     public static Command getOnePieceExit(SwerveDrive drive, Intake intake, Indexer indexer, GravityClawSubsystem claw, Arm arm) {
         PathPlannerTrajectory path = PathPlanner.loadPath("exit", new PathConstraints(2, 3));
 

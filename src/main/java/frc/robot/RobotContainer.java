@@ -45,7 +45,7 @@ public class RobotContainer implements SubsystemLogging {
         autoMode.addOption("One Piece Level open",  AutoFactory.getOnePieceThenLevelOpen(m_swerveDrive, intake, m_indexer, gravityClawSubsystem, m_Arm));
         autoMode.addOption("One Piece Level mid",  AutoFactory.getOnePieceThenLevelMid(m_swerveDrive, intake, m_indexer, gravityClawSubsystem, m_Arm));
         autoMode.addOption("One Piece Level cable",  AutoFactory.getOnePieceThenLevelCable(m_swerveDrive, intake, m_indexer, gravityClawSubsystem, m_Arm));
-//        autoMode.addOption("Level Open Exit Top", AutoFactory.getLevelOpen(m_swerveDrive));
+        // autoMode.addOption("Exit Top", AutoFactory.getLevelOpen(m_swerveDrive));
         autoMode.addOption("Exit Bot", AutoFactory.getLevelBotCable(m_swerveDrive));
         autoMode.addOption("Two Piece", AutoFactory.getTwoPiece(m_swerveDrive, intake, m_indexer, gravityClawSubsystem, m_Arm));
 
@@ -167,7 +167,6 @@ The below code creates a time deadband for running the intake Solenoid, has a bu
         m_driverController.povUp().whileTrue(new AutoBalance(m_swerveDrive));
         m_driverController.povDown().whileTrue(m_swerveDrive.runOnce(() -> m_swerveDrive.setSpeedMulti(1)));
         m_driverController.touchpad().whileTrue(m_swerveDrive.runOnce(() -> m_swerveDrive.setSpeedMulti(0.2)));
-        
         /*
         m_driverController.touchpad().whileTrue(
                 new ChaseTagCommand(m_swerveDrive, m_visionLocker).andThen(
@@ -188,7 +187,6 @@ The below code creates a time deadband for running the intake Solenoid, has a bu
         new Trigger(m_operatorController::getRightStickButton).whileTrue(m_Arm.runOnce(
                 () -> m_Arm.setGoalState(m_Arm.getCurrentState().clear())
         ));
-        
        new Trigger(m_operatorController::getLeftBumper).whileTrue(m_visionLocker.runOnce(m_visionLocker::gridLeft));
        new Trigger(m_operatorController::getRightBumper).whileTrue(m_visionLocker.runOnce(m_visionLocker::gridRight));
 
@@ -208,6 +206,7 @@ The below code creates a time deadband for running the intake Solenoid, has a bu
         new Trigger(m_operatorController::getStartButton).onTrue(m_swerveDrive.runOnce(() -> m_swerveDrive.setSpeedMulti(0.3))); // low
 
 
+        
 
 
         //new Trigger(m_operatorController::getXButton).onTrue(ArmPathFactory.getScoreShelf(m_swerveDrive, gravityClawSubsystem, m_Arm, intake, m_indexer));
@@ -219,7 +218,7 @@ The below code creates a time deadband for running the intake Solenoid, has a bu
     }
 
     public Command getAutonomousCommand() {
-        // Send auto dropdown 
+        // An example command will be run in autonomous
         return autoMode.getSelected();
 
     }
